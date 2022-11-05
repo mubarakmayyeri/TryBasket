@@ -73,31 +73,17 @@
         <div class="container">
             <div class="row">
                 <div class="categories__slider owl-carousel">
+                    
+                    {% for category in categories %}
+                        
                     <div class="col-lg-3">
-                        <div class="categories__item set-bg" data-setbg="{% static 'img/categories/cat-1.jpg' %}">
-                            <h5><a href="#">Fresh Fruit</a></h5>
+                        <div class="categories__item set-bg p-5" data-setbg="{{category.cat_image.url}} ">
+                            <h5><a href="#">{{category.category_name}}</a></h5>
                         </div>
                     </div>
-                    <div class="col-lg-3">
-                        <div class="categories__item set-bg" data-setbg="{% static 'img/categories/cat-2.jpg' %}">
-                            <h5><a href="#">Dried Fruit</a></h5>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="categories__item set-bg" data-setbg="{% static 'img/categories/cat-3.jpg' %}">
-                            <h5><a href="#">Vegetables</a></h5>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="categories__item set-bg" data-setbg="{% static 'img/categories/cat-4.jpg' %}">
-                            <h5><a href="#">drink fruits</a></h5>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="categories__item set-bg" data-setbg="{% static 'img/categories/cat-5.jpg' %}">
-                            <h5><a href="#">drink fruits</a></h5>
-                        </div>
-                    </div>
+
+                    {% endfor %}
+
                 </div>
             </div>
         </div>
@@ -115,18 +101,24 @@
                     <div class="featured__controls">
                         <ul>
                             <li class="active" data-filter="*">All</li>
-                            <li data-filter=".oranges">Oranges</li>
-                            <li data-filter=".fresh-meat">Fresh Meat</li>
-                            <li data-filter=".vegetables">Vegetables</li>
-                            <li data-filter=".fastfood">Fastfood</li>
+                            
+                            {% for category in featured_categories  %}
+                                
+                            <li data-filter=".{{category.sub_category_name}}">{{category.sub_category_name}}</li>
+
+                            {% endfor %}
+
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="row featured__filter">
-                <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+
+                {% for product in featured_products  %}
+                
+                <div class="col-lg-3 col-md-4 col-sm-6 mix {{product.sub_category}}">
                     <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="{% static 'img/featured/feature-1.jpg' %}">
+                        <div class="featured__item__pic set-bg" data-setbg="{{product.image_1.url}}">
                             <ul class="featured__item__pic__hover">
                                 <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                 <li><a href="#"><i class="fa fa-retweet"></i></a></li>
@@ -134,12 +126,15 @@
                             </ul>
                         </div>
                         <div class="featured__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
+                            <h6><a href="#">{{product.product_name}}</a></h6>
+                            <h5>₹{{product.price}}/<span class='text-secondary'> kg</span></h5>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables fastfood">
+
+                {% endfor %}
+
+                {% comment %} <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables fastfood">
                     <div class="featured__item">
                         <div class="featured__item__pic set-bg" data-setbg="{% static 'img/featured/feature-2.jpg' %}">
                             <ul class="featured__item__pic__hover">
@@ -243,7 +238,7 @@
                             <h5>$30.00</h5>
                         </div>
                     </div>
-                </div>
+                </div> {% endcomment %}
             </div>
         </div>
     </section>
