@@ -11,7 +11,7 @@
               <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
               <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
           </ul>
-          <div class="header__cart__price">item: <span>$150.00</span></div>
+          <div class="header__cart__price">item: <span>₹150.00</span></div>
       </div>
       <div class="humberger__menu__widget">
           <div class="header__top__right__language">
@@ -19,19 +19,22 @@
               <div>English</div>
               <span class="arrow_carrot-down"></span>
               <ul>
-                  <li><a href="#">Spanis</a></li>
+                  <li><a href="#">Hindi</a></li>
                   <li><a href="#">English</a></li>
               </ul>
           </div>
           <div class="header__top__right__auth">
-              <a href="#"><i class="fa fa-user"></i> Login</a>
+              <a href="{% url 'login' %}"><i class="fa fa-user"></i> Login</a>
+          </div>
+          <div class="header__top__right__auth">
+              <a href="{% url 'register' %}"><i class="fa fa-user mt-3"></i> Register</a>
           </div>
       </div>
       <nav class="humberger__menu__nav mobile-menu">
           <ul>
               <li class="active"><a href="./index.html">Home</a></li>
               <li><a href="./shop-grid.html">Shop</a></li>
-              <li><a href="#">Pages</a>
+              <li><a href="#">Offers</a>
                   <ul class="header__menu__dropdown">
                       <li><a href="./shop-details.html">Shop Details</a></li>
                       <li><a href="./shoping-cart.html">Shoping Cart</a></li>
@@ -39,7 +42,7 @@
                       <li><a href="./blog-details.html">Blog Details</a></li>
                   </ul>
               </li>
-              <li><a href="./blog.html">Blog</a></li>
+              <li><a href="./blog.html">Basket</a></li>
               <li><a href="./contact.html">Contact</a></li>
           </ul>
       </nav>
@@ -85,14 +88,33 @@
                               <div>English</div>
                               <span class="arrow_carrot-down"></span>
                               <ul>
-                                  <li><a href="#">Spanis</a></li>
+                                  <li><a href="#">Hindi</a></li>
                                   <li><a href="#">English</a></li>
                               </ul>
                           </div>
+
+                          
+                          {% if user.id is None %}
+                            
                           <div class="header__top__right__auth">
-                              <a href="#"><i class="fa fa-user"></i> Login</a>
+                              <a href="{% url 'login' %}"><i class="fa fa-user"></i>Login</a>
                           </div>
-                      </div>
+                          <div class="header__top__right__auth">
+                            <a href="{% url 'register' %}"><i class="fa fa-user ml-1"></i>Register</a>
+                          </div>
+
+                          {% else %}
+
+                          <div class="header__top__right__auth">
+                            <a href=""><i class="fa fa-user"></i>Welcome <strong>{{user.first_name}}</strong></a>
+                        </div>
+                        <div class="header__top__right__auth">
+                          <a href="{% url 'logout' %}"><i class="fa fa-user ml-1"></i>Logout</a>
+                        </div>
+
+                          {% endif %}
+
+                        </div>
                   </div>
               </div>
           </div>
@@ -100,7 +122,7 @@
       <div class="container">
           <div class="row">
               <div class="col-lg-3">
-                  <div class="header__logo">
+                  <div class="header__logo" style="max-width: 25rem;">
                       <a href="./index.html"><img src="{% static 'img/logo.png' %}" alt=""></a>
                   </div>
               </div>
@@ -109,7 +131,7 @@
                       <ul>
                           <li class="active"><a href="./index.html">Home</a></li>
                           <li><a href="./shop-grid.html">Shop</a></li>
-                          <li><a href="#">Pages</a>
+                          <li><a href="#">Offers</a>
                               <ul class="header__menu__dropdown">
                                   <li><a href="./shop-details.html">Shop Details</a></li>
                                   <li><a href="./shoping-cart.html">Shoping Cart</a></li>
@@ -128,7 +150,7 @@
                           <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
                           <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
                       </ul>
-                      <div class="header__cart__price">item: <span>$150.00</span></div>
+                      <div class="header__cart__price">item: <span>₹150.00</span></div>
                   </div>
               </div>
           </div>
