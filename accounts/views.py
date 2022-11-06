@@ -20,7 +20,7 @@ def register(request):
       user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email, phone_number=phone_number, password=password)
       user.save()
       messages.success(request, 'Registration Successful')
-      return redirect('register')
+      return redirect('login')
   else:    
     form = RegistrationForm()
   context = {
@@ -30,6 +30,9 @@ def register(request):
   return render (request, 'accounts/register.html', context)
 
 def login(request):
+  if 'email' in request.session:
+    return redirect('home')
+  
   if request.method == 'POST':
     email = request.POST['email']
     password = request.POST['password']
@@ -37,6 +40,7 @@ def login(request):
     user = auth.authenticate(email=email, password=password)
 
     if user is not None:
+      request.session['email'] = email
       auth.login(request, user)
       # messages.success(request, 'You are now logged in.')
       return redirect('home')
@@ -49,6 +53,8 @@ def login(request):
 
 @login_required(login_url = 'login')
 def logout(request):
+  if 'email' in request.session:
+    request.session.flush()
   auth.logout(request)
   messages.success(request, "You are logged out.")
   return redirect('login')
