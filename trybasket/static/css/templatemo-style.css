@@ -277,7 +277,7 @@ thead {
   padding-left: 15px;
   padding-right: 15px;
 }
-.form-control {
+/* .form-control {
   background-color: #54657d;
   color: #fff;
   border: 0;
@@ -287,7 +287,7 @@ thead {
   color: #fff;
   border-color: transparent;
   box-shadow: 0 0 0 0.1rem rgb(180, 206, 233, 0.5);
-}
+} */
 .form-group label {
   color: #fff;
   margin-bottom: 10px;
@@ -328,7 +328,7 @@ thead {
 .form-group {
   margin-bottom: 15px;
 }
-.btn {
+/* .btn {
   border-radius: 0;
   padding: 13px 28px;
   transition: all 0.2s ease;
@@ -349,7 +349,7 @@ thead {
   color: #f5a623;
   background-color: transparent;
   border: 2px solid #f5a623;
-}
+} */
 .custom-file-input {
   cursor: pointer;
 }

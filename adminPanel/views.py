@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
 from .forms import LoginForm
+from accounts.models import Account
 # Create your views here.
 
 def adminLogin(request):
@@ -34,6 +36,8 @@ def adminLogin(request):
 def dashboard(request):
   if 'email' in request.session:
     return render(request, 'adminPanel/dashboard.html')
+  else:
+    return redirect(adminLogin)
   
 @login_required(login_url = 'adminLogin')
 def adminLogout(request):
@@ -42,3 +46,36 @@ def adminLogout(request):
   logout(request)
   messages.success(request, 'Logged out successfully.')
   return redirect(adminLogin)
+
+@login_required(login_url = 'adminLogin')
+def accounts(request):
+  users = Account.objects.all().filter(is_superadmin=False).order_by('-id')
+  context = {
+    'users': users
+  }
+  return render(request, 'adminPanel/accounts.html', context)
+
+@login_required(login_url = 'adminLogin')
+def categories(request):
+  return render(request, 'adminPanel/categories.html')
+
+@login_required(login_url = 'adminLogin')
+def products(request):
+  return render(request, 'adminPanel/products.html')
+
+@login_required(login_url = 'adminLogin')
+def orders(request):
+  return render(request, 'adminPanel/orders.html')
+
+@login_required(login_url = 'adminLogin')
+def blockUser(request,id):
+    users = Account.objects.get(id=id)
+    if users.is_active:
+        users.is_active = False
+        users.save()
+
+    else:
+         users.is_active = True
+         users.save()
+
+    return redirect('accounts')
