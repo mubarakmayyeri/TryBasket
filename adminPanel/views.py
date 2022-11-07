@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from .forms import LoginForm
+from .forms import LoginForm, ProductForm
 from accounts.models import Account
 from shop.models import Product
 # Create your views here.
@@ -13,7 +13,7 @@ def adminLogin(request):
     return redirect('dashboard')
   
   if request.method == 'POST':
-    form = LoginForm(request.POST)
+    # form = LoginForm(request.POST)
     email = request.POST['email']
     password = request.POST['password']
     
@@ -61,14 +61,6 @@ def categories(request):
   return render(request, 'adminPanel/categories.html')
 
 @login_required(login_url = 'adminLogin')
-def products(request):
-  products = Product.objects.all().order_by('-id')
-  context = {
-    'products': products
-  }
-  return render(request, 'adminPanel/products.html', context)
-
-@login_required(login_url = 'adminLogin')
 def orders(request):
   return render(request, 'adminPanel/orders.html')
 
@@ -85,6 +77,53 @@ def blockUser(request, id):
 
     return redirect('accounts')
   
+@login_required(login_url = 'adminLogin')
+def products(request):
+  products = Product.objects.all().order_by('-id')
+  context = {
+    'products': products
+  }
+  return render(request, 'adminPanel/products.html', context)
+
+@login_required(login_url = 'adminLogin')
+def addProduct(request):
+  if request.method == 'POST':
+    form = ProductForm(request.POST, request.FILES)
+    if form.is_valid:
+      form.save()
+      messages.success(request, 'Product added successfully.')
+      return redirect('products')
+    else:
+      messages.error(request, 'Invalid input!!!')
+  else:
+    form = ProductForm()
+    context = {
+      'form':form,
+    }
+    return render(request, 'adminPanel/addProduct.html', context)
+
+@login_required(login_url = 'adminLogin')
+def editProduct(request, id):
+  product = Product.objects.get(id=id)
+  
+  if request.method == 'POST':
+    form = ProductForm(request.POST, request.FILES, instance=product)
+    
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Product edited successfully.')
+      return redirect('products')
+    else:
+      messages.error(request, 'Invalid input')
+      
+  form =   ProductForm(instance=product)
+  context = {
+    'form':form,
+    'product':product,
+  }
+  return render(request, 'adminPanel/editProduct.html', context)
+
+@login_required(login_url = 'adminLogin')  
 def deleteProduct(request, id):
   product = Product.objects.get(id=id)
   product.delete()
