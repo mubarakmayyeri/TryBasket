@@ -11,6 +11,8 @@ urlpatterns = [
   path('<int:id>/blockUser', views.blockUser, name='blockUser'),
   
   path('categories', views.categories, name='categories'),
+  path('addCategory', views.addCategory, name='addCategory'),
+  path('<int:id>/subCategories', views.subCategories, name='subCategories'),
   
   path('products', views.products, name='products'),
   path('<int:id>/deleteProduct', views.deleteProduct, name='deleteProduct'),

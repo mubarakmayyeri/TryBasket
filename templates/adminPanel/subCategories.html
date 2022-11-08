@@ -10,33 +10,33 @@
 <div class="container mt-3" style="min-height: 33rem;">
   <div class="d-flex justify-content-between">
     <input class="form-control w-50 mx-auto mb-3" type="search" placeholder="Search" aria-label="Search" id="myInput">
-    <div><a href="{% url 'addCategory' %}"><button class="btn btn-warning btn-sm mt-1"><i class="fas fa-plus mr-2"></i>Add Category</button></a></div>
+    <div><a href="{% url 'addProduct' %}"><button class="btn btn-warning btn-sm mt-1"><i class="fas fa-plus mr-2"></i>Add Sub Category</button></a></div>
   </div>
   <table class="table table-hover">
     <thead>
       <tr>
-        <th scope="col">Category Name</th>
+        <th scope="col">Sub Category Name</th>
         <th>Description</th>
-        <th>Sub Categories</th>
+        <th>Is_featured</th>
         <th>Edit</th>
         <th>Delete</th>
       </tr>
     </thead>
     <tbody id="myTable">
       
-      {% for category in categories %}
+      {% for subCategory in subCategories %}
 
       <tr style="height: 50px !important;" class="text-wrap">
-        <th scope="row">{{category.category_name}}</th>
-        <td>{{category.description}}</td>
-        <td><a href="{% url 'subCategories' category.id %}"><button class="btn btn-info btn-sm ml-3"><i class="fas fa-list"></i></button></a></td>
+        <th scope="row">{{subCategory.sub_category_name}}</th>
+        <td>{{subCategory.description}}</td>
+        <td>{{subCategory.is_featured}}</td>
         <td>
-          <div><a href="" ><i class="fas fa-edit text-warning ml-2"></i></a>
+          <div class="pro-img-overlay"><a href="" ><i class="fas fa-edit text-warning"></i></a>
           </div> 
         </td>
         <td>
-          <div class=""><a href="" onclick="return confirm('Are you sure to delete {{category.category_name}}?')">
-            <i class="fas fa-trash-alt text-danger ml-2"></i></a>
+          <div class="pro-img-overlay"><a href="" onclick="return confirm('Are you sure to delete {{product.product_name}}?')">
+            <i class="fas fa-trash-alt text-danger"></i></a>
           </div> 
         </td>
       </tr>

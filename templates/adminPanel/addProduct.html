@@ -63,5 +63,11 @@
     </div>
   </form>
 </div>
+
+<script>
+    document.getElementById("id_product_name").onkeyup=function(){
+        document.getElementById("id_slug").value=document.getElementById("id_product_name").value.toLowerCase().replaceAll(" ","-");
+      }
+</script>
   
 {% endblock content %}
