@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="container" style="min-height: 33rem;">
-    <form method="POST" action="{% url 'otpVerification' 'user.email' %}" class="d-flex justify-content-center align-items-center container">
+    <form method="POST" action="{% url 'otpVerification' %}" class="d-flex justify-content-center align-items-center container">
         {% csrf_token %}
         <div class="card py-5 px-5 mt-5">
             <h5 class="m-0 text-center">Mobile Number Verification</h5>

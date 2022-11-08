@@ -8,7 +8,7 @@ class Product(models.Model):
   slug = models.SlugField(max_length=255, unique=True)
   description = models.TextField(max_length=500, blank=True)
   price = models.IntegerField()
-  image_1 = models.ImageField(upload_to='photos/products', blank=True)
+  image_1 = models.ImageField(upload_to='photos/products', blank=False)
   image_2 = models.ImageField(upload_to='photos/products', blank=True)
   image_3 = models.ImageField(upload_to='photos/products', blank=True)
   image_4 = models.ImageField(upload_to='photos/products', blank=True)

@@ -6,12 +6,12 @@
 
 <div class="container mt-3" style="min-height: 33rem;">
   <h2 class="text-center text-white">Add Sub Category</h2>
-  <form action="{% url 'addProduct' %}" method="post" enctype="multipart/form-data">
+  <form action="{% url 'addSubCategory' id %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     <div class="col form-group">
-        <label >Sub Category Name</label><br>
-        {{form.sub_category_name}}  
+        <label >Sub Category Name </label><br>
+        {{form.sub_category_name}}
     </div>
     <div class="col form-group">
         <label > Slug</label><br>
@@ -24,6 +24,7 @@
     <div class="col form-group">
         <label > Category</label><br>
         {{form.category}}
+        {% comment %} <input class="form-control" type="text" placeholder="hi" readonly> {% endcomment %}
     </div>
     <div class="col form-group">
       <label > Is_featured</label><br>

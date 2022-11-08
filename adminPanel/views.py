@@ -18,7 +18,7 @@ from category.models import Category, Sub_Category
 def adminLogin(request):
   if 'email' in request.session:
     return redirect('dashboard')
-  
+    
   if request.method == 'POST':
     # form = LoginForm(request.POST)
     email = request.POST['email']
@@ -28,13 +28,13 @@ def adminLogin(request):
     
     if user is not None:
       if user.is_superadmin:
-        
         request.session['email'] = email
-        login(request, user)            #for log in without otp
-        return redirect('dashboard')
         
-        # send_otp(user.phone_number)
-        # return redirect('otpVerification', email)
+        # login(request, user)            #for log in without otp
+        # return redirect('dashboard')
+        
+        send_otp(user.phone_number)
+        return redirect('otpVerification')
       else:
         messages.error(request, 'Not Authorized!!!')
         return redirect(adminLogin)
@@ -59,11 +59,12 @@ def adminLogout(request):
   messages.success(request, 'Logged out successfully.')
   return redirect(adminLogin)
 
-def otpVerification(request, email):
-  if 'email' in request.session:
-    return redirect('dashboard')
+def otpVerification(request):
+  # if 'email' in request.session:
+  #   return redirect('dashboard')
   
   if request.method == 'POST':
+    email = request.session['email']
     user = Account.objects.get(email=email)
     phone_number = user.phone_number
     check_otp = request.POST.get('otp')
@@ -71,7 +72,7 @@ def otpVerification(request, email):
     
     if check:
       login(request, user)
-      request.session['email'] = email
+      # request.session['email'] = email
       return redirect('dashboard')
     
     else:
@@ -144,7 +145,8 @@ def deleteCategory(request, id):
 def subCategories(request, id):
   subCategories = Sub_Category.objects.all().filter(category=id)
   context = {
-    'subCategories':subCategories
+    'subCategories':subCategories,
+    'id':id,
   }
   return render(request, 'adminPanel/subCategories.html', context)
 
@@ -155,14 +157,14 @@ def addSubCategory(request, id):
     if form.is_valid:
       form.save()
       messages.success(request, 'Sub Category added successfully.')
-      return redirect('subCategories')
+      return redirect('subCategories', id)
     else:
       messages.error(request, 'Invalid input!!!')
   else:
     form = SubCategoryForm()
-    form.category = id
     context = {
       'form':form,
+      'id':id
     }
     return render(request, 'adminPanel/addSubCategory.html', context)
 
