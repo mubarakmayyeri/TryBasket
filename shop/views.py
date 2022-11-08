@@ -27,13 +27,26 @@ def shop(request):
   products = Product.objects.all().filter(is_available=True).order_by('product_name')
   latest_products_1 = Product.objects.all().order_by('-created_date')[:3]
   latest_products_2 = Product.objects.all().order_by('-created_date')[3:6]
-  poduct_count = products.count()
+  product_count = products.count()
   
   context = {
     'categories' : categories,
     'products':products,
     'latest_products_1' : latest_products_1,
     'latest_products_2' : latest_products_2,
-    'poduct_count':poduct_count
+    'product_count':product_count
   }
   return render(request, 'shop.html', context)
+
+def product_details(request, category_slug, sub_category_slug, product_slug):
+  try:
+    product = Product.objects.get(category__slug=category_slug, sub_category__slug=sub_category_slug, slug=product_slug)
+    related_products = Product.objects.filter(sub_category__slug=sub_category_slug)[:4]
+  except Exception as e:
+    raise e
+  
+  context = {
+    'product':product,
+    "related_products":related_products,
+  }
+  return render(request, 'product_detail.html', context)

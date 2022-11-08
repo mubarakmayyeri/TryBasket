@@ -176,7 +176,7 @@
                                 
                               {% for product in latest_products_1 %}
                                   
-                              <a href="#" class="latest-product__item">
+                              <a href="{{product.get_url}}" class="latest-product__item">
                                   <div class="latest-product__item__pic">
                                       <img src="{{product.image_1.url}}" alt="">
                                   </div>
@@ -341,7 +341,7 @@
                       </div>
                       <div class="col-lg-4 col-md-4">
                           <div class="filter__found">
-                              <h6><span>{{poduct_count}}</span> Products found</h6>
+                              <h6><span>{{product_count}}</span> Products found</h6>
                           </div>
                       </div>
                       <div class="col-lg-4 col-md-3">
@@ -366,7 +366,7 @@
                           </ul>
                       </div>
                       <div class="product__item__text">
-                          <h6><a href="#">{{product.product_name}}</a></h6>
+                          <h6><a href="{{product.get_url}}">{{product.product_name}}</a></h6>
                           <h5>₹{{product.price}}</h5>
                       </div>
                   </div>
