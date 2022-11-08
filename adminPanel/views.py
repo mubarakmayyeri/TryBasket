@@ -28,13 +28,13 @@ def adminLogin(request):
     
     if user is not None:
       if user.is_superadmin:
+        
         request.session['email'] = email
+        login(request, user)            #for log in without otp
+        return redirect('dashboard')
         
-        # login(request, user)            #for log in without otp
-        # return redirect('dashboard')
-        
-        send_otp(user.phone_number)
-        return redirect('otpVerification')
+        # send_otp(user.phone_number)
+        # return redirect('otpVerification', email)
       else:
         messages.error(request, 'Not Authorized!!!')
         return redirect(adminLogin)
@@ -59,9 +59,11 @@ def adminLogout(request):
   messages.success(request, 'Logged out successfully.')
   return redirect(adminLogin)
 
-def otpVerification(request):
+def otpVerification(request, email):
+  if 'email' in request.session:
+    return redirect('dashboard')
+  
   if request.method == 'POST':
-    email = request.session['email']
     user = Account.objects.get(email=email)
     phone_number = user.phone_number
     check_otp = request.POST.get('otp')
@@ -69,6 +71,7 @@ def otpVerification(request):
     
     if check:
       login(request, user)
+      request.session['email'] = email
       return redirect('dashboard')
     
     else:
@@ -130,6 +133,12 @@ def addCategory(request):
       'form':form,
     }
     return render(request, 'adminPanel/addCategory.html', context)
+  
+@login_required(login_url = 'adminLogin')  
+def deleteCategory(request, id):
+  category = Category.objects.get(id=id)
+  category.delete()
+  return redirect('categories')
 
 @login_required(login_url = 'adminLogin')
 def subCategories(request, id):
@@ -138,6 +147,31 @@ def subCategories(request, id):
     'subCategories':subCategories
   }
   return render(request, 'adminPanel/subCategories.html', context)
+
+@login_required(login_url = 'adminLogin')
+def addSubCategory(request, id):
+  if request.method == 'POST':
+    form = SubCategoryForm(request.POST, request.FILES)
+    if form.is_valid:
+      form.save()
+      messages.success(request, 'Sub Category added successfully.')
+      return redirect('subCategories')
+    else:
+      messages.error(request, 'Invalid input!!!')
+  else:
+    form = SubCategoryForm()
+    form.category = id
+    context = {
+      'form':form,
+    }
+    return render(request, 'adminPanel/addSubCategory.html', context)
+
+@login_required(login_url = 'adminLogin')  
+def deleteSubCategory(request, id):
+  sub_category = Sub_Category.objects.get(id=id)
+  cat_id = sub_category.category.id
+  sub_category.delete()
+  return redirect('subCategories', cat_id)
  
  
  
