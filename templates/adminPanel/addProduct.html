@@ -1,0 +1,67 @@
+{% extends 'adminPanel/base.html' %}
+
+{% block content %}
+
+<div class="text-center mx-auto mt-2" style="min-width: 22rem;">{% include 'includes/alerts.html' %}</div>
+
+<div class="container mt-3" style="min-height: 33rem;">
+  <h2 class="text-center text-white">Add Product</h2>
+  <form action="{% url 'addProduct' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="col form-group">
+        <label > Product Name</label><br>
+        {{form.product_name}}  
+    </div>
+    <div class="col form-group">
+        <label > Slug</label><br>
+        {{form.slug}}  
+    </div>
+    <div class="col-6 form-group">
+        <label > Category</label><br>
+        {{form.category}}  
+    </div>
+    <div class="col-6 form-group">
+        <label > Sub Category</label><br>
+        {{form.sub_category}}  
+    </div>
+    <div class="col form-group">
+        <label > Description</label><br>
+        {{form.description}}  
+    </div>
+    <div class="col-3 form-group">
+        <label > Price </label><br>
+        {{form.price}} 
+    </div>
+    <div class="col-3 form-group">
+      <label > Stock </label><br>
+      {{form.stock}}
+  </div>
+    <div class="col form-group">
+        <label > Image 1 </label><br>
+        {{form.image_1}}
+    </div>
+    <div class="col form-group">
+        <label > Image 2 </label><br>
+        {{form.image_2}}
+    </div>
+    <div class="col form-group">
+        <label > Image 3 </label><br>
+        {{form.image_3}}
+    </div>
+    <div class="col form-group">
+        <label > Image 4 </label><br>
+        {{form.image_4}}
+    </div>
+    <div class="col form-group">
+        <label > Is Available </label><br>
+        {{form.is_available}}
+    </div>
+                     
+    <div class="col form-group">
+       <a href=""> <input type="submit" name="submit" id="submit" class="btn btn-warning" value="Save"/></a>
+    </div>
+  </form>
+</div>
+  
+{% endblock content %}

@@ -1,0 +1,67 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+
+{% extends 'adminPanel/base.html' %}
+
+{% block content %}
+
+
+
+<div class="container mt-3" style="min-height: 33rem;">
+  <input class="form-control w-50 mx-auto mb-3" type="search" placeholder="Search" aria-label="Search" id="myInput">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Email</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Phone Number</th>
+        <th scope="col">is_active</th>
+        <th scope="col">Date Joined</th>
+        <th scope="col">Action</th>
+        <th scope="col">Edit</th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      
+      {% for user in users %}
+
+      <tr>
+        <th scope="row">{{user.email}}</th>
+        <td>{{user.first_name}}</td>
+        <td>{{user.last_name}}</td>
+        <td>{{user.phone_number}}</td>
+        <td>{{user.is_active}}</td>
+        <td>{{user.date_joined}}</td>
+
+        {% if user.is_active %}
+        <td>
+          <a href="{% url 'blockUser' user.id %}"><button  class="btn btn-success btn-small"><span class="label label-success">Block</span></button></a></td>
+        {% else %}
+        <td>
+          <a href="{% url 'blockUser' user.id %}"><button  class="btn btn-danger btn-small"><span class="label label-danger">Unblock</span></button></a></td>
+        {% endif %}
+
+        <td>
+          <div class="pro-img-overlay"><a href=""   ><i class="fas fa-edit text-white"></i></a> </div> 
+        </td>
+      </tr>
+        
+      {% endfor %}
+        
+    </tbody>
+  </table>
+</div>
+  
+{% endblock content %}
+
+  
