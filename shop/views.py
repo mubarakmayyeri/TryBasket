@@ -39,6 +39,8 @@ def shop(request):
   return render(request, 'shop.html', context)
 
 def product_details(request, category_slug, sub_category_slug, product_slug):
+  categories = Category.objects.all()
+  
   try:
     product = Product.objects.get(category__slug=category_slug, sub_category__slug=sub_category_slug, slug=product_slug)
     related_products = Product.objects.filter(sub_category__slug=sub_category_slug)[:4]
@@ -46,6 +48,7 @@ def product_details(request, category_slug, sub_category_slug, product_slug):
     raise e
   
   context = {
+    'categories':categories,
     'product':product,
     "related_products":related_products,
   }
