@@ -7,7 +7,7 @@
 
 <div class="text-center mx-auto mt-2"  style="min-width: 22rem;">{% include 'includes/alerts.html' %}</div>
 
-<div class="container mt-3" style="min-height: 33rem;">
+<div class="container-fluid mt-3" style="min-height: 33rem;">
   <h2 class="text-center text-white">Products</h2>
   <div class="d-flex justify-content-between">
     <input class="form-control w-50 mx-auto mb-3" type="search" placeholder="Search" aria-label="Search" id="myInput">
@@ -33,10 +33,15 @@
       {% for product in products %}
 
       <tr style="height: 50px !important;" class="text-wrap">
-        <th scope="row">{{product.product_name}}</th>
+        <th scope="row">
+          <div class="product-img d-flex flex-column">
+          <a href="{% url 'editProduct' product.id %}" class="text-white">
+          <div class="mx-auto"><img class="mx-auto" src="{{product.image_1.url}}" style="height:10vh ; object-fit:cover " ></div>
+          <div class="mx-auto">{{product.product_name}}</div></a>
+          </div></th>
         <td>{{product.category}}</td>
         <td>{{product.sub_category}}</td>
-        <td>{{product.price}}</td>
+        <td>₹{{product.price}}</td>
         <td style="max-height: 20px;">{{product.description}}</td>
         <td>{{product.stock}}</td>
         <td>{{product.is_available}}</td>
