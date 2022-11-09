@@ -49,7 +49,7 @@ def login(request):
     if user is not None:
       request.session['phone_number'] = user.phone_number
       
-      # auth.login(request, user)
+      # auth.login(request, user)        # login without otp
       # messages.success(request, 'You are now logged in.')
       # return redirect('home')
       

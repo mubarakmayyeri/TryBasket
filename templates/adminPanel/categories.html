@@ -30,13 +30,13 @@
       <tr style="height: 50px !important;" class="text-wrap">
         <th scope="row">{{category.category_name}}</th>
         <td>{{category.description}}</td>
-        <td><a href="{% url 'subCategories' category.id %}"><button class="btn btn-info btn-sm ml-3"><i class="fas fa-list"></i></button></a></td>
+        <td><a href="{% url 'subCategories' category.slug %}"><button class="btn btn-info btn-sm ml-3"><i class="fas fa-list"></i></button></a></td>
         <td>
           <div><a href="{% url 'editCategory' category.slug %}" ><i class="fas fa-edit text-warning ml-2"></i></a>
           </div> 
         </td>
         <td>
-          <div class=""><a href="{% url 'deleteCategory' category.id %}" onclick="return confirm('Are you sure to delete {{category.category_name}}?')">
+          <div class=""><a href="{% url 'deleteCategory' category.slug %}" onclick="return confirm('Are you sure to delete {{category.category_name}}?')">
             <i class="fas fa-trash-alt text-danger ml-2"></i></a>
           </div> 
         </td>
