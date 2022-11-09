@@ -32,7 +32,7 @@
         <td>{{subCategory.description}}</td>
         <td>{{subCategory.is_featured}}</td>
         <td>
-          <div class="pro-img-overlay"><a href="" ><i class="fas fa-edit text-warning"></i></a>
+          <div class="pro-img-overlay"><a href="{% url 'editSubCategory' subCategory.slug %}" ><i class="fas fa-edit text-warning"></i></a>
           </div> 
         </td>
         <td>

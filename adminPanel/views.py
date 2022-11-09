@@ -113,11 +113,36 @@ def addCategory(request):
     }
     return render(request, 'adminPanel/addCategory.html', context)
   
+@login_required(login_url = 'adminLogin')
+def editCategory(request, slug):
+  category = Category.objects.get(slug=slug)
+  
+  if request.method == 'POST':
+    form = CategoryForm(request.POST, request.FILES, instance=category)
+    
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Category edited successfully.')
+      return redirect('categories')
+    else:
+      messages.error(request, 'Invalid input')
+      return redirect('editCategory')
+      
+  form =   CategoryForm(instance=category)
+  context = {
+    'form':form,
+    'category':category,
+  }
+  return render(request, 'adminPanel/editCategory.html', context)
+  
 @login_required(login_url = 'adminLogin')  
 def deleteCategory(request, id):
   category = Category.objects.get(id=id)
   category.delete()
   return redirect('categories')
+
+
+# sub category management
 
 @login_required(login_url = 'adminLogin')
 def subCategories(request, id):
@@ -145,6 +170,29 @@ def addSubCategory(request, id):
       'id':id
     }
     return render(request, 'adminPanel/addSubCategory.html', context)
+  
+@login_required(login_url = 'adminLogin')
+def editSubCategory(request, slug):
+  subCategory = Sub_Category.objects.get(slug=slug)
+  id = subCategory.id
+  
+  if request.method == 'POST':
+    form = SubCategoryForm(request.POST, request.FILES, instance=subCategory)
+    
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Category edited successfully.')
+      return redirect('subCategories', id)
+    else:
+      messages.error(request, 'Invalid input')
+      return redirect('editSubCategory')
+      
+  form =   SubCategoryForm(instance=subCategory)
+  context = {
+    'form':form,
+    'subCategory':subCategory,
+  }
+  return render(request, 'adminPanel/editSubCategory.html', context)
 
 @login_required(login_url = 'adminLogin')  
 def deleteSubCategory(request, id):

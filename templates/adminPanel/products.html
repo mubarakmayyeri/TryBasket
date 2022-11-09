@@ -23,6 +23,7 @@
         <th>Description</th>
         <th>Stock</th>
         <th>is_available</th>
+        <th>is_featured</th>
         <th>Edit</th>
         <th>Delete</th>
       </tr>
@@ -36,9 +37,10 @@
         <td>{{product.category}}</td>
         <td>{{product.sub_category}}</td>
         <td>{{product.price}}</td>
-        <td>{{product.description}}</td>
+        <td style="max-height: 20px;">{{product.description}}</td>
         <td>{{product.stock}}</td>
         <td>{{product.is_available}}</td>
+        <td>{{product.is_featured}}</td>
         <td>
           <div class="pro-img-overlay"><a href="{% url 'editProduct' product.id  %}" ><i class="fas fa-edit text-warning"></i></a>
           </div> 

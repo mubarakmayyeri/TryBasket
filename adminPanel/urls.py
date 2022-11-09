@@ -11,10 +11,12 @@ urlpatterns = [
   
   path('categories', views.categories, name='categories'),
   path('addCategory', views.addCategory, name='addCategory'),
+  path('<str:slug>/editCategory', views.editCategory, name='editCategory'),
   path('<int:id>/deleteCategory', views.deleteCategory, name='deleteCategory'),
   
   path('<int:id>/subCategories', views.subCategories, name='subCategories'),
   path('<int:id>/addSubCategory', views.addSubCategory, name='addSubCategory'),
+  path('<str:slug>/editSubCategory', views.editSubCategory, name='editSubCategory'),
   path('<int:id>/deleteSubCategory', views.deleteSubCategory, name='deleteSubCategory'),
   
   path('products', views.products, name='products'),
