@@ -5,9 +5,7 @@
 {% block content %}
 
 
-    
-
-    <!-- Hero Section Begin -->
+<!-- Hero Section Begin -->
     <section class="hero">
         <div class="container">
             <div class="row">
@@ -112,21 +110,21 @@
 
                 {% for product in featured_products  %}
                 
-                <div class="col-lg-3 col-md-4 col-sm-6 mix a{{product.sub_category_id}}">
-                    <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="{{product.image_1.url}}">
-                            <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="featured__item__text">
-                            <h6><a href="#">{{product.product_name}}</a></h6>
-                            <h5>₹{{product.price}}/<span class='text-secondary'> kg</span></h5>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mix a{{product.sub_category_id}}">
+                        <div class="featured__item">
+                            <div class="featured__item__pic set-bg" data-setbg="{{product.image_1.url}}">
+                                <ul class="featured__item__pic__hover">
+                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="featured__item__text">
+                                <h6><a href="{{product.get_url}}">{{product.product_name}}</a></h6>
+                                <h5>₹{{product.price}}/<span class='text-secondary'> kg</span></h5>
+                            </div>
                         </div>
                     </div>
-                </div>
 
                 {% endfor %}
 
@@ -164,9 +162,9 @@
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
                                 
-                                {% for product in latest_products %}
+                                {% for product in latest_products_1 %}
                                     
-                                <a href="#" class="latest-product__item">
+                                <a href="{{product.get_url}}" class="latest-product__item">
                                     <div class="latest-product__item__pic">
                                         <img src="{{product.image_1.url}}" alt="">
                                     </div>
@@ -180,33 +178,20 @@
                                  
                             </div>
                             <div class="latest-prdouct__slider__item">
-                                <a href="#" class="latest-product__item">
+
+                                {% for product in latest_products_2 %}
+                                    
+                                <a href="{{product.get_url}}" class="latest-product__item">
                                     <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-1.jpg' %}" alt="">
+                                        <img src="{{product.image_1.url}}" alt="">
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
+                                        <h6>{{product.product_name}}</h6>
+                                        <span>₹{{product.price}}</span>
                                     </div>
                                 </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-2.jpg' %}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
-                                    </div>
-                                </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-3.jpg' %}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
-                                    </div>
-                                </a>
+
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -216,127 +201,77 @@
                         <h4>Top Rated Products</h4>
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
-                                <a href="#" class="latest-product__item">
+                                
+                                {% for product in latest_products_1 %}
+                                    
+                                <a href="{{product.get_url}}" class="latest-product__item">
                                     <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-2.jpg' %}" alt="">
+                                        <img src="{{product.image_1.url}}" alt="">
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
+                                        <h6>{{product.product_name}}</h6>
+                                        <span>₹{{product.price}}</span>
                                     </div>
                                 </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-1.jpg' %}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
-                                    </div>
-                                </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-3.jpg' %}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
-                                    </div>
-                                </a>
+
+                                {% endfor %}
+                                 
                             </div>
                             <div class="latest-prdouct__slider__item">
+
+                                {% for product in latest_products_2 %}
+                                    
                                 <a href="#" class="latest-product__item">
                                     <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-1.jpg' %}" alt="">
+                                        <img src="{{product.image_1.url}}" alt="">
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
+                                        <h6>{{product.product_name}}</h6>
+                                        <span>₹{{product.price}}</span>
                                     </div>
                                 </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-2.jpg' %}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
-                                    </div>
-                                </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-3.jpg' %}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
-                                    </div>
-                                </a>
+
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="latest-product__text">
-                        <h4>Review Products</h4>
+                        <h4>Top Deals</h4>
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
-                                <a href="#" class="latest-product__item">
+                                
+                                {% for product in latest_products_1 %}
+                                    
+                                <a href="{{product.get_url}}" class="latest-product__item">
                                     <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-1.jpg' %}" alt="">
+                                        <img src="{{product.image_1.url}}" alt="">
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
+                                        <h6>{{product.product_name}}</h6>
+                                        <span>₹{{product.price}}</span>
                                     </div>
                                 </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-2.jpg' %}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
-                                    </div>
-                                </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-3.jpg' %}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
-                                    </div>
-                                </a>
+
+                                {% endfor %}
+                                 
                             </div>
                             <div class="latest-prdouct__slider__item">
-                                <a href="#" class="latest-product__item">
+
+                                {% for product in latest_products_2 %}
+                                    
+                                <a href="{{product.get_url}}" class="latest-product__item">
                                     <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-1.jpg' %}" alt="">
+                                        <img src="{{product.image_1.url}}" alt="">
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
+                                        <h6>{{product.product_name}}</h6>
+                                        <span>₹{{product.price}}</span>
                                     </div>
                                 </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-2.jpg' %}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
-                                    </div>
-                                </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="{% static 'img/latest-product/lp-3.jpg' %}" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>₹30.00</span>
-                                    </div>
-                                </a>
+
+                                {% endfor %}
                             </div>
                         </div>
                     </div>

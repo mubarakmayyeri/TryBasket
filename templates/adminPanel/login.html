@@ -1,0 +1,65 @@
+{% extends 'adminPanel/base.html' %}
+
+{% block content %}
+
+<div class="mx-auto mt-3 w-50">{% include 'includes/alerts.html' %}
+
+</div>
+
+    <div class="container tm-mt-big tm-mb-big" style="min-height: 31rem;">
+      <div class="row">
+        <div class="col-12 mx-auto tm-login-col">
+          <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h2 class="tm-block-title mb-4">TryBasket Administration</h2>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-12">
+                <form action="{% url 'adminLogin' %}" method="post" class="tm-login-form">
+                  {% csrf_token %}
+
+                  <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input
+                      name="email"
+                      type="email"
+                      class="form-control validate"
+                      id="email"
+                      value=""
+                      required
+                    />
+                  </div>
+                  <div class="form-group mt-3">
+                    <label for="password">Password:</label>
+                    <input
+                      name="password"
+                      type="password"
+                      class="form-control validate"
+                      id="password"
+                      value=""
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group mt-4">
+                    <button
+                      type="submit"
+                      class="btn btn-secondary btn-block text-uppercase"
+                    >
+                      Login
+                    </button>
+                  </div>
+                  <button class="mt-5 btn btn-secondary btn-block text-uppercase">
+                    Forgot your password?
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endblock content %}
