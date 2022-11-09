@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from accounts.otp import *
 
 from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm
@@ -15,6 +16,7 @@ from category.models import Category, Sub_Category
 
 # Admin log in & Logout
 
+@never_cache
 def adminLogin(request):
   if 'email' in request.session:
     return redirect('dashboard')
@@ -45,11 +47,9 @@ def adminLogin(request):
   form = LoginForm
   return render(request, 'adminPanel/login.html', {'form':form})
 
+@login_required(login_url = 'adminLogin')
 def dashboard(request):
-  if 'email' in request.session:
     return render(request, 'adminPanel/dashboard.html')
-  else:
-    return redirect(adminLogin)
   
 @login_required(login_url = 'adminLogin')
 def adminLogout(request):
@@ -58,28 +58,6 @@ def adminLogout(request):
   logout(request)
   messages.success(request, 'Logged out successfully.')
   return redirect(adminLogin)
-
-def otpVerification(request):
-  # if 'email' in request.session:
-  #   return redirect('dashboard')
-  
-  if request.method == 'POST':
-    email = request.session['email']
-    user = Account.objects.get(email=email)
-    phone_number = user.phone_number
-    check_otp = request.POST.get('otp')
-    check = verify_otp(phone_number, check_otp)
-    
-    if check:
-      login(request, user)
-      # request.session['email'] = email
-      return redirect('dashboard')
-    
-    else:
-      messages.error(request, 'Invalid OTP!!!')
-      return redirect('otpVerification')
-    
-  return render(request, 'adminPanel/otpVerification.html')
 
 
 
