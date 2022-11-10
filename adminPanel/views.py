@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from accounts.otp import *
 
-from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm
+from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm
 from accounts.models import Account
 from shop.models import Product
 from category.models import Category, Sub_Category
@@ -72,6 +72,31 @@ def accounts(request):
   return render(request, 'adminPanel/accounts.html', context)
 
 @login_required(login_url = 'adminLogin')
+def editUser(request, id):
+  user = Account.objects.get(id=id)
+  id = user.id
+  
+  if request.method == 'POST':
+    form = UserForm(request.POST, request.FILES, instance=user)
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'User Account edited successfully.')
+      return redirect('accounts')
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('editUser', id)
+    
+  else:
+    form = UserForm(instance=user)
+  
+  context = {
+    'form':form,
+    'id':id,
+  }
+    
+  return render(request, 'adminPanel/editUser.html', context)
+
+@login_required(login_url = 'adminLogin')
 def blockUser(request, id):
     users = Account.objects.get(id=id)
     if users.is_active:
@@ -127,7 +152,7 @@ def editCategory(request, slug):
       return redirect('categories')
     else:
       messages.error(request, 'Invalid input')
-      return redirect('editCategory')
+      return redirect('editCategory', slug)
       
   form =   CategoryForm(instance=category)
   context = {

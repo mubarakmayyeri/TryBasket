@@ -5,6 +5,7 @@ from shop.models import Category, Product, Sub_Category
 
 def home(request):
   categories = Category.objects.all()
+  subCategories = Sub_Category.objects.all()
   products = Product.objects.all().filter(is_available=True)
   featured_categories = Sub_Category.objects.all().filter(is_featured=True)[:5]
   featured_products = Product.objects.all().filter(is_featured=True)[:8]
@@ -13,6 +14,7 @@ def home(request):
   
   context = {
     'categories' : categories,
+    'subCategories':subCategories,
     'products': products,
     'featured_categories': featured_categories,
     'featured_products': featured_products,

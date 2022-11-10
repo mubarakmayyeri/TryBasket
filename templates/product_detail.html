@@ -16,11 +16,24 @@
                       </div>
                       <ul class="overflow-auto" style="max-height: 29rem;">
                         {% for category in categories %}
+                        <li><a class="text-dark f-5" data-toggle="collapse" href="#{{category.slug}}" role="button" aria-expanded="false" aria-controls="{{category.slug}}">
+                            {{category.category_name}}
+                        </a></li>
+                      <div class="collapse" id="{{category.slug}}">
+                        <div class="ml-3">
+                            {% for sub_category in subCategories %}
 
-                        <li><a href="#">{{category}}</a></li>
+                            {% if sub_category.category.id == category.id %}
 
-                        {% endfor %}
-                      </ul>
+                            <a href=""><p>{{sub_category.sub_category_name}}</p></a>
+
+                            {% endif %}
+    
+                             {% endfor %}
+                        </div>
+                      </div>
+                      {% endfor %} 
+                    </ul>
                   </div>
               </div>
               <div class="col-lg-9">

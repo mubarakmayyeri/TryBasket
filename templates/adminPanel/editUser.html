@@ -1,0 +1,52 @@
+{% extends 'adminPanel/base.html' %}
+
+{% block content %}
+
+<div class="text-center mx-auto mt-2" style="min-width: 22rem;">{% include 'includes/alerts.html' %}</div>
+
+<div class="container mt-3" style="min-height: 33rem;">
+  <h2 class="text-center text-white">Edit User Details</h2>
+  <form action="{% url 'editUser' id %}" method="post">
+    {% csrf_token %}
+
+    <div class="col form-group">
+        <label > First Name</label><br>
+        {{form.first_name}}  
+    </div>
+    <div class="col form-group">
+        <label > Last Name</label><br>
+        {{form.last_name}}  
+    </div>
+    <div class="col-6 form-group">
+        <label > Email</label><br>
+        {{form.email}}
+    </div>
+    <div class="col-6 form-group">
+        <label > Phone number</label><br>
+        {{form.phone_number}}  
+    </div>
+    <div class="col-6 form-group">
+      <label > Is Admin</label><br>
+      {{form.is_admin}}  
+  </div>
+  <div class="col-6 form-group">
+    <label > Is Staff</label><br>
+    {{form.is_staff}}  
+  </div>
+  <div class="col-6 form-group">
+    <label > Is Active</label><br>
+    {{form.is_active}}  
+  </div>
+  <div class="col-6 form-group">
+    <label > Is Superadmin</label><br>
+    {{form.is_superadmin}}  
+  </div>
+                     
+    <div class="col form-group">
+       <a href=""> <input type="submit" name="submit" id="submit" class="btn btn-warning" value="Save"/></a>
+    </div>
+  </form>
+</div>
+
+  
+{% endblock content %}

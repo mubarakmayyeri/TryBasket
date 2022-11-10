@@ -14,7 +14,7 @@
 
 {% block content %}
 
-
+<div class="text-center mx-auto mt-2" style="min-width: 22rem;">{% include 'includes/alerts.html' %}</div>
 
 <div class="container mt-3" style="min-height: 33rem;">
   <input class="form-control w-50 mx-auto mb-3" type="search" placeholder="Search" aria-label="Search" id="myInput">
@@ -28,7 +28,7 @@
         <th scope="col">is_active</th>
         <th scope="col">Date Joined</th>
         <th scope="col">Action</th>
-        {% comment %} <th scope="col">Edit</th> {% endcomment %}
+        <th scope="col">Edit</th>
       </tr>
     </thead>
     <tbody id="myTable">
@@ -51,9 +51,9 @@
           <a href="{% url 'blockUser' user.id %}"><button  class="btn btn-danger btn-small"><span class="label label-danger">Unblock</span></button></a></td>
         {% endif %}
 
-        {% comment %} <td>
-          <div class="pro-img-overlay"><a href=""   ><i class="fas fa-edit text-warning"></i></a> </div> 
-        </td> {% endcomment %}
+        <td>
+          <div class="pro-img-overlay"><a href="{% url 'editUser' user.id %}"><i class="fas fa-edit text-warning"></i></a> </div> 
+        </td>
       </tr>
         
       {% endfor %}

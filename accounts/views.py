@@ -50,29 +50,53 @@ def login(request):
     user = auth.authenticate(email=email, password=password)
 
     if user is not None:
-      request.session['phone_number'] = user.phone_number
-      
-      # auth.login(request, user)        # login without otp
+           
+      auth.login(request, user)      # login without otp
+      request.session['email'] = email
       # messages.success(request, 'You are now logged in.')
-      # return redirect('home')
-      
-      send_otp(user.phone_number)
-      return redirect('otpVerification')
-    
+      return redirect('home')    
     else:
       messages.error(request, 'Invalid credentials')
       return redirect('login')
     
   return render (request, 'accounts/login.html')
 
+def otpLogin(request):
+  if request.user.is_authenticated:
+      return redirect('home')
+  
+  if request.method == 'POST':
+    phone_number = request.POST['phone_number']
+    request.session['phone_number'] = phone_number
+    try:
+      user = Account.objects.get(phone_number=phone_number)
+    except:
+      messages.error(request, 'Mobile number not registered!!!')
+      return redirect('otpLogin')
+    
+    send_otp(phone_number)
+    return redirect('otpVerification')
+  
+  return render(request, 'accounts/otpLogin.html')
+
 def otpVerification(request):
+  if request.user.is_authenticated:
+    return redirect('home')
+  
   phone_number = request.session['phone_number']
   
   if request.method == 'POST':
     # request.session.pop('phone_number', None)
     # request.session.modified = True
     user = Account.objects.get(phone_number=phone_number)
-    check_otp = request.POST.get('otp')
+    try:
+      check_otp = request.POST.get('otp')
+      if not check_otp:
+        raise e
+    except Exception as e:
+      messages.error(request, 'Please type in your OTP!!!')
+      return redirect('otpVerification')
+    
     check = verify_otp(phone_number, check_otp)
     
     if check:

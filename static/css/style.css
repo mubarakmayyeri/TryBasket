@@ -140,6 +140,11 @@ ol {
 	background-position: top center;
 }
 
+.set-bgcat {
+	background-size: auto !important;
+	background-position: center;
+}
+
 .spad {
 	padding-top: 100px;
 	padding-bottom: 100px;
@@ -617,7 +622,7 @@ ol {
 
 .hero__categories ul {
 	border: 1px solid #ebebeb;
-	padding-left: 40px;
+	padding-left: 20px;
 	padding-top: 10px;
 	padding-bottom: 12px;
 }
@@ -627,7 +632,7 @@ ol {
 }
 
 .hero__categories ul li a {
-	font-size: 16px;
+	font-size: 15px;
 	color: #1c1c1c;
 	line-height: 39px;
 	display: block;

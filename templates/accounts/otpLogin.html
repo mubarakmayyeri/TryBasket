@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <!-- ========================= SECTION CONTENT ========================= -->
+  <section class="section-conten padding-y" style="min-height:84vh">
+
+    <!-- ============================ COMPONENT LOGIN   ================================= -->
+      <div class="card mx-auto mt-5" style="max-width: 380px;">
+          <div class="card-body">
+          <h2 class="card-title mb-4 text-center">Sign in with OTP</h2>
+          
+          {% include 'includes/alerts.html' %}
+  
+          <form action="{% url 'otpLogin' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+           <input type="text" class="form-control" placeholder="Enter Your Mobile Number" name="phone_number" maxlength="10" required>
+              </div> <!-- form-group// -->
+              <div class="form-group">
+                  <button type="submit" class="btn btn-success btn-block"> Login  </button>
+              </div> <!-- form-group// -->    
+          </form>
+          <p class="text-center">Or Login with password? <a href="{% url 'login' %}">Click Here</a></p>
+          </div> <!-- card-body.// -->
+        </div> <!-- card .// -->
+    
+         <p class="text-center mt-4">Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
+         <br><br>
+    <!-- ============================ COMPONENT LOGIN  END.// ================================= -->
+    
+    
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+  
+
+{% endblock content %}
