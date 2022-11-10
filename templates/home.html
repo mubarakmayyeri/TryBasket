@@ -15,13 +15,27 @@
                             <i class="fa fa-bars"></i>
                             <span>All departments</span>
                         </div>
+
                         <ul class="overflow-auto" style="max-height: 29rem;">
+                            {% for category in categories %}
+                            <li><a class="text-dark" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                {{category.category_name}}
+                            </a></li>
+                          <div class="collapse" id="collapseExample">
+                            <div class="ml-3">
+                              sub category
+                            </div>
+                          </div>
+                          {% endfor %} 
+                        </ul>
+                        {% comment %} <ul class="overflow-auto" style="max-height: 29rem;">
                             
                             {% for category in categories %}
                             
-                            <li><a href="#">{{category.category_name}}</a></li>
+                            <li><a href="#" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample" >{{category.category_name}}</a></li>
+                            
 
-                            {% endfor %}
+                            {% endfor %} {% endcomment %}
                                 
                         </ul>
                     </div>
@@ -71,7 +85,7 @@
                     {% for category in categories %}
                         
                     <div class="col-lg-3">
-                        <div class="categories__item set-bg p-5" data-setbg="{{category.cat_image.url}} ">
+                        <div class="categories__item set-bg set-bgcat p-5" data-setbg="{{category.cat_image.url}} ">
                             <h5><a href="#">{{category.category_name}}</a></h5>
                         </div>
                     </div>

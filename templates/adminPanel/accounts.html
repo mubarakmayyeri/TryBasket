@@ -28,7 +28,7 @@
         <th scope="col">is_active</th>
         <th scope="col">Date Joined</th>
         <th scope="col">Action</th>
-        <th scope="col">Edit</th>
+        {% comment %} <th scope="col">Edit</th> {% endcomment %}
       </tr>
     </thead>
     <tbody id="myTable">
@@ -51,9 +51,9 @@
           <a href="{% url 'blockUser' user.id %}"><button  class="btn btn-danger btn-small"><span class="label label-danger">Unblock</span></button></a></td>
         {% endif %}
 
-        <td>
+        {% comment %} <td>
           <div class="pro-img-overlay"><a href=""   ><i class="fas fa-edit text-warning"></i></a> </div> 
-        </td>
+        </td> {% endcomment %}
       </tr>
         
       {% endfor %}

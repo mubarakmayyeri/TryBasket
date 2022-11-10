@@ -10,6 +10,9 @@ from .otp import *
 
 
 def register(request):
+  if 'email' in request.session:
+    return redirect('home')
+  
   if request.method == 'POST':
     form = RegistrationForm(request.POST)
     if form.is_valid():
@@ -62,11 +65,12 @@ def login(request):
     
   return render (request, 'accounts/login.html')
 
-def otpVerification(request): 
+def otpVerification(request):
+  phone_number = request.session['phone_number']
+  
   if request.method == 'POST':
-    phone_number = request.session['phone_number']
-    request.session.pop('phone_number', None)
-    request.session.modified = True
+    # request.session.pop('phone_number', None)
+    # request.session.modified = True
     user = Account.objects.get(phone_number=phone_number)
     check_otp = request.POST.get('otp')
     check = verify_otp(phone_number, check_otp)
@@ -87,7 +91,10 @@ def otpVerification(request):
       messages.error(request, 'Invalid OTP!!!')
       return redirect('otpVerification')
     
-  return render(request, 'accounts/otpVerification.html')
+  context = {
+    'phone_number':phone_number
+  }
+  return render(request, 'accounts/otpVerification.html', context)
 
 @login_required(login_url = 'login')
 def logout(request):

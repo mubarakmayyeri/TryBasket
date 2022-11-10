@@ -100,12 +100,13 @@ def categories(request):
 def addCategory(request):
   if request.method == 'POST':
     form = CategoryForm(request.POST, request.FILES)
-    if form.is_valid:
+    if form.is_valid():
       form.save()
       messages.success(request, 'Category added successfully.')
       return redirect('categories')
     else:
       messages.error(request, 'Invalid input!!!')
+      return redirect('addCategory')
   else:
     form = CategoryForm()
     context = {
@@ -158,12 +159,13 @@ def subCategories(request, category_slug):
 def addSubCategory(request, category_slug):
   if request.method == 'POST':
     form = SubCategoryForm(request.POST, request.FILES)
-    if form.is_valid:
+    if form.is_valid():
       form.save()
       messages.success(request, 'Sub Category added successfully.')
       return redirect('subCategories', category_slug)
     else:
       messages.error(request, 'Invalid input!!!')
+      return redirect('addSubCategory', category_slug)
   else:
     form = SubCategoryForm()
     context = {
@@ -219,12 +221,13 @@ def products(request):
 def addProduct(request):
   if request.method == 'POST':
     form = ProductForm(request.POST, request.FILES)
-    if form.is_valid:
+    if form.is_valid():
       form.save()
       messages.success(request, 'Product added successfully.')
       return redirect('products')
     else:
       messages.error(request, 'Invalid input!!!')
+      return redirect('addProduct')
   else:
     form = ProductForm()
     context = {

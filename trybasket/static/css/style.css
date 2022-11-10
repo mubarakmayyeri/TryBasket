@@ -140,6 +140,11 @@ ol {
 	background-position: top center;
 }
 
+.set-bgcat {
+	background-size: auto !important;
+	background-position: center;
+}
+
 .spad {
 	padding-top: 100px;
 	padding-bottom: 100px;

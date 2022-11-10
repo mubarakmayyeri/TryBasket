@@ -80,15 +80,25 @@
                           <img id="imageZoom" class="product__details__pic__item--large"
                               src="{{product.image_1.url}}" alt="">
                       </div>
-                      <div class="product__details__pic__slider owl-carousel">
-                          <img data-imgbigurl="{{product.image_1.url}}"
+                      <div class="product__details__pic__slider owl-carousel my-gallery">
+                          <img class="gallery-image" id="" data-imgbigurl="{{product.image_1.url}}"
                               src="{{product.image_1.url}}" alt="">
-                          <img data-imgbigurl="{% static 'img/product/details/product-details-3.jpg' %}"
-                              src="{% static 'img/product/details/thumb-2.jpg' %}" alt="">
-                          <img data-imgbigurl="{% static 'img/product/details/product-details-5.jpg' %}"
-                              src="{% static 'img/product/details/thumb-3.jpg' %}" alt="">
-                          <img data-imgbigurl="{% static 'img/product/details/product-details-4.jpg' %}"
-                              src="{% static 'img/product/details/thumb-4.jpg' %}" alt="">
+
+                              {% if product.image_2.url != '' %}
+                              <img id="imageZoom1" class="gallery-image" id="" data-imgbigurl="{{product.image_2.url}}"
+                              src="{{product.image_2.url}}" alt="">
+                              {% endif %}
+
+                              {% if product.image_3.url != '' %}
+                              <img id="imageZoom2" class="gallery-image" id="" data-imgbigurl="{{product.image_3.url}}"
+                              src="{{product.image_3.url}}" alt="">
+                              {% endif %}
+
+                              {% if product.image_4.url != '' %}
+                              <img id="imageZoom3" class="gallery-image" id="" data-imgbigurl="{{product.image_4.url}}"
+                              src="{{product.image_4.url}}" alt="">
+                              {% endif %}
+
                       </div>
                   </div>
               </div>

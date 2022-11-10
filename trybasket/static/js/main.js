@@ -191,9 +191,9 @@
     $('.product__details__pic__slider img').on('click', function () {
 
         var imgurl = $(this).data('imgbigurl');
-        var bigImg = $('.product__details__pic__item--large').attr('src');
+        var bigImg = $('#imageZoom').attr('src');
         if (imgurl != bigImg) {
-            $('.product__details__pic__item--large').attr({
+            $('#imageZoom').attr({
                 src: imgurl
             });
         }
