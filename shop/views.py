@@ -4,22 +4,12 @@ from shop.models import Category, Product, Sub_Category
 # Create your views here.
 
 def home(request):
-  categories = Category.objects.all()
-  subCategories = Sub_Category.objects.all()
-  products = Product.objects.all().filter(is_available=True)
   featured_categories = Sub_Category.objects.all().filter(is_featured=True)[:5]
   featured_products = Product.objects.all().filter(is_featured=True)[:8]
-  latest_products_1 = Product.objects.all().order_by('-created_date')[:3]
-  latest_products_2 = Product.objects.all().order_by('-created_date')[3:6]
   
   context = {
-    'categories' : categories,
-    'subCategories':subCategories,
-    'products': products,
     'featured_categories': featured_categories,
     'featured_products': featured_products,
-    'latest_products_1' : latest_products_1,
-    'latest_products_2' : latest_products_2,
   }
   
   return render(request, 'home.html', context)
@@ -32,9 +22,11 @@ def shop(request, category_slug=None, sub_category_slug=None):
   if category_slug != None:
     categories_shop = get_object_or_404(Category, slug=category_slug)
     products = Product.objects.all().filter(category=categories_shop, is_available=True)
+    print(categories_shop)
     product_count = products.count()
   
-  if sub_category_slug != None:
+  elif sub_category_slug != None:
+    print('hello')
     subCategories_shop = get_object_or_404(Sub_Category, slug=sub_category_slug)
     products = Product.objects.all().filter(sub_category=subCategories_shop, is_available=True)
     product_count = products.count()
@@ -45,20 +37,10 @@ def shop(request, category_slug=None, sub_category_slug=None):
     products = Product.objects.all().filter(is_available=True).order_by('product_name')
     product_count = products.count()
     
-  categories = Category.objects.all()
-  subCategories = Sub_Category.objects.all()
-    
-  latest_products_1 = Product.objects.all().order_by('-created_date')[:3]
-  latest_products_2 = Product.objects.all().order_by('-created_date')[3:6]
-  
   context = {
-    'categories' : categories,
     'categories_shop':categories_shop,
-    'subCategories':subCategories,
     'subCategories_shop':subCategories_shop,
     'products':products,
-    'latest_products_1' : latest_products_1,
-    'latest_products_2' : latest_products_2,
     'product_count':product_count
   }
   return render(request, 'shop.html', context)
