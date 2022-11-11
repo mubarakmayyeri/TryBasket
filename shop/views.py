@@ -19,16 +19,16 @@ def shop(request, category_slug=None, sub_category_slug=None):
   subCategories_shop = None
   products = None
   
-  if category_slug != None:
-    categories_shop = get_object_or_404(Category, slug=category_slug)
-    products = Product.objects.all().filter(category=categories_shop, is_available=True)
-    print(categories_shop)
-    product_count = products.count()
-  
-  elif sub_category_slug != None:
+  if sub_category_slug != None:
     print('hello')
     subCategories_shop = get_object_or_404(Sub_Category, slug=sub_category_slug)
     products = Product.objects.all().filter(sub_category=subCategories_shop, is_available=True)
+    product_count = products.count()
+    
+  elif category_slug != None:
+    categories_shop = get_object_or_404(Category, slug=category_slug)
+    products = Product.objects.all().filter(category=categories_shop, is_available=True)
+    print(categories_shop)
     product_count = products.count()
     
   else:
@@ -43,7 +43,7 @@ def shop(request, category_slug=None, sub_category_slug=None):
     'products':products,
     'product_count':product_count
   }
-  return render(request, 'shop.html', context)
+  return render(request, 'shop/shop.html', context)
 
 def product_details(request, category_slug, sub_category_slug, product_slug):
   categories = Category.objects.all()
@@ -60,4 +60,4 @@ def product_details(request, category_slug, sub_category_slug, product_slug):
     'product':product,
     "related_products":related_products,
   }
-  return render(request, 'product_detail.html', context)
+  return render(request, 'shop/product_detail.html', context)

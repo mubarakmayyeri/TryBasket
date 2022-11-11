@@ -31,6 +31,9 @@
                   <div class="sidebar__item ">
                       <h4>Shop by Sub Category</h4>
                       <ul class="overflow-auto"  style="max-height: 29rem;">
+                        <li><a class="text-dark f-5" href="{% url 'shop' %}">
+                            All Products
+                        </a></li>
                         {% for category in cat_links %}
                         <li><a class="text-dark f-5" data-toggle="collapse" href="#{{category.slug}}" role="button" aria-expanded="false" aria-controls="{{category.slug}}">
                             {{category.category_name}}

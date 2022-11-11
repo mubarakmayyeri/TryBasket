@@ -49,7 +49,7 @@
       </div>
       <nav class="humberger__menu__nav mobile-menu">
           <ul>
-              <li class="active"><a href="./index.html">Home</a></li>
+              <li class="active"><a href="{% url 'home' %}">Home</a></li>
               <li><a href="{% url 'shop' %}">Shop</a></li>
               <li><a href="#">Offers</a>
                   <ul class="header__menu__dropdown">
@@ -59,7 +59,7 @@
                       <li><a href="./blog-details.html">Blog Details</a></li>
                   </ul>
               </li>
-              <li><a href="./blog.html">Basket</a></li>
+              <li><a href="{% url 'cart' %}">Basket</a></li>
               <li><a href="./contact.html">Contact</a></li>
           </ul>
       </nav>
@@ -158,7 +158,7 @@
                                   <li><a href="./blog-details.html">Blog Details</a></li>
                               </ul>
                           </li>
-                          <li><a href="./blog.html">Basket</a></li>
+                          <li><a href="{% url 'cart' %}">Basket</a></li>
                           <li><a href="./contact.html">Contact</a></li>
                       </ul>
                   </nav>
@@ -191,6 +191,9 @@
                             <span>All categories</span>
                         </div>
                         <ul class="overflow-auto" style="max-height: 29rem;">
+                            <li><a class="text-dark f-5" href="{% url 'shop' %}">
+                                All Products
+                            </a></li>
                           {% for category in cat_links %}
                           <li><a class="text-dark f-5" href="{{category.get_url}}">
                               {{category.category_name}}
