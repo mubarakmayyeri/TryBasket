@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from .models import Account
 from .forms import RegistrationForm
 from django.contrib import messages, auth
@@ -39,25 +40,33 @@ def register(request):
   return render (request, 'accounts/register.html', context)
 
 @never_cache
-def login(request):
+def userLogin(request):
   if 'email' in request.session:
     return redirect('home')
   
   if request.method == 'POST':
     email = request.POST['email']
     password = request.POST['password']
-        
     user = auth.authenticate(email=email, password=password)
 
     if user is not None:
            
       auth.login(request, user)      # login without otp
       request.session['email'] = email
-      # messages.success(request, 'You are now logged in.')
-      return redirect('home')    
+      return JsonResponse(
+        {'success': True,},
+        safe=False
+      )
     else:
-      messages.error(request, 'Invalid credentials')
-      return redirect('login')
+      return JsonResponse(
+        {'success':False},
+        safe=False
+      )
+  #     # messages.success(request, 'You are now logged in.')
+  #     return redirect('home')    
+  #   else:
+  #     messages.error(request, 'Invalid credentials')
+  #     return redirect('userLogin')
     
   return render (request, 'accounts/login.html')
 
@@ -74,7 +83,7 @@ def otpLogin(request):
       messages.error(request, 'Mobile number not registered!!!')
       return redirect('otpLogin')
     
-    send_otp(phone_number)
+    # send_otp(phone_number)
     return redirect('otpVerification')
   
   return render(request, 'accounts/otpLogin.html')
@@ -109,7 +118,7 @@ def otpVerification(request):
         user.is_active = True
         user.save()
         messages.success(request, 'Account Verified.')
-        return redirect('login')
+        return redirect('userLogin')
     
     else:
       messages.error(request, 'Invalid OTP!!!')
@@ -120,10 +129,10 @@ def otpVerification(request):
   }
   return render(request, 'accounts/otpVerification.html', context)
 
-@login_required(login_url = 'login')
+@login_required(login_url = 'userLogin')
 def logout(request):
   if 'email' in request.session:
     request.session.flush()
   auth.logout(request)
   messages.success(request, "You are logged out.")
-  return redirect('login')
+  return redirect('userLogin')
