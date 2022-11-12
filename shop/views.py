@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from shop.models import Category, Product, Sub_Category
+from carts.models import Cart, CartItem
+
+from carts.views import _cart_id
 
 # Create your views here.
 
@@ -50,8 +53,9 @@ def product_details(request, category_slug, sub_category_slug, product_slug):
   
   try:
     product = Product.objects.get(category__slug=category_slug, sub_category__slug=sub_category_slug, slug=product_slug)
-    
+    in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=product).exists()    
     related_products = Product.objects.filter(sub_category__slug=sub_category_slug)[:4]
+    
   except Exception as e:
     raise e
 
@@ -59,5 +63,6 @@ def product_details(request, category_slug, sub_category_slug, product_slug):
     'categories':categories,
     'product':product,
     "related_products":related_products,
+    "in_cart":in_cart,
   }
   return render(request, 'shop/product_detail.html', context)

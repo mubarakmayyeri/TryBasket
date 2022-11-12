@@ -68,14 +68,31 @@
                       </div>
                       <div class="product__details__price">₹{{product.price}}</div>
                       <p>{{product.description}}</p>
-                      <div class="product__details__quantity">
+                      {% comment %} <div class="product__details__quantity">
                           <div class="quantity">
                               <div class="pro-qty">
                                   <input type="text" value="1">
                               </div>
                           </div>
-                      </div>
-                      <a href="#" class="primary-btn">ADD TO CARD</a>
+                      </div> {% endcomment %}
+                      {% if product.stock <= 0 %}
+
+                      <h3  class="danger-btn">OUT OF STOCK</h3>
+
+                      {% else %}
+
+                        {% if in_cart %}
+
+                        <h3  class="info-btn">ADDED TO BASKET</h3>
+                        <a href="{% url 'cart' %}" class="primary-btn">VIEW BASKET</a>
+
+                        {% else %}
+
+                        <a href="{% url 'add_cart' product.id %}" class="primary-btn">ADD TO BASKET</a>
+
+                        {% endif %}
+
+                      {% endif %}
                       <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                       <ul>
                           <li><b>Availability</b> <span>In Stock</span></li>
