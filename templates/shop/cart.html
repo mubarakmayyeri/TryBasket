@@ -55,18 +55,40 @@
 
                             <tr>
                                 <td class="shoping__cart__item">
-                                    <img src="{{cart_item.product.image_1.url}}" height="100px" alt="">
-                                    <a href="{{cart_item.product.get_url}}"><h5>{{cart_item.product.product_name}}</h5></a>
+                                    <div class="d-flex">
+                                        <img src="{{cart_item.product.image_1.url}}" height="100px" alt="">
+                                        <div class="mt-3">
+                                            <a href="{{cart_item.product.get_url}}"><h5>{{cart_item.product.product_name}}</h5></a>
+                                            <p class="text_muted">
+                                                {% if cart_item.variations.all %}
+                                                    {% for item in cart_item.variations.all %}
+                                                        {{item.variation_category | capfirst }} : {{item.variation_value}} <br>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="shoping__cart__price">
                                     ₹{{cart_item.product.price}}
                                 </td>
                                 <td class="shoping__cart__quantity">
                                     <div class="quantity">
-                                        <div class="pro-qty">
-                                            <a href="{% url 'remove_cart' cart_item.product.id %}" class="dec qtybtn">-</a>
+                                        <div class="pro-qty d-flex">
+                                            <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}">
+                                            <button class="btn">-</button></a>
                                             <input type="text" value="{{cart_item.quantity}}">
-                                            <a href="{% url 'add_cart' cart_item.product.id %}" class="inc qtybtn">+</a>
+                                            
+                                            <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
+                                                {% csrf_token %}
+                                                {% for item in cart_item.variations.all %}
+
+                                                <input type="hidden" name="{{item.variation_category | lower}}" value="{{item.variation_value | capfirst}}">
+                                                    
+                                                {% endfor %}
+                                                <button href="" type="submit" class="btn">+</button>
+                                            </form>
+
                                         </div>
                                     </div>
                                 </td>
@@ -74,7 +96,7 @@
                                     ₹{{cart_item.sub_total}}
                                 </td>
                                 <td class="shoping__cart__item__close">
-                                    <a href="{% url 'remove_cart_item' cart_item.product.id %}"  onclick="return confirm('Are you sure to remove {{cart_item.product.product_name}} from basket?')">
+                                    <a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}"  onclick="return confirm('Are you sure to remove {{cart_item.product.product_name}} from basket?')">
                                         <span class="icon_close"></span></a>
                                 </td>
                             </tr>

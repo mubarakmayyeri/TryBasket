@@ -55,60 +55,80 @@
                       </div>
                   </div>
               </div>
-              <div class="col-lg-6 col-md-6">
-                  <div class="product__details__text">
-                      <h3>{{product.product_name}}</h3>
-                      <div class="product__details__rating">
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star-half-o"></i>
-                          <span>(18 reviews)</span>
-                      </div>
-                      <div class="product__details__price">₹{{product.price}}</div>
-                      <p>{{product.description}}</p>
-                      {% comment %} <div class="product__details__quantity">
-                          <div class="quantity">
-                              <div class="pro-qty">
-                                  <input type="text" value="1">
-                              </div>
-                          </div>
-                      </div> {% endcomment %}
-                      {% if product.stock <= 0 %}
+                <div class="col-lg-6 col-md-6">
+                    <form action="{% url 'add_cart' product.id %}" method="POST">
+                        {% csrf_token %}
+                        <div class="product__details__text">
+                            <h3>{{product.product_name}}</h3>
+                            <div class="product__details__rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
+                                <span>(18 reviews)</span>
+                            </div>
+                            <div class="product__details__price">₹{{product.price}}</div>
+                            <p>{{product.description}}</p>
+                            {% comment %} <div class="product__details__quantity">
+                                <div class="quantity">
+                                    <div class="pro-qty">
+                                        <input type="text" value="1">
+                                    </div>
+                                </div>
+                            </div> {% endcomment %}
+                            <div class="d-flex mb-2">
+                                    <select class="ml-2" id="size" name="size" required>
+                                        <option value="" disabled selected>Size</option>
 
-                      <h3  class="danger-btn">OUT OF STOCK</h3>
+                                        {% for i in product.variation_set.sizes %}
 
-                      {% else %}
+                                        <option value="{{i.variation_value}}">{{i.variation_value}}</option>
 
-                        {% if in_cart %}
+                                        {% endfor %}
 
-                        <h3  class="info-btn">ADDED TO BASKET</h3>
-                        <a href="{% url 'cart' %}" class="primary-btn">VIEW BASKET</a>
+                                    </select>
+                            </div>
+                            {% if product.stock <= 0 %}
 
-                        {% else %}
+                            <h3  class="danger-btn">OUT OF STOCK</h3>
 
-                        <a href="{% url 'add_cart' product.id %}" class="primary-btn">ADD TO BASKET</a>
+                            {% else %}
 
-                        {% endif %}
+                                {% comment %} {% if in_cart %}
 
-                      {% endif %}
-                      <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
-                      <ul>
-                          <li><b>Availability</b> <span>In Stock</span></li>
-                          <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
-                          <li><b>Weight</b> <span>0.5 kg</span></li>
-                          <li><b>Share on</b>
-                              <div class="share">
-                                  <a href="#"><i class="fa fa-facebook"></i></a>
-                                  <a href="#"><i class="fa fa-twitter"></i></a>
-                                  <a href="#"><i class="fa fa-instagram"></i></a>
-                                  <a href="#"><i class="fa fa-pinterest"></i></a>
-                              </div>
-                          </li>
-                      </ul>
-                  </div>
-              </div>
+                                <h3  class="info-btn">ADDED TO BASKET</h3>
+                                <a href="{% url 'cart' %}" class="btn primary-btn">VIEW BASKET</a>
+
+                                {% else %} {% endcomment %}
+
+                                <button type="submit" class="btn primary-btn">ADD TO BASKET</button>
+
+                                {% comment %} {% endif %} {% endcomment %}
+
+                            {% endif %}
+                            <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+                            <ul>
+                                <li><b>Availability</b>
+                                    {% if product.stock <= 0 %}
+                                        <span>Out of Stock</span></li>
+                                    {% else %}
+                                        <span>In Stock</span></li>
+                                    {% endif %}
+                                <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
+                                <li><b>Weight</b> <span>0.5 kg</span></li>
+                                <li><b>Share on</b>
+                                    <div class="share">
+                                        <a href="#"><i class="fa fa-facebook"></i></a>
+                                        <a href="#"><i class="fa fa-twitter"></i></a>
+                                        <a href="#"><i class="fa fa-instagram"></i></a>
+                                        <a href="#"><i class="fa fa-pinterest"></i></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
               <div class="col-lg-12">
                   <div class="product__details__tab">
                       <ul class="nav nav-tabs" role="tablist">
@@ -213,5 +233,9 @@
       </div>
   </section>
   <!-- Related Product Section End -->
+
+  <script>
+
+  </script>
 
 {% endblock content %}
