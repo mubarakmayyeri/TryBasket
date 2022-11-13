@@ -130,9 +130,16 @@ def otpVerification(request):
   return render(request, 'accounts/otpVerification.html', context)
 
 @login_required(login_url = 'userLogin')
-def logout(request):
+def userLogout(request):
   if 'email' in request.session:
     request.session.flush()
   auth.logout(request)
   messages.success(request, "You are logged out.")
   return redirect('userLogin')
+
+
+# User Dashboard and Profile Settings
+
+@login_required(login_url = 'userLogin')
+def userDashboard(request):
+  return render(request, 'accounts/userDashboard.html')

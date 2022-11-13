@@ -30,7 +30,7 @@
                             </div>
                             <span class="ml-2 mr-2">|</span>
                             <div class="header__top__right__auth">
-                            <a href="{% url 'logout' %}" class="btn btn-light"><i class="fa fa-sign-out"></i></i>Logout</a>
+                            <a href="{% url 'userLogout' %}" class="btn btn-light"><i class="fa fa-sign-out"></i></i>Logout</a>
                             </div>
                                 
 
@@ -114,11 +114,11 @@
                         {% if user.is_authenticated %}
 
                             <div class="header__top__right__auth">
-                                <a href="" class="btn btn-light><i class="fa fa-user-circle" aria-hidden="true"></i><strong>{{user.first_name}}</strong></a>
+                                <a href="{% url 'userDashboard' %}" class="btn btn-light><i class="fa fa-user-circle" aria-hidden="true"></i><strong>{{user.first_name}}</strong></a>
                             </div>
                             <span class="ml-2 mr-2">|</span>
                             <div class="header__top__right__auth">
-                            <a href="{% url 'logout' %}" class="btn btn-light><i class="fa fa-sign-out"></i></i>Logout</a>
+                            <a href="{% url 'userLogout' %}" class="btn btn-light><i class="fa fa-sign-out"></i></i>Logout</a>
                             </div>
 
                         {% else %}
