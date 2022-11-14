@@ -14,7 +14,8 @@
   
           <form action="{% url 'otpLogin' %}" method="post">
             {% csrf_token %}
-            <div class="form-group">
+            <div class="form-group d-flex">
+              <span class="border mr-1 btn">+91</span>
            <input type="text" class="form-control" placeholder="Enter Your Mobile Number" name="phone_number" maxlength="10" required>
               </div> <!-- form-group// -->
               <div class="form-group">
