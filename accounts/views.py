@@ -6,6 +6,7 @@ from django.contrib import messages, auth
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from .otp import *
+from requests.utils import urlparse
 
 from carts.views import _cart_id, add_cart
 from carts.models import Cart, CartItem
@@ -93,10 +94,25 @@ def userLogin(request):
         pass
            
       auth.login(request, user)      # login without otp
-      return JsonResponse(
-        {'success': True,},
-        safe=False
-      )
+      
+      url = request.META.get('HTTP_REFERER')
+      
+      try:
+        query = urlparse(url).query
+        params = dict(x.split('=') for x in query.split('&'))
+        if 'next' in params:
+          nextPage = params['next']
+          return JsonResponse(
+              {'success': True,
+               'url':nextPage,},
+              safe=False
+            )
+      except:
+        return JsonResponse(
+          {'success': True,
+           'url':'/',},
+          safe=False
+        )
     else:
       return JsonResponse(
         {'success':False},
@@ -110,6 +126,7 @@ def userLogin(request):
     
   return render (request, 'accounts/login.html')
 
+@never_cache
 def otpLogin(request):
   if request.user.is_authenticated:
       return redirect('home')

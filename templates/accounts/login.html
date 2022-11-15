@@ -72,7 +72,7 @@
           {% comment %} dataType: 'json', {% endcomment %}
           success: function(data){
             if(data.success){
-              window.location.replace('/')
+              window.location.replace(data.url)
             }else{
               $('#crederror').html('Invalid credentials!!!')
             }
