@@ -8,9 +8,10 @@ class Payment(models.Model):
     user    =  models.ForeignKey(Account,on_delete=models.CASCADE)
     payment_id =   models.CharField(max_length=100)
     order_id = models.CharField(max_length=100,blank=True)
+    payment_method = models.CharField(max_length=100)
     amount_paid     = models.CharField(max_length=100) #this is total amount paid
     created_at = models.DateTimeField(auto_now_add=True)
-    paid =models.BooleanField(default=False)
+    status         = models.BooleanField(default=False)
 
 
 
@@ -42,11 +43,11 @@ class Address(models.Model):
 
 class Order(models.Model):
     STATUS = (
-        ('ordered','ordered'),
-        ('shipped','shipped'),
-        ('out_for_delivery','out_for_delivery'),
-        ('Delivered','Delivered'),
-        ('Cancelled','Cancelled'),
+        ('Order Conformed', 'Order Confirmed'),
+        ('Shipped',"Shipped"),
+        ('Out for delivery',"Out for delivery"),
+        ('Completed', 'Completed'),
+        ('Cancelled','Cancelled')
     )
 
     user = models.ForeignKey(Account, on_delete=models.SET_NULL,null=True)
@@ -66,7 +67,7 @@ class Order(models.Model):
     order_note = models.CharField(max_length=100, blank=True)
     order_total = models.FloatField()
     tax     = models.FloatField()
-    status = models.CharField(max_length=50,choices=STATUS,default='New')
+    status = models.CharField(max_length=50,choices=STATUS,default='Order Confirmed')
     ip = models.CharField(blank=True,max_length=20)
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -87,7 +88,6 @@ class OrderProduct(models.Model):
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     variations = models.ManyToManyField(Variation,blank=True)
-    size = models.CharField(max_length=50,null=True)
     quantity = models.IntegerField()
     product_price = models.FloatField()
     ordered = models.BooleanField(default=False)

@@ -52,12 +52,6 @@
               <li class="active"><a href="{% url 'home' %}">Home</a></li>
               <li><a href="{% url 'shop' %}">Shop</a></li>
               <li><a href="#">Offers</a>
-                  <ul class="header__menu__dropdown">
-                      <li><a href="./shop-details.html">Shop Details</a></li>
-                      <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                      <li><a href="./checkout.html">Check Out</a></li>
-                      <li><a href="./blog-details.html">Blog Details</a></li>
-                  </ul>
               </li>
               <li><a href="{% url 'cart' %}">Basket</a></li>
               <li><a href="./contact.html">Contact</a></li>
@@ -148,18 +142,11 @@
               <div class="col-lg-6">
                   <nav class="header__menu">
                       <ul>
-                          <li class="active"><a href="{% url 'home' %}">Home</a></li>
-                          <li><a href="{% url 'shop' %}">Shop</a></li>
+                          <li class="{% if '/' == request.path %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
+                          <li class="{% if '/shop/' in request.path %}active{% endif %}"><a href="{% url 'shop' %}">Shop</a></li>
                           <li><a href="#">Offers</a>
-                              <ul class="header__menu__dropdown">
-                                  <li><a href="./shop-details.html">Shop Details</a></li>
-                                  <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                                  <li><a href="./checkout.html">Check Out</a></li>
-                                  <li><a href="./blog-details.html">Blog Details</a></li>
-                              </ul>
-                          </li>
-                          <li><a href="{% url 'cart' %}">Basket</a></li>
-                          <li><a href="./contact.html">Contact</a></li>
+                          <li class="{% if '/cart/' in request.path %}active{% endif %}"><a href="{% url 'cart' %}">Basket</a></li>
+                          <li class="{% if '/contact/' in request.path %}active{% endif %}"><a href="./contact.html">Contact</a></li>
                       </ul>
                   </nav>
               </div>

@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 import datetime
 from carts.models import CartItem
-from .models import Order, Address
+from .models import Order, Address, Payment, OrderProduct
+from shop.models import Product
 from .forms import OrderForm
 
 # Create your views here.
@@ -61,6 +62,7 @@ def place_order(request, total=0, quantity=0):
         'total':total,
         'tax':tax,
         'grand_total':grand_total,
+        'order_number':order_number,
       }
       return render(request, 'orders/payment.html', context)
     else:
@@ -68,3 +70,57 @@ def place_order(request, total=0, quantity=0):
     
 def payments(request):
   return render(request, 'orders/payment.html')
+
+def cash_on_delivery(request,id):
+    # Move cart item to ordered product table
+    try:
+        order = Order.objects.get(user = request.user, is_ordered = False, order_number = id)
+        cart_items = CartItem.objects.filter(user = request.user)
+        order.is_ordered = True
+        payment = Payment(
+            user = request.user,
+            payment_id = order.order_number,
+            order_id = order.order_number,
+            payment_method = 'Cash On Delivery', 
+            amount_paid = order.order_total,
+            status = False
+        )
+        payment.save()
+        order.payment = payment
+        order.is_ordered = True
+        order.save()
+        for cart_item in cart_items:
+            order_product =  OrderProduct()
+            order_product.order_id = order.id
+
+            order_product.user_id =  request.user.id
+            order_product.product_id = cart_item.product_id
+            order_product.quantity =  cart_item.quantity
+            order_product.product_price = cart_item.sub_total()
+            order_product.ordered = True
+            order_product.save()
+            
+        #Reduce Quantity of product
+        
+            product = Product.objects.get( id = cart_item.product_id)
+            product.stock -= cart_item.quantity
+            product.save()
+
+        #clear cart
+        CartItem.objects.filter(user = request.user).delete()
+        #send order number and Transaction id to Web page using 
+        context ={
+          'orders':order,
+          'payment':payment
+             }
+        return render(request,'orders/cod_success.html',context)
+    except:
+      return redirect('home')
+    
+def cancel_order(request,id):
+    order = Order.objects.get(order_number = id,user = request.user)
+    order.status = "Cancelled"
+    order.save()
+    payment = Payment.objects.get(order_id = order.order_number)
+    payment.delete()
+    return redirect('orderDetails', id)

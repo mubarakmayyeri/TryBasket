@@ -10,6 +10,7 @@ from requests.utils import urlparse
 
 from carts.views import _cart_id, add_cart
 from carts.models import Cart, CartItem
+from orders.models import Order, OrderProduct
 
 # Create your views here.
 
@@ -197,4 +198,35 @@ def userLogout(request):
 
 @login_required(login_url = 'userLogin')
 def userDashboard(request):
-  return render(request, 'accounts/userDashboard.html')
+    orders = Order.objects.order_by('-created_at').filter(user_id= request.user.id, is_ordered= True)
+    orders_count = orders.count()
+    context = {
+        'orders_count':orders_count
+    }
+    return render(request, 'accounts/userDashboard.html', context)
+  
+@login_required(login_url='userLogin')
+def myOrders(request):
+    orders = Order.objects.filter(user=request.user,is_ordered=True).order_by('-created_at')
+
+    context = {
+        'orders':orders
+    }
+
+    return render(request,'accounts/myOrders.html',context)
+
+@login_required(login_url='userLogin') 
+def orderDetails(request,order_id):
+    order_details = OrderProduct.objects.filter(order__order_number=order_id)
+    order = Order.objects.get(order_number=order_id)
+    subtotal = 0
+    for i in order_details:
+        subtotal += i.product_price * i.quantity
+        
+    context = {
+        'order_details':order_details,
+        'order':order,
+        'subtotal':subtotal    
+    }
+
+    return render(request,'accounts/orderDetails.html',context) 
