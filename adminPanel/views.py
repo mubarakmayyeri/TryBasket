@@ -4,11 +4,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from accounts.otp import *
+from django.shortcuts import get_object_or_404
 
 from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm
 from accounts.models import Account
 from shop.models import Product
 from category.models import Category, Sub_Category
+from orders.models import Order
 
 # Create your views here.
 
@@ -293,4 +295,19 @@ def deleteProduct(request, id):
 
 @login_required(login_url = 'adminLogin')
 def orders(request):
-  return render(request, 'adminPanel/orders.html')
+  orders = Order.objects.all().order_by('-id')
+  
+  context = {
+    'orders':orders,
+  }
+  return render(request, 'adminPanel/orders.html', context)
+
+@login_required(login_url = 'adminLogin')
+def update_order(request, id):
+  if request.method == 'POST':
+    order = get_object_or_404(Order, id=id)
+    status = request.POST.get('status')
+    print(status)
+    order.status = status 
+    order.save()
+  return redirect('orders')

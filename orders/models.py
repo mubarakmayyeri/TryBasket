@@ -43,10 +43,10 @@ class Address(models.Model):
 
 class Order(models.Model):
     STATUS = (
-        ('Order Conformed', 'Order Confirmed'),
+        ('Order Confirmed', 'Order Confirmed'),
         ('Shipped',"Shipped"),
         ('Out for delivery',"Out for delivery"),
-        ('Completed', 'Completed'),
+        ('Delivered', 'Delivered'),
         ('Cancelled','Cancelled')
     )
 

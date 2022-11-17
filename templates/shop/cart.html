@@ -96,8 +96,27 @@
                                     ₹{{cart_item.sub_total}}
                                 </td>
                                 <td class="shoping__cart__item__close">
-                                    <a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}"  onclick="return confirm('Are you sure to remove {{cart_item.product.product_name}} from basket?')">
-                                        <span class="icon_close"></span></a>
+                                    <a data-toggle="modal" data-target="#Modal{{cart_item.product.id}}">
+                                                                            <span class="icon_close"></span></a>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="Modal{{cart_item.product.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body text-left">
+                                                Are you sure to remove <b>{{cart_item.product.product_name}}</b> from basket?
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}" type="button" class="btn btn-primary">Yes</a>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
 

@@ -46,7 +46,8 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mx-auto h-100">
-            <li class="nav-item">
+            <li class="nav-item ">
+            <li class="nav-item {% if '/dashboard/' in request.path %}active{% endif %}">
               <a class="nav-link" href="{% url 'dashboard' %}">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
                 <span class="sr-only">(current)</span>
@@ -72,25 +73,25 @@
               </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item {% if '/categories/' in request.path %}active{% endif %}">
               <a class="nav-link" href="{% url 'categories' %}">
                 <i class="far fa-list-alt"></i></i> Categories
               </a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item {% if '/products/' in request.path %}active{% endif %}">
               <a class="nav-link" href="{% url 'products' %}">
                 <i class="fas fa-shopping-cart"></i> Products
               </a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item {% if '/accounts/' in request.path %}active{% endif %}">
               <a class="nav-link" href="{% url 'accounts' %}">
                 <i class="far fa-user"></i> Accounts
               </a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item {% if '/orders/' in request.path %}active{% endif %}">
               <a class="nav-link" href="{% url 'orders' %}">
                 <i class="fas fa-truck"></i> Orders
               </a>

@@ -27,7 +27,11 @@
   <header class="card-header d-flex justify-content-between">
     <strong class="d-inline-block mr-3">Order Details</strong>
     <!-- Button trigger modal -->
-    {% if order.status != 'Cancelled' %}
+{% if order.status == 'Delivered' %}
+<button type="button" class="btn btn-success disabled">
+  Order Delivered.
+</button>
+{% elif order.status != 'Cancelled' %}
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
   Cancel Order?
 </button>
@@ -72,7 +76,7 @@
                               <!-- Start .row -->
                               <div class="col-lg-6">
                                   <!-- col-lg-6 start here -->
-                                  <div class="invoice-logo"><img src="{% static 'img/logo.png' %}" alt="Invoice logo" style="max-height: 40px;"></div>
+                                  <div class="invoice-logo mt-3"><img src="{% static 'img/logo.png' %}" alt="Invoice logo" style="max-height: 40px;"></div>
                               </div>
                               <!-- col-lg-6 end here -->
                               <div class="col-lg-6">
@@ -97,7 +101,7 @@
                                               <li><strong>Order: </strong> #{{order.order_number}} </li>
                                               <li><strong>Transaction: </strong>{{order.payment.payment_method}}</li>
                                               <li><strong>Order Date:</strong> {{order.created_at}}</li>
-                                              <li><strong>Status:</strong>{{order.status}}</li>
+                                              <li><strong>Status:</strong> {{order.status}}</li>
                                           </ul>
                                       </div>
                                   </div>

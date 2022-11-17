@@ -118,9 +118,15 @@ def cash_on_delivery(request,id):
       return redirect('home')
     
 def cancel_order(request,id):
-    order = Order.objects.get(order_number = id,user = request.user)
+    if request.user.is_superadmin:
+      order = Order.objects.get(order_number = id)
+    else:
+      order = Order.objects.get(order_number = id,user = request.user)
     order.status = "Cancelled"
     order.save()
     payment = Payment.objects.get(order_id = order.order_number)
     payment.delete()
-    return redirect('orderDetails', id)
+    if request.user.is_superadmin:
+      return redirect('orders')
+    else:
+      return redirect('orderDetails', id)

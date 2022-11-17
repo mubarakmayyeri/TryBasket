@@ -141,7 +141,7 @@ def otpLogin(request):
       messages.error(request, 'Mobile number not registered!!!')
       return redirect('otpLogin')
     
-    # send_otp(phone_number)
+    send_otp(phone_number)
     return redirect('otpVerification')
   
   return render(request, 'accounts/otpLogin.html')

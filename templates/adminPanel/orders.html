@@ -1,9 +1,141 @@
-{% extends 'adminPanel/base.html' %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+
+{% extends 'adminPanel/base.html' %}
 
 {% block content %}
 
-<h1>Orders</h1>
+<div class="text-center mx-auto mt-2"  style="min-width: 22rem;">{% include 'includes/alerts.html' %}</div>
+
+<div class="container-fluid mt-3" style="min-height: 33rem;">
+  <h2 class="text-center text-white">Manage Orders</h2>
+  <div class="d-flex justify-content-between">
+    <input class="form-control w-50 mx-auto mb-3" type="search" placeholder="Search" aria-label="Search" id="myInput">
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Number</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Amount</th>
+        <th>Tracking id</th>
+        <th>Status</th>
+        <th>Action</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      
+      {% for order in orders %}
+
+      <tr style="height: 50px !important;" class="text-wrap">
+        <th scope="row">
+          <a href="" class="text-white">{{forloop.counter}}</a></th>
+        <td>{{order.full_name}}</td>
+        <td>{{order.email}}</td>
+        <td>₹{{order.order_total}}</td>
+        <td>{{order.order_number}}</td>
+        <td>{{order.status}}</td>
+        <td>
+          {% if order.status == 'Delivered' %}
+          <label class="badge badge-success">Delivered</label>
+          {% elif order.status == 'Cancelled' %}
+          <label class="badge badge-danger">Cancelled</label>
+          {%else%}
+          <label class="badge badge-warning" type="button"  data-toggle="modal" data-target="#myModal{{order.id}}" id="Modal_button">Change</button>
+          {%endif%}
+        </td>
+        <td>
+          {% if order.status != 'Cancelled' and order.status != 'Delivered' %}
+          
+          <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancel{{order.id}}">
+            Cancel
+          </button>         
+
+          {% endif %}
+        </td>
+      </tr>
+
+      <!-- Button trigger modal -->
+
+<!-- Status Modal -->
+<div class="modal fade" id="myModal{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Change Status</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'update_order' order.id %}" method="POST">
+          {% csrf_token %}
+
+          <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Order Confirmed"  checked>
+            <label for="dreamweaver" class="ml-2 mt-2">Order Confirmed</label>
+          </div>
+          <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Shipped">
+            <label for="dreamweaver" class="ml-2 mt-2 text-info">Shipped</label>
+          </div>
+          <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Out for delivery">
+            <label for="dreamweaver" class="ml-2 mt-2 text-warning">Out for delivery</label>
+          </div>
+          <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Delivered">
+            <label for="dreamweaver" class="ml-2 mt-2 text-success">Delivered</label>
+          </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+          <!--Cancel Modal -->
+          <div class="modal fade" id="cancel{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Cancel Order</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body text-left">
+                  Are you sure to cancel the order <b>#{{order.order_number}}</b>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <a type="button" href="{% url 'cancel_order' order.order_number %}" class="btn btn-primary">Yes</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+      {% endfor %}
+        
+    </tbody>
+  </table>
+</div>
+
+<script>
+  $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
   
 {% endblock content %}
-  
