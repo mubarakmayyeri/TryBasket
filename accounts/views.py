@@ -142,6 +142,7 @@ def otpLogin(request):
       return redirect('otpLogin')
     
     send_otp(phone_number)
+    print(phone_number)
     return redirect('otpVerification')
   
   return render(request, 'accounts/otpLogin.html')
@@ -153,8 +154,7 @@ def otpVerification(request):
   phone_number = request.session['phone_number']
   
   if request.method == 'POST':
-    # request.session.pop('phone_number', None)
-    # request.session.modified = True
+    
     user = Account.objects.get(phone_number=phone_number)
     try:
       check_otp = request.POST.get('otp')

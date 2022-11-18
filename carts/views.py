@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from .models import Cart, CartItem
 from shop.models import Product, Variation
 from django.core.exceptions import ObjectDoesNotExist
@@ -174,6 +175,33 @@ def remove_cart(request, product_id, cart_item_id):
   except:
     pass
   return redirect('cart')
+
+def decqnty(request):
+  product_id = request.GET['pid']
+  cart_item_id = request.GET['cid']
+  
+  product = get_object_or_404(Product, id=product_id)
+  
+  try:
+    if request.user.is_authenticated:
+      cart_item = CartItem.objects.get(product=product, user=request.user, id=cart_item_id)
+    else:
+      cart = Cart.objects.get(cart_id=_cart_id(request))
+      cart_item = CartItem.objects.get(product=product, cart=cart, id=cart_item_id)
+    
+    if cart_item.quantity > 1:
+      cart_item.quantity  -= 1
+      cart_item.save()
+    else:
+      cart_item.delete()
+      
+  except:
+    pass
+  return JsonResponse(
+          {'success': True,
+           'qnty':cart_item.quantity},
+          safe=False
+        )
 
 def remove_cart_item(request, product_id, cart_item_id):
   product = get_object_or_404(Product, id=product_id)

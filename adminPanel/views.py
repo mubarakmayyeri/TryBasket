@@ -34,11 +34,9 @@ def adminLogin(request):
       if user.is_superadmin:
         request.session['email'] = email
         
-        login(request, user)            #for log in without otp
+        login(request, user)
         return redirect('dashboard')
         
-        # send_otp(user.phone_number)
-        # return redirect('otpVerification')
       else:
         messages.error(request, 'Not Authorized!!!')
         return redirect(adminLogin)

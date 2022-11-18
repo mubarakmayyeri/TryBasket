@@ -75,9 +75,22 @@
                                 <td class="shoping__cart__quantity">
                                     <div class="quantity">
                                         <div class="pro-qty d-flex">
-                                            <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}">
-                                            <button class="btn">-</button></a>
-                                            <input type="text" value="{{cart_item.quantity}}">
+
+                                            <div class="product_count">
+                                                <input type="text" name="qty" id="sst1" maxlength="12" value="1" title="Quantity:"
+                                                    class="input-text qty">
+                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                                                    class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) && sst > 0 ) result.value--;return false;"
+                                                    class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+                                            </div>
+
+                                            {% comment %} <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}">
+                                            <button class="btn">-</button></a> {% endcomment %}
+
+                                            <button id="dec-button" class="btn" data-item='{{cart_item.product.id}}' data-id='{{cart_item.id}}'>-</button>
+
+                                            <input type="number" id="sst" value="{{cart_item.quantity}}">
                                             
                                             <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
                                                 {% csrf_token %}
@@ -136,7 +149,7 @@
                   </div>
               </div>
               <div class="col-lg-6">
-                  <div class="shoping__continue">
+                  {% comment %} <div class="shoping__continue">
                       <div class="shoping__discount">
                           <h5>Discount Codes</h5>
                           <form action="#">
@@ -144,7 +157,7 @@
                               <button type="submit" class="site-btn">APPLY COUPON</button>
                           </form>
                       </div>
-                  </div>
+                  </div> {% endcomment %}
               </div>
               <div class="col-lg-6">
                   <div class="shoping__checkout">
@@ -162,26 +175,37 @@
   </section>
   <!-- Shoping Cart Section End -->
   {% endif %}
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  {% comment %} <script>
+    $('#dec-button').click(() => {
+        var result = document.getElementById('sst'); 
+        var sst = result.value;
+        if( !isNaN( sst ) && sst > 0 ) result.value--;
+        return false;
+    })
+  </script> {% endcomment %}
   <script>
-    function confirms() {
-        swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this imaginary file!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-          })
-          .then((willDelete) => {
-            if (willDelete) {
-              swal("Poof! Your imaginary file has been deleted!", {
-                icon: "success",
-              });
-            } else {
-              swal("Your imaginary file is safe!");
-            }
-          });
-    }
+    $('#dec-button').click(() => {
+         var pid = $('#dec-button').attr('data-item');
+         var cid = $('#dec-button').attr('data-id');
+         console.log(pid, cid)
+         $.ajax({
+            url: 'decqnty/',
+            data: {
+                'pid':pid,
+                'cid':cid,
+            },
+            dataType: 'json',
+
+            success: function(data){
+                if(data.success){
+                  $('#sst').val(data.qnty)
+                }else{
+                  alert('fail')
+                }
+              }
+        });
+    })
   </script>
   
 
