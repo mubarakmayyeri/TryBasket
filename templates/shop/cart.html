@@ -90,7 +90,7 @@
                                                 <input type="hidden" name="{{item.variation_category | lower}}" value="{{item.variation_value | capfirst}}">
                                                     
                                                 {% endfor %}
-                                                <button href="" type="submit" class="btn">+</button>
+                                                <button id="inc-button{{cart_item.product.slug}}" href="" type="button" class="btn">+</button>
                                             </form>
 
                                         </div>
@@ -176,10 +176,14 @@
   <script>
     {% for cart_item in cart_items %}
 
+    
     $('#dec-button{{cart_item.product.slug}}').click(() => {
+         
          var pid = $('#dec-button{{cart_item.product.slug}}').attr('data-item');
          var cid = $('#dec-button{{cart_item.product.slug}}').attr('data-id');
-         console.log(pid, cid)
+
+
+
          $.ajax({
             url: 'decqnty/',
             data: {
@@ -202,7 +206,38 @@
                 }
              }
         });
-    })
+    });
+
+    $('#inc-button{{cart_item.product.slug}}').click(() => {
+        var pid = $('#dec-button{{cart_item.product.slug}}').attr('data-item');
+        var cid = $('#dec-button{{cart_item.product.slug}}').attr('data-id');
+
+        $.ajax({
+           url: 'incqnty/',
+           method:'POST',
+           data: {
+                'csrfmiddlewaretoken':'{{ csrf_token }}',
+                'pid':pid,
+                'cid':cid,
+           },
+           dataType: 'json',
+
+           success: function(data){
+               if(data.success){
+                $('#qnty{{cart_item.product.slug}}').val(data.qnty)
+                $('#total{{cart_item.product.slug}}').html('₹'+ data.sub_total)
+
+                $('#total').html('₹'+data.total)
+                $('#tax').html('₹'+data.tax)
+                $('#grand_total').html('₹'+data.grand_total)
+                $('#count').html(data.cart_count)
+                $('#ct').html('₹'+data.total)
+               }else{
+                 alert('fail')
+               }
+            }
+       });
+   });
 
     {% endfor %}
   </script>

@@ -236,6 +236,65 @@ def decqnty(request):
            },
           safe=False
         )
+  
+def incqnty(request):
+  if request.method == 'POST':
+    product_id = request.POST['pid']
+    cart_item_id = request.POST['cid']
+    
+  product = get_object_or_404(Product, id=product_id)
+  
+  tax= 0
+  grand_total = 0
+  cart_count = 0
+  try:
+    if request.user.is_authenticated:
+      cart_item = CartItem.objects.get(product=product, user=request.user, id=cart_item_id)
+    else:
+      cart = Cart.objects.get(cart_id=_cart_id(request))
+      cart_item = CartItem.objects.get(product=product, cart=cart, id=cart_item_id)
+    
+    if cart_item.quantity < cart_item.product.stock:
+      cart_item.quantity  += 1
+      cart_item.save()
+      
+    sub_total = cart_item.sub_total()
+        
+  except:
+    pass
+  
+  try:
+    if request.user.is_authenticated:
+      cart_items = CartItem.objects.filter(user = request.user, is_active=True)
+    else:
+      cart = Cart.objects.get(cart_id=_cart_id(request))
+      cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+      
+    for cart_item in cart_items:
+      cart_count += cart_item.quantity
+        
+    total = 0
+    for item in cart_items:
+      total += (item.product.price * item.quantity)
+      
+    tax = (18 * total)/100
+    grand_total = total + tax
+    grand_total = format(grand_total, '.2f')
+
+  except:
+    pass
+  
+  return JsonResponse(
+          {'success': True,
+           'qnty':cart_item.quantity,
+           'sub_total':sub_total,
+           'cart_count':cart_count,
+           'total':total,
+           'tax':tax,
+           'grand_total':grand_total,
+           },
+          safe=False
+        )
 
 def remove_cart_item(request, product_id, cart_item_id):
   product = get_object_or_404(Product, id=product_id)

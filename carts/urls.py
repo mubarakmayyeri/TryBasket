@@ -11,4 +11,5 @@ urlpatterns = [
   
   
   path('decqnty/', views.decqnty, name='decqnty'),
+  path('incqnty/', views.incqnty, name='incqnty'),
 ]

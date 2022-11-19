@@ -6,8 +6,12 @@ import json
 from shop.models import Product
 from .forms import OrderForm
 from django.http import JsonResponse
+from django.conf import settings
+import razorpay
 
 # Create your views here.
+
+client =razorpay.Client(auth=(settings.RAZORPAY_ID,settings.RAZORPAY_KEY))
 
 def place_order(request, total=0, quantity=0):
   current_user = request.user
@@ -203,6 +207,38 @@ def cancel_order(request,id):
       return redirect('orders')
     else:
       return redirect('orderDetails', id)
+
+def razorpay(request):
+  current_user = request.user
+  
+  cart_items = CartItem.objects.filter(user=current_user)
+
+  grand_total = 0
+  tax = 0
+  total = 0
+  for cart_item in cart_items:
+    total += (cart_item.product.price * cart_item.quantity)
     
+  tax = (18 * total)/100
+  grand_total = total + tax
+  grand_total = format(grand_total, '.2f')
+    
+  amount = float(grand_total) * 100
+  
+  DATA = {
+    "amount": amount,
+    "currency": "INR",
+    "receipt": "receipt#1",
+    "notes": {
+        "key1": "value3",
+        "key2": "value2"
+    }
+      }
+  payment = client.order.create(data=DATA)
+  return JsonResponse({
+    'payment':payment,
+     'payment_method' : "RazorPay"
+      })
+   
 def test(request):
   return render(request, 'orders/test.html')

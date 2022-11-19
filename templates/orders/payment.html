@@ -77,84 +77,6 @@
                                 </div>
                             </div>
 
-
-
-                                <!-- Start Coupon Start -->
-                            {% comment %} <div class="coupon_area" id="coupon_container">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
-                                                <h3>Coupon</h3>
-                                                <div class="coupon_inner">
-                                                    <p>Enter your coupon code if you have one.</p>
-                                                    <div id="output" class="my-2 text-danger" >
-                                                    </div>
-                                                    <form id="coupon_form" method="POST">
-                                                        {% csrf_token %}
-                                                        <input class="mb-2" placeholder="Coupon code" type="text"
-                                                            name="coupon_data" id="coupon_data"
-                                                        >
-                                                        <button  class="btn btn-md btn-golden" type="submit">Apply coupon</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% if coupons %}
-                                        <div class="col-md-12 mt-3">
-                                            <h3 class="text-success"> Availabel Coupons:</h3>
-                                            <div class="faq-accordian">
-                                                {% for item in coupons %}
-                                                {% if forloop.counter == 1 %}
-                                                <div class="faq-accordian-single-item" data-aos="fade-up" data-aos-delay="0">
-                                                    <input id="item-1" name="accordian-item" type="radio" checked="">
-                                                    <label for="item-1">{{item.coupone.discount}}% OFF</label>
-                                                    <div class="item-content">
-                                                        <p><b>*</b>Applicable only  for order price more than {{item.coupone.min_value}}</p>
-                                                        <div class="d-flex mb-3">
-                                                        <span class="h4 text-success mt-2 ml-5 mr-2">Coupon Code : </span>
-                                                        <div class="code text-center mr-2" style="text-transform: uppercase;
-                                                            padding: 4px;
-                                                            background-color: #fff;
-                                                            color: red;
-                                                            margin-top: 5px;
-                                                            font-size: 19px;
-                                                            padding-right: 57px;">
-
-                                                        <span class="text-center">{{item.coupone.code}}</span>
-                                                        </div>
-                                                          </div>
-                                                    </div>
-                                                </div>
-                                                {%else%}
-                                                <div class="faq-accordian-single-item" data-aos="fade-up" data-aos-delay="200">
-                                                    <input id="item-2" name="accordian-item" type="radio">
-                                                    <label for="item-2">{{item.coupone.discount}}% OFF</label>
-                                                    <div class="item-content">
-                                                        <p><b>*</b>Applicable only  for order price more than {{item.coupone.min_value}}</p>
-                                                        <div class="d-flex mb-3">
-                                                        <span class="h4 text-success mt-2 ml-5 mr-2">Coupon Code : </span>
-                                                        <div class="code text-center mr-2" style="text-transform: uppercase;
-                                                            padding: 4px;
-                                                            background-color: #fff;
-                                                            color: red;
-                                                            margin-top: 5px;
-                                                            font-size: 19px;
-                                                            padding-right: 57px;">
-
-                                                        <span class="text-center">{{item.coupone.code}}</span>
-                                                    </div>
-                                                </div>
-                                                {%endif%}
-                                                {%endfor%}
-                                                
-                                            </div>
-
-                                        </div>
-                                        {%endif%}
-                                    </div>
-                                </div>
-                            </div> <!-- End Coupon Start -->   {% endcomment %}
                         </div>
 
 
@@ -309,6 +231,85 @@
     
         }).render('#paypal-button-container');
 </script>
+
+<!-- Razer pay -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var orderID = "{{order_number}}"
+    var csrftoken = getCookie('csrftoken');
+    var redirect_url = "{% url 'payments_completed' %}"
+    var url1 = "{% url 'razorpay' %}";
+    var url = "{% url 'payments' %}"
+    function sample(response){
+        // var payment_method = response.payment.payment_method
+      var options = {
+          "key": "rzp_test_6NP00hKOgzuTUT",
+          "amount":response.payment.amount , 
+          "currency": "INR",
+          "name": "TryBasket",
+          "description": "purchase test 1",
+          "image": "https://example.com/your_logo",
+          "order_id": response.payment.id,
+    
+          "handler": function (response2){
+              sendData(response,response2);
+          },
+          "prefill": {
+              "name": "hai",
+              "email": "hai@gmail.com",
+              "contact": "1234567891"
+          },
+          "notes": {
+              "address": "Razorpay Corporate Office"
+          },
+          "theme": {
+              "color": "#3399cc"
+          }
+      };
+      var rzp1 = new Razorpay(options);
+        rzp1.open();
+    //     e.preventDefault();
+    //   rzp1.on('payment.failed', function (response){
+    //           alert(response.error.reason);
+    //           //alert(response.error.metadata.order_id);
+    //           //alert(response.error.metadata.payment_id);
+    //   });
+    }
+      document.getElementById('rzp-button1').onclick = function(e){
+          fetch(url1).then((response)=>response.json()).then(response=>{
+            console.log(response)
+             sample(response)
+             
+          })
+          e.preventDefault();
+      }
+    
+      function sendData(response,response2){  
+                console.log(response.razorpay_payment_id)
+                  fetch(url,{
+                      method : "POST",
+                      headers : {
+                          "Content-type":"application/json",
+                          "X-CSRFToken": csrftoken,
+                      },
+                      body:JSON.stringify({
+                          orderID: orderID,
+                          transID: response2.razorpay_payment_id,
+                        //   razorpay_payment_id:response.razorpay_payment_id,
+                        //   razorpay_order_id:response.razorpay_order_id,
+                        //   razorpay_signature:response.razorpay_signature,
+                        //   amount_paid:amount_paid,
+                          status:'completed',
+                          paymode:'RazerPay'
+                      }),
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      window.location.href = redirect_url + '?order_number='+data.order_number +'&payment_id='+data.transID;
+    
+                  });
+              }	
+    </script>
 
 
 {% endblock %}
