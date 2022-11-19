@@ -76,12 +76,12 @@
                                     <div class="quantity">
                                         <div class="pro-qty d-flex">
 
-                                            <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}">
-                                            <button class="btn">-</button></a>
+                                            {% comment %} <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}">
+                                            <button class="btn">-</button></a> {% endcomment %}
 
-                                            {% comment %} <button id="dec-button" class="btn" data-item='{{cart_item.product.id}}' data-id='{{cart_item.id}}'>-</button> {% endcomment %}
+                                            <button id="dec-button{{cart_item.product.slug}}" class="btn" data-item='{{cart_item.product.id}}' data-id='{{cart_item.id}}'>-</button>
 
-                                            <input type="number" id="sst" value="{{cart_item.quantity}}">
+                                            <input type="number" id="qnty{{cart_item.product.slug}}" value="{{cart_item.quantity}}">
                                             
                                             <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
                                                 {% csrf_token %}
@@ -96,9 +96,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="shoping__cart__total">
-                                    ₹{{cart_item.sub_total}}
-                                </td>
+                                <td class="shoping__cart__total"  id="total{{cart_item.product.slug}}"> ₹{{cart_item.sub_total}} </td>
                                 <td class="shoping__cart__item__close">
                                     <a data-toggle="modal" data-target="#Modal{{cart_item.product.id}}">
                                                                             <span class="icon_close"></span></a>
@@ -154,9 +152,9 @@
                   <div class="shoping__checkout">
                       <h5>Cart Total</h5>
                       <ul>
-                          <li>Subtotal <span>₹{{total}}</span></li>
-                          <li>Tax <span>₹{{tax}}</span></li>
-                          <li>Total <span>₹{{grand_total}}</span></li>
+                          <li>Subtotal <span id="total">₹{{total}}</span></li>
+                          <li>Tax <span id="tax">₹{{tax}}</span></li>
+                          <li>Total <span id="grand_total">₹{{grand_total}}</span></li>
                       </ul>
                       <a href="{% url 'checkout' %}" class="primary-btn">PROCEED TO CHECKOUT</a>
                   </div>
@@ -176,9 +174,11 @@
     })
   </script> {% endcomment %}
   <script>
-    $('#dec-button').click(() => {
-         var pid = $('#dec-button').attr('data-item');
-         var cid = $('#dec-button').attr('data-id');
+    {% for cart_item in cart_items %}
+
+    $('#dec-button{{cart_item.product.slug}}').click(() => {
+         var pid = $('#dec-button{{cart_item.product.slug}}').attr('data-item');
+         var cid = $('#dec-button{{cart_item.product.slug}}').attr('data-id');
          console.log(pid, cid)
          $.ajax({
             url: 'decqnty/',
@@ -190,13 +190,21 @@
 
             success: function(data){
                 if(data.success){
-                  $('#sst').val(data.qnty)
+                  $('#qnty{{cart_item.product.slug}}').val(data.qnty)
+                  $('#total{{cart_item.product.slug}}').html('₹'+ data.sub_total)
+
+                  $('#total').html('₹'+data.total)
+                  $('#tax').html('₹'+data.tax)
+                  $('#grand_total').html('₹'+data.grand_total)
+                  $('#count').html(data.cart_count)
                 }else{
                   alert('fail')
                 }
-              }
+             }
         });
     })
+
+    {% endfor %}
   </script>
   
 
