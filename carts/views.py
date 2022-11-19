@@ -32,6 +32,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
       quantity += cart_item.quantity
     tax = (18 * total)/100
     grand_total = total + tax
+    grand_total = format(grand_total, '.2f')
   except ObjectDoesNotExist:
     pass
   
@@ -230,6 +231,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
       quantity += cart_item.quantity
     tax = (18 * total)/100
     grand_total = total + tax
+    grand_total = format(grand_total, '.2f')
   except ObjectDoesNotExist:
     pass
   

@@ -76,19 +76,10 @@
                                     <div class="quantity">
                                         <div class="pro-qty d-flex">
 
-                                            <div class="product_count">
-                                                <input type="text" name="qty" id="sst1" maxlength="12" value="1" title="Quantity:"
-                                                    class="input-text qty">
-                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                                    class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) && sst > 0 ) result.value--;return false;"
-                                                    class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-                                            </div>
+                                            <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}">
+                                            <button class="btn">-</button></a>
 
-                                            {% comment %} <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}">
-                                            <button class="btn">-</button></a> {% endcomment %}
-
-                                            <button id="dec-button" class="btn" data-item='{{cart_item.product.id}}' data-id='{{cart_item.id}}'>-</button>
+                                            {% comment %} <button id="dec-button" class="btn" data-item='{{cart_item.product.id}}' data-id='{{cart_item.id}}'>-</button> {% endcomment %}
 
                                             <input type="number" id="sst" value="{{cart_item.quantity}}">
                                             

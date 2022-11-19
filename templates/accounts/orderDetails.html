@@ -129,8 +129,9 @@
                                                           {% endif %}
                                                         </p>
                                                       </td>
-                                                      <td class="text-center">{{item.quantity}}</td>
-                                                      <td class="text-center">₹{{item.product_price}}</td>
+                                                      <td class="text-center" id="qnty{{item.product.slug}}">{{item.quantity}}</td>
+                                              <td class="d-none" id="price{{item.product.slug}}">{{item.product_price}} </td>
+                                              <td class="text-center" id="total{{item.product.slug}}"></td>
                                                   </tr>
                                                   {% endfor %}
                                               </tbody>
@@ -176,6 +177,20 @@
   
   </section>
   <!-- ========================= SECTION CONTENT END// ========================= -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>
+    {% for item in order_details %}
+
+    var qnty = $('#qnty{{item.product.slug}}').html()
+    var price = $('#price{{item.product.slug}}').html()
+    var total = qnty * price
+    $('#total{{item.product.slug}}').html('₹'+total)
+    console.log(total)
+
+    {% endfor %}
+  </script>
   
 
 {% endblock content %}
