@@ -9,6 +9,7 @@ from datetime import datetime,timedelta,date
 from django.db.models import Sum
 from django.db.models import FloatField
 from django.db.models.functions import Cast
+from django.core.paginator import Paginator
 
 from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm
 from accounts.models import Account
@@ -120,6 +121,9 @@ def dashboard(request):
         'today_sale':today_sale,
         'yester_day_sale':yester_day_sale,
         'day_2':day_2,
+        'day_3':day_3,
+        'day_4':day_4,
+        'day_5':day_5,
         'today':today,
         'yesterday':yesterday,
         'day_2_name':day_2_name,
@@ -374,8 +378,12 @@ def deleteProduct(request, id):
 def orders(request):
   orders = Order.objects.all().order_by('-id')
   
+  paginator = Paginator(orders, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
   context = {
-    'orders':orders,
+    'orders':page_obj,
   }
   return render(request, 'adminPanel/orders.html', context)
 
@@ -384,7 +392,17 @@ def update_order(request, id):
   if request.method == 'POST':
     order = get_object_or_404(Order, id=id)
     status = request.POST.get('status')
-    print(status)
     order.status = status 
     order.save()
+    if status  == "Delivered":
+      try:
+          payment = Payment.objects.get(payment_id = order.order_number, status = False)
+          print(payment)
+          if payment.payment_method == 'Cash On Delivery':
+              payment.status = True
+              payment.save()
+      except:
+          pass
+    order.save()
+    
   return redirect('orders')
