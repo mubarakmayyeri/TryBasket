@@ -72,7 +72,7 @@
                                 <td class="shoping__cart__price">
                                     ₹{{cart_item.product.price}}
                                 </td>
-                                <td class="shoping__cart__quantity">
+                                <td class="shoping__cart__quantity p-5">
                                     <div class="quantity">
                                         <div class="pro-qty d-flex">
 
@@ -175,8 +175,12 @@
   </script> {% endcomment %}
   <script>
     {% for cart_item in cart_items %}
+        var quantity = $('#qnty{{cart_item.product.slug}}').val()
+        if(quantity == 1) {
+            $('#dec-button{{cart_item.product.slug}}').attr('disabled', true)
+            $('#dec-button{{cart_item.product.slug}}').html(' ')
+        }
 
-    
     $('#dec-button{{cart_item.product.slug}}').click(() => {
          
          var pid = $('#dec-button{{cart_item.product.slug}}').attr('data-item');
@@ -201,6 +205,11 @@
                   $('#tax').html('₹'+data.tax)
                   $('#grand_total').html('₹'+data.grand_total)
                   $('#count').html(data.cart_count)
+                  if(data.qnty == 1) {
+                    $('#dec-button{{cart_item.product.slug}}').attr('disabled', true)
+                    $('#dec-button{{cart_item.product.slug}}').html(' ')
+                }
+            
                 }else{
                   alert('fail')
                 }
@@ -211,6 +220,9 @@
     $('#inc-button{{cart_item.product.slug}}').click(() => {
         var pid = $('#dec-button{{cart_item.product.slug}}').attr('data-item');
         var cid = $('#dec-button{{cart_item.product.slug}}').attr('data-id');
+
+        $('#dec-button{{cart_item.product.slug}}').attr('disabled', false)
+        $('#dec-button{{cart_item.product.slug}}').html('-')
 
         $.ajax({
            url: 'incqnty/',

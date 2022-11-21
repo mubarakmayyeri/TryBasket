@@ -9,7 +9,7 @@ function drawLineChart() {
           {
             scaleLabel: {
               display: true,
-              labelString: "Hits"
+              labelString: "Sales"
             }
           }
         ]
@@ -34,7 +34,7 @@ function drawLineChart() {
         ],
         datasets: [
           {
-            label: "Latest Hits",
+            label: "Latest Sales",
             data: [88, 68, 79, 57, 50, 55, 70],
             fill: false,
             borderColor: "rgb(75, 192, 192)",

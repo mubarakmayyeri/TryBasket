@@ -11,257 +11,68 @@
       </div>
   </div>
   <!-- row -->
+  <div class="row">
+    <div class="col-md-3 mb-4 stretch-card transparent">
+      <div class="card card-tale tm-bg-primary-dark text-white text-center">
+        <div class="card-body">
+          <h4 class="mb-4">Today's Orders</h4>
+          <p class="mb-2">{{order_count_in_day}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4 stretch-card transparent">
+      <div class="card  tm-bg-primary-dark text-white text-center">
+        <div class="card-body">
+          <h4 class="mb-4">This Week's Orders</h4>
+          <p class="fs-30 mb-2">{{order_count_in_week}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4 mb-lg-0 stretch-card transparent">
+      <div class="card  tm-bg-primary-dark text-white text-center">
+        <div class="card-body">
+          <h4 class="mb-4">This Month's Orders</h4>
+          <p class="fs-30 mb-2">{{order_count_in_month}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 stretch-card transparent">
+      <div class="card  tm-bg-primary-dark text-white text-center">
+        <div class="card-body">
+          <h4 class="mb-4">Number of Users</h4>
+          <p class="fs-30 mb-2">{{number_of_users}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphs -->
+
   <div class="row tm-content-row">
       <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-          <div class="tm-bg-primary-dark tm-block">
-              <h2 class="tm-block-title">Latest Hits</h2>
-              <canvas id="lineChart" class="text-white"></canvas>
+          <div class="bg-white tm-block">
+              <h2 class="tm-block-title text-dark text-center">Order Details</h2>
+              <canvas id="orderChart"  class="">></canvas>
           </div>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-          <div class="tm-bg-primary-dark tm-block">
-              <h2 class="tm-block-title">Performance</h2>
-              <canvas id="barChart"></canvas>
-          </div>
+        <div class="bg-white tm-block">
+            <h2 class="tm-block-title text-dark text-center">Payment Details</h2>
+            <h1 class="text-danger h2"><span class="text-dark">Revenue :</span> ₹{{revenue}}</h1>
+            <canvas id="north-america-chart"  class="mx-auto">></canvas>
+        </div>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-          <div class="tm-bg-primary-dark tm-block tm-block-taller">
-              <h2 class="tm-block-title">Storage Information</h2>
-              <div id="pieChartContainer">
-                  <canvas id="pieChart" class="chartjs-render-monitor" width="200" height="200"></canvas>
-              </div>                        
-          </div>
+        <div class="bg-white tm-block">
+            <h2 class="tm-block-title text-dark text-center">Sales</h2>
+            <canvas id="lineChart">></canvas>
+        </div>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
-          <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-overflow">
-              <h2 class="tm-block-title">Notification List</h2>
-              <div class="tm-notification-items">
-                  <div class="media tm-notification-item">
-                      <div class="tm-gray-circle"><img src="{% static 'img/notification-01.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                      <div class="media-body">
-                          <p class="mb-2"><b>Jessica</b> and <b>6 others</b> sent you new <a href="#"
-                                  class="tm-notification-link">product updates</a>. Check new orders.</p>
-                          <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                      </div>
-                  </div>
-                  <div class="media tm-notification-item">
-                      <div class="tm-gray-circle"><img src="{% static 'img/notification-02.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                      <div class="media-body">
-                          <p class="mb-2"><b>Oliver Too</b> and <b>6 others</b> sent you existing <a href="#"
-                                  class="tm-notification-link">product updates</a>. Read more reports.</p>
-                          <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                      </div>
-                  </div>
-                  <div class="media tm-notification-item">
-                      <div class="tm-gray-circle"><img src="{% static 'img/notification-03.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                      <div class="media-body">
-                          <p class="mb-2"><b>Victoria</b> and <b>6 others</b> sent you <a href="#"
-                                  class="tm-notification-link">order updates</a>. Read order information.</p>
-                          <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                      </div>
-                  </div>
-                  <div class="media tm-notification-item">
-                      <div class="tm-gray-circle"><img src="{% static 'img/notification-01.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                      <div class="media-body">
-                          <p class="mb-2"><b>Laura Cute</b> and <b>6 others</b> sent you <a href="#"
-                                  class="tm-notification-link">product records</a>.</p>
-                          <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                      </div>
-                  </div>
-                  <div class="media tm-notification-item">
-                      <div class="tm-gray-circle"><img src="{% static 'img/notification-02.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                      <div class="media-body">
-                          <p class="mb-2"><b>Samantha</b> and <b>6 others</b> sent you <a href="#"
-                                  class="tm-notification-link">order stuffs</a>.</p>
-                          <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                      </div>
-                  </div>
-                  <div class="media tm-notification-item">
-                      <div class="tm-gray-circle"><img src="{% static 'img/notification-03.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                      <div class="media-body">
-                          <p class="mb-2"><b>Sophie</b> and <b>6 others</b> sent you <a href="#"
-                                  class="tm-notification-link">product updates</a>.</p>
-                          <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                      </div>
-                  </div>
-                  <div class="media tm-notification-item">
-                      <div class="tm-gray-circle"><img src="{% static 'img/notification-01.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                      <div class="media-body">
-                          <p class="mb-2"><b>Lily A</b> and <b>6 others</b> sent you <a href="#"
-                                  class="tm-notification-link">product updates</a>.</p>
-                          <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                      </div>
-                  </div>
-                  <div class="media tm-notification-item">
-                      <div class="tm-gray-circle"><img src="{% static 'img/notification-02.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                      <div class="media-body">
-                          <p class="mb-2"><b>Amara</b> and <b>6 others</b> sent you <a href="#"
-                                  class="tm-notification-link">product updates</a>.</p>
-                          <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                      </div>
-                  </div>
-                  <div class="media tm-notification-item">
-                      <div class="tm-gray-circle"><img src="{% static 'img/notification-03.jpg' %}" alt="Avatar Image" class="rounded-circle"></div>
-                      <div class="media-body">
-                          <p class="mb-2"><b>Cinthela</b> and <b>6 others</b> sent you <a href="#"
-                                  class="tm-notification-link">product updates</a>.</p>
-                          <span class="tm-small tm-text-color-secondary">6h ago.</span>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div class="col-12 tm-block-col">
-          <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-              <h2 class="tm-block-title">Orders List</h2>
-              <table class="table">
-                  <thead>
-                      <tr>
-                          <th scope="col">ORDER NO.</th>
-                          <th scope="col">STATUS</th>
-                          <th scope="col">OPERATORS</th>
-                          <th scope="col">LOCATION</th>
-                          <th scope="col">DISTANCE</th>
-                          <th scope="col">START DATE</th>
-                          <th scope="col">EST DELIVERY DUE</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                          <th scope="row"><b>#122349</b></th>
-                          <td>
-                              <div class="tm-status-circle moving">
-                              </div>Moving
-                          </td>
-                          <td><b>Oliver Trag</b></td>
-                          <td><b>London, UK</b></td>
-                          <td><b>485 km</b></td>
-                          <td>16:00, 12 NOV 2018</td>
-                          <td>08:00, 18 NOV 2018</td>
-                      </tr>
-                      <tr>
-                          <th scope="row"><b>#122348</b></th>
-                          <td>
-                              <div class="tm-status-circle pending">
-                              </div>Pending
-                          </td>
-                          <td><b>Jacob Miller</b></td>
-                          <td><b>London, UK</b></td>
-                          <td><b>360 km</b></td>
-                          <td>11:00, 10 NOV 2018</td>
-                          <td>04:00, 14 NOV 2018</td>
-                      </tr>
-                      <tr>
-                          <th scope="row"><b>#122347</b></th>
-                          <td>
-                              <div class="tm-status-circle cancelled">
-                              </div>Cancelled
-                          </td>
-                          <td><b>George Wilson</b></td>
-                          <td><b>London, UK</b></td>
-                          <td><b>340 km</b></td>
-                          <td>12:00, 22 NOV 2018</td>
-                          <td>06:00, 28 NOV 2018</td>
-                      </tr>
-                      <tr>
-                          <th scope="row"><b>#122346</b></th>
-                          <td>
-                              <div class="tm-status-circle moving">
-                              </div>Moving
-                          </td>
-                          <td><b>William Aung</b></td>
-                          <td><b>London, UK</b></td>
-                          <td><b>218 km</b></td>
-                          <td>15:00, 10 NOV 2018</td>
-                          <td>09:00, 14 NOV 2018</td>
-                      </tr>
-                      <tr>
-                          <th scope="row"><b>#122345</b></th>
-                          <td>
-                              <div class="tm-status-circle pending">
-                              </div>Pending
-                          </td>
-                          <td><b>Harry Ryan</b></td>
-                          <td><b>London, UK</b></td>
-                          <td><b>280 km</b></td>
-                          <td>15:00, 11 NOV 2018</td>
-                          <td>09:00, 17 NOV 2018</td>
-                      </tr>
-                      <tr>
-                          <th scope="row"><b>#122344</b></th>
-                          <td>
-                              <div class="tm-status-circle pending">
-                              </div>Pending
-                          </td>
-                          <td><b>Michael Jones</b></td>
-                          <td><b>London, UK</b></td>
-                          <td><b>218 km</b></td>
-                          <td>18:00, 12 OCT 2018</td>
-                          <td>06:00, 18 OCT 2018</td>
-                      </tr>
-                      <tr>
-                          <th scope="row"><b>#122343</b></th>
-                          <td>
-                              <div class="tm-status-circle moving">
-                              </div>Moving
-                          </td>
-                          <td><b>Timmy Davis</b></td>
-                          <td><b>London, UK</b></td>
-                          <td><b>218 km</b></td>
-                          <td>12:00, 10 OCT 2018</td>
-                          <td>08:00, 18 OCT 2018</td>
-                      </tr>
-                      <tr>
-                          <th scope="row"><b>#122342</b></th>
-                          <td>
-                              <div class="tm-status-circle moving">
-                              </div>Moving
-                          </td>
-                          <td><b>Oscar Phyo</b></td>
-                          <td><b>London, UK</b></td>
-                          <td><b>420 km</b></td>
-                          <td>15:30, 06 OCT 2018</td>
-                          <td>09:30, 16 OCT 2018</td>
-                      </tr>
-                      <tr>
-                          <th scope="row"><b>#122341</b></th>
-                          <td>
-                              <div class="tm-status-circle moving">
-                              </div>Moving
-                          </td>
-                          <td><b>Charlie Brown</b></td>
-                          <td><b>London, UK</b></td>
-                          <td><b>300 km</b></td>
-                          <td>11:00, 10 OCT 2018</td>
-                          <td>03:00, 14 OCT 2018</td>
-                      </tr>
-                      <tr>
-                          <th scope="row"><b>#122340</b></th>
-                          <td>
-                              <div class="tm-status-circle cancelled">
-                              </div>Cancelled
-                          </td>
-                          <td><b>Wilson Cookies</b></td>
-                          <td><b>London, UK</b></td>
-                          <td><b>218 km</b></td>
-                          <td>17:30, 12 OCT 2018</td>
-                          <td>08:30, 22 OCT 2018</td>
-                      </tr>
-                      <tr>
-                          <th scope="row"><b>#122339</b></th>
-                          <td>
-                              <div class="tm-status-circle moving">
-                              </div>Moving
-                          </td>
-                          <td><b>Richard Clamon</b></td>
-                          <td><b>London, UK</b></td>
-                          <td><b>150 km</b></td>
-                          <td>15:00, 12 OCT 2018</td>
-                          <td>09:20, 26 OCT 2018</td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
+        <div class="bg-white tm-block">
+            <h2 class="tm-block-title text-dark text-center">User Status</h2>
+            <canvas id="doughnutChart"  class="mx-auto">></canvas>
+        </div>
       </div>
   </div>
 </div>
@@ -274,31 +85,247 @@
 <!-- http://www.chartjs.org/docs/latest/ -->
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <!-- https://getbootstrap.com/ -->
-<script src="{% static 'js/tooplate-scripts.js' %}"></script>
-<script>
-    Chart.defaults.global.defaultFontColor = 'white';
-    let ctxLine,
-        ctxBar,
-        ctxPie,
-        optionsLine,
-        optionsBar,
-        optionsPie,
-        configLine,
-        configBar,
-        configPie,
-        lineChart;
-    barChart, pieChart;
-    // DOM is ready
-    $(function () {
-        drawLineChart(); // Line Chart
-        drawBarChart(); // Bar Chart
-        drawPieChart(); // Pie Chart
 
-        $(window).resize(function () {
-            updateLineChart();
-            updateBarChart();                
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    
+    var data = {
+        labels: ["Ordered", "Shipped", "Out for delivery", "Delivered", ],
+        datasets: [{
+          label: '# of Ordres',
+          data: ['{{ordered}}', '{{shipped}}', '{{out_of_delivery}}', '{{delivered}}', ],
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'rgba(255,99,132,1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1,
+          fill: true
+        }]
+        };
+      
+        var options = {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            }
+          }]
+        },
+        legend: {
+          display: false
+        },
+        elements: {
+          point: {
+            radius: 0
+          }
+        }
+    
+        };
+      
+      
+    
+    
+        // Get context with jQuery - using jQuery's .get() method.
+        if ($("#orderChart").length) {
+        var barChartCanvas = $("#orderChart").get(0).getContext("2d");
+        // This will get the first returned node in the jQuery collection.
+        var barChart = new Chart(barChartCanvas, {
+          type: 'bar',
+          data: data,
+          options: options
         });
-    })
+        }
+    
+  </script>
+
+  <script>
+    if ($("#north-america-chart").length) {
+  var areaData = {
+    labels: ["PayPal", "RazorPay", "Cash on delivery"],
+    datasets: [{
+        data: ['{{paypal_orders}}','{{razorpay_orders}}','{{cash_on_delivery_count}}'],
+        backgroundColor: [
+           "#4B49AC","#FFC100", "#248AFD",
+        ],
+        borderColor: "rgba(0,0,0,0)"
+      }
+    ]
+  };
+  var areaOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    segmentShowStroke: false,
+    cutoutPercentage: 78,
+    elements: {
+      arc: {
+          borderWidth: 10
+      }
+    },      
+    legend: {
+      display: false
+    },
+    tooltips: {
+      enabled: true
+    },
+    legendCallback: function(chart) { 
+      var text = [];
+      text.push('<div class="report-chart">');
+        text.push('<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' + chart.data.datasets[0].backgroundColor[0] + '"></div><p class="mb-0">PayPal Sales</p></div>');
+        text.push('<p class="mb-0 mr-auto ml-4" style:"margin-left:5px" >{{paypal_orders}}</p>');
+        text.push('</div>');
+        text.push('<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' + chart.data.datasets[0].backgroundColor[1] + '"></div><p class="mb-0">RazorPay Sales</p></div>');
+        text.push('<p class="mb-0 mr-auto ml-4">{{razorpay_orders}}</p>');
+        text.push('</div>');
+        text.push('<div class="d-flex justify-content-between mx-4 mx-xl-5 mt-3"><div class="d-flex align-items-center"><div class="mr-3" style="width:20px; height:20px; border-radius: 50%; background-color: ' + chart.data.datasets[0].backgroundColor[2] + '"></div><p class="mb-0">Cash On Delivery</p></div>');
+        text.push('<p class="mb-0 mr-auto ml-3">{{cash_on_delivery_count}}</p>');
+        text.push('</div>');
+      text.push('</div>');
+      return text.join("");
+    },
+  }
+  var northAmericaChartPlugins = {
+    beforeDraw: function(chart) {
+      var width = chart.chart.width,
+          height = chart.chart.height,
+          ctx = chart.chart.ctx;
+  
+      ctx.restore();
+      var fontSize = 3.125;
+      ctx.font = "500 " + fontSize + "em sans-serif";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#13381B";
+  
+      var text = "{{total_payment_count}}",
+          textX = Math.round((width - ctx.measureText(text).width) / 2),
+          textY = height / 2;
+  
+      ctx.fillText(text, textX, textY);
+      ctx.save();
+    }
+  }
+  var northAmericaChartCanvas = $("#north-america-chart").get(0).getContext("2d");
+  var northAmericaChart = new Chart(northAmericaChartCanvas, {
+    type: 'doughnut',
+    data: areaData,
+    options: areaOptions,
+    plugins: northAmericaChartPlugins
+  });
+  document.getElementById('north-america-legend').innerHTML = northAmericaChart.generateLegend();
+}
 </script>
+
+<script>
+    var doughnutPieData = {
+  datasets: [{
+    data: ['{{blocked_user}}', '{{unblocked_user}}'],
+    backgroundColor: [
+      'rgba(255, 99, 132, 0.5)',
+      'rgba(54, 162, 235, 0.5)',
+      'rgba(255, 206, 86, 0.5)',
+      'rgba(75, 192, 192, 0.5)',
+      'rgba(153, 102, 255, 0.5)',
+      'rgba(255, 159, 64, 0.5)'
+    ],
+    borderColor: [
+      'rgba(255,99,132,1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)'
+    ],
+  }],
+
+  // These labels appear in the legend and in the tooltips when hovering different arcs
+  labels: [
+    'Blocked Users',
+    'Unblocked Users',
+  ]
+};
+var doughnutPieOptions = {
+  responsive: true,
+  animation: {
+    animateScale: true,
+    animateRotate: true
+  }
+};
+  if ($("#doughnutChart").length) {
+  var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
+  var doughnutChart = new Chart(doughnutChartCanvas, {
+    type: 'doughnut',
+    data: doughnutPieData,
+    options: doughnutPieOptions
+  });
+}
+</script>
+
+ <script>
+    var data = {
+    labels: ["{{day_5_name}}", "{{day_4_name}}", "{{day_3_name}}", "{{day_2_name}}", "{{yesterday}}","{{today}}"],
+    datasets: [{
+      label: '# Sales',
+      data: ['{{day_5}}', '{{day_4}}', '{{day_3}}', '{{day_2}}', '{{yester_day_sale}}', '{{today_sale}}'],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+      ],
+      borderWidth: 1,
+      fill: false
+    }]
+  };
+
+  var options = {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    },
+    legend: {
+      display: false
+    },
+    elements: {
+      point: {
+        radius: 0
+      }
+    }
+
+  };
+
+  if ($("#lineChart").length) {
+    var lineChartCanvas = $("#lineChart").get(0).getContext("2d");
+    var lineChart = new Chart(lineChartCanvas, {
+      type: 'line',
+      data: data,
+      options: options
+    });
+  }
+ </script>
 
 {% endblock content %}

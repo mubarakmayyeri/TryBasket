@@ -5,12 +5,16 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from accounts.otp import *
 from django.shortcuts import get_object_or_404
+from datetime import datetime,timedelta,date
+from django.db.models import Sum
+from django.db.models import FloatField
+from django.db.models.functions import Cast
 
 from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm
 from accounts.models import Account
 from shop.models import Product
 from category.models import Category, Sub_Category
-from orders.models import Order
+from orders.models import Order, Payment
 
 # Create your views here.
 
@@ -49,7 +53,82 @@ def adminLogin(request):
 
 @login_required(login_url = 'adminLogin')
 def dashboard(request):
-    return render(request, 'adminPanel/dashboard.html')
+    today = datetime.today()
+    today_date = today.strftime("%Y-%m-%d")
+    month = today.month
+    year = today.strftime("%Y")
+    one_week = datetime.today() - timedelta(days=7)
+    order_count_in_month = Order.objects.filter(created_at__year = year,created_at__month=month).count() 
+    order_count_in_day =Order.objects.filter(created_at__date = today).count()
+    order_count_in_week = Order.objects.filter(created_at__gte = one_week).count()
+    number_of_users  = Account.objects.filter(is_admin = False).count()
+    paypal_orders = Payment.objects.filter(payment_method="PayPal",status = True).count()
+    razorpay_orders = Payment.objects.filter(payment_method="RazerPay",status = True).count()
+    cash_on_delivery_count = Payment.objects.filter(payment_method="Cash On Delivery",status = True).count()
+
+    total_payment_count = paypal_orders + razorpay_orders + cash_on_delivery_count
+    try:
+        total_payment_amount = Payment.objects.filter(status = True).annotate(total_amount=Cast('amount_paid', FloatField())).aggregate(Sum('total_amount'))
+        
+    except:
+        total_payment_amount=0
+    revenue = total_payment_amount['total_amount__sum']
+    revenue = format(revenue, '.2f')
+           
+    blocked_user = Account.objects.filter(is_active = False,is_superadmin = False).count()
+    unblocked_user = Account.objects.filter(is_active = True,is_superadmin = False).count()
+
+    today_sale = Order.objects.filter(created_at__date = today_date,payment__status = True).count()
+    today = today.strftime("%A")
+    new_date = datetime.today() - timedelta(days = 1)
+    yester_day_sale =   Order.objects.filter(created_at__date = new_date,payment__status = True).count()  
+    yesterday = new_date.strftime("%A")
+    new_date = new_date - timedelta(days = 1)
+    day_2 = Order.objects.filter(created_at__date = new_date,payment__status = True).count()
+    day_2_name = new_date.strftime("%A")
+    new_date = new_date - timedelta(days = 1)
+    day_3 = Order.objects.filter(created_at__date = new_date,payment__status = True).count()
+    day_3_name = new_date.strftime("%A")
+    new_date = new_date - timedelta(days = 1)
+    day_4 = Order.objects.filter(created_at__date = new_date,payment__status = True).count()
+    day_4_name = new_date.strftime("%A")
+    new_date = new_date - timedelta(days = 1)
+    day_5 = Order.objects.filter(created_at__date = new_date,payment__status = True).count()
+    day_5_name = new_date.strftime("%A")
+    #status
+    ordered = Order.objects.filter(status = 'Order Confirmed').count()
+    shipped = Order.objects.filter(status = "Shipped").count()
+    out_of_delivery = Order.objects.filter(status ="Out for delivery").count()
+    delivered = Order.objects.filter(status = "Delivered").count()
+
+    context ={
+        'order_count_in_month':order_count_in_month,
+        'order_count_in_day':order_count_in_day,
+        'order_count_in_week':order_count_in_week,
+        'number_of_users':number_of_users,
+        'paypal_orders':paypal_orders,
+        'razorpay_orders':razorpay_orders,
+        'total_payment_count':total_payment_count,
+        'revenue':revenue,
+        'ordered':ordered,
+        'shipped':shipped,
+        'out_of_delivery':out_of_delivery,
+        'delivered':delivered,
+        'cash_on_delivery_count':cash_on_delivery_count,
+        'blocked_user':blocked_user,
+        'unblocked_user':unblocked_user,
+        'today_sale':today_sale,
+        'yester_day_sale':yester_day_sale,
+        'day_2':day_2,
+        'today':today,
+        'yesterday':yesterday,
+        'day_2_name':day_2_name,
+        'day_3_name':day_3_name,
+        'day_4_name':day_4_name,
+        'day_5_name':day_5_name
+        
+    }
+    return render(request, 'adminPanel/dashboard.html', context)
   
 @login_required(login_url = 'adminLogin')
 def adminLogout(request):
