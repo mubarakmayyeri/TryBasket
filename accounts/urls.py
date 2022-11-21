@@ -12,4 +12,5 @@ urlpatterns = [
   path('userDashboard/', views.userDashboard, name='userDashboard'),
   path('myOrders/', views.myOrders, name='myOrders'),
   path('orderDetails/<int:order_id>/', views.orderDetails, name='orderDetails'),
+  path('editProfile/', views.editProfile, name='editProfile'),
 ]

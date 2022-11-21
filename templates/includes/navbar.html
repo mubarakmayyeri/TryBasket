@@ -144,7 +144,6 @@
                       <ul>
                           <li class="{% if '/' == request.path %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
                           <li class="{% if '/shop/' in request.path %}active{% endif %}"><a href="{% url 'shop' %}">Shop</a></li>
-                          <li><a href="#">Offers</a>
                           <li class="{% if '/cart/' in request.path %}active{% endif %}"><a href="{% url 'cart' %}">Basket</a></li>
                           <li class="{% if '/contact/' in request.path %}active{% endif %}"><a href="./contact.html">Contact</a></li>
                       </ul>

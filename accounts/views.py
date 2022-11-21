@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .models import Account
-from .forms import RegistrationForm
+from .forms import RegistrationForm, UserForm
 from django.contrib import messages, auth
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
@@ -203,7 +203,7 @@ def userDashboard(request):
     context = {
         'orders_count':orders_count
     }
-    return render(request, 'accounts/userDashboard.html', context)
+    return render(request, 'user/userDashboard.html', context)
   
 @login_required(login_url='userLogin')
 def myOrders(request):
@@ -213,7 +213,7 @@ def myOrders(request):
         'orders':orders
     }
 
-    return render(request,'accounts/myOrders.html',context)
+    return render(request,'user/myOrders.html',context)
 
 @login_required(login_url='userLogin') 
 def orderDetails(request,order_id):
@@ -229,4 +229,22 @@ def orderDetails(request,order_id):
         'subtotal':subtotal    
     }
 
-    return render(request,'accounts/orderDetails.html',context) 
+    return render(request,'user/orderDetails.html',context)
+  
+@login_required(login_url='userLogin') 
+def editProfile(request):
+  if request.method =='POST':
+    form = UserForm(request.POST,instance=request.user)
+    if form.is_valid():
+      form.save()
+      messages.success(request,'Your Profile Updated Successfully ')
+      return redirect ('userDashboard')
+
+  else:
+      form = UserForm(instance=request.user)
+
+  context = {
+        'form':form
+    } 
+
+  return render(request,'user/editProfile.html', context) 
