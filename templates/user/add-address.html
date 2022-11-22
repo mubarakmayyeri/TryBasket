@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<section class="section-conten padding-y bg mb-5 mt-3">
+
+  <div class="container">
+    <div class="row">
+    <aside class="col-md-3">
+      <!--   SIDEBAR   -->
+      <ul class="list-group">
+        <a class="list-group-item active disabled" href="{% url 'userDashboard' %}"> Dash Board </a>
+        <a class="list-group-item" href="{% url 'myOrders' %}" style="color: #7fad39;"> My Orders </a>
+        <a class="list-group-item" href="{% url 'editProfile' %}" style="color: #7fad39;"> Edit Profile </a>
+        <a class="list-group-item" href="" style="color: #7fad39;">Change Password </a>
+      </ul>
+      <br>
+      <a class="btn btn-light btn-block" href="{% url 'userLogout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+      <!--   SIDEBAR .//END   -->
+    </aside>
+ 
+    <form action="{% url 'add_address' %}" method="POST">
+      {% csrf_token %}
+      {{form}}
+      <input type="submit" value="Save">
+    </form>
+
+
+  </div> <!-- row.// -->
+  </div>
+  
+  
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+  
+
+{% endblock content %}

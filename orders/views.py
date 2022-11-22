@@ -32,21 +32,21 @@ def place_order(request, total=0, quantity=0):
   grand_total = format(grand_total, '.2f')
   
   if request.method == 'POST':
-    form = OrderForm(request.POST)
-    if form.is_valid():
+      id = request.POST['flexRadioDefault']
+      address  = Address.objects.get(user = request.user,id = id)
       data = Order()
       data.user = current_user
-      data.first_name = form.cleaned_data['first_name']
-      data.last_name = form.cleaned_data['last_name']
-      data.phone = form.cleaned_data['phone']
-      data.email = form.cleaned_data['email']
-      data.address_line1 = form.cleaned_data['address_line1']
-      data.address_line2 = form.cleaned_data['address_line2']
-      data.state = form.cleaned_data['state']
-      data.district = form.cleaned_data['district']
-      data.city = form.cleaned_data['city']
-      data.pincode = form.cleaned_data['pincode']
-      data.order_note = form.cleaned_data['order_note']
+      data.first_name = address.first_name
+      data.last_name = address.last_name
+      data.phone = address.phone
+      data.email = address.email
+      data.address_line1 = address.address_line1
+      data.address_line2 = address.address_line2
+      data.state = address.state
+      data.district = address.district
+      data.city = address.city
+      data.pincode = address.pincode
+      data.order_note = address.order_note
       data.order_total = grand_total
       data.tax = tax
       data.ip = request.META.get('REMOTE_ADDR')
@@ -72,7 +72,7 @@ def place_order(request, total=0, quantity=0):
         'order_number':order_number,
       }
       return render(request, 'orders/payment.html', context)
-    else:
+  else:
       return redirect('checkout')
     
 def payments(request):

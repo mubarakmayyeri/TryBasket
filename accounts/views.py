@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .models import Account
-from .forms import RegistrationForm, UserForm
+from .forms import RegistrationForm, UserForm, AddressForm
 from django.contrib import messages, auth
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
@@ -10,7 +10,7 @@ from requests.utils import urlparse
 
 from carts.views import _cart_id, add_cart
 from carts.models import Cart, CartItem
-from orders.models import Order, OrderProduct
+from orders.models import Order, OrderProduct, Address
 
 # Create your views here.
 
@@ -247,4 +247,34 @@ def editProfile(request):
         'form':form
     } 
 
-  return render(request,'user/editProfile.html', context) 
+  return render(request,'user/editProfile.html', context)
+
+def add_address(request):
+    if request.method == 'POST':
+        form = AddressForm(request.POST,request.FILES,)
+        if form.is_valid():
+            print('form is valid')
+            detail = Address()
+            detail.user = request.user
+            detail.first_name =form.cleaned_data['first_name']
+            detail.last_name = form.cleaned_data['last_name']
+            detail.phone =  form.cleaned_data['phone']
+            detail.email =  form.cleaned_data['email']
+            detail.address_line1 =  form.cleaned_data['address_line1']
+            detail.address_line2  = form.cleaned_data['address_line2']
+            detail.district =  form.cleaned_data['district']
+            detail.state =  form.cleaned_data['state']
+            detail.city =  form.cleaned_data['city']
+            detail.pincode =  form.cleaned_data['pincode']
+            detail.save()
+            messages.success(request,'Address added Successfully')
+            return redirect('userDashboard')
+        else:
+            messages.success(request,'Form is Not valid')
+            return redirect('userDashboard')
+    else:
+        form = AddressForm()
+        context={
+            'form':form
+        }    
+    return render(request,'user/add-address.html',context)
