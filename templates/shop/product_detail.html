@@ -34,21 +34,21 @@
                               src="{{product.image_1.url}}" alt="">
                       </div>
                       <div class="product__details__pic__slider owl-carousel my-gallery">
-                          <img class="gallery-image" id="" data-imgbigurl="{{product.image_1.url}}"
+                          <img class="gallery-image" data-imgbigurl="{{product.image_1.url}}"
                               src="{{product.image_1.url}}" alt="">
 
                               {% if product.image_2.url != '' %}
-                              <img id="imageZoom1" class="gallery-image" id="" data-imgbigurl="{{product.image_2.url}}"
+                              <img id="imageZoom1" class="gallery-image" data-imgbigurl="{{product.image_2.url}}"
                               src="{{product.image_2.url}}" alt="">
                               {% endif %}
 
                               {% if product.image_3.url != '' %}
-                              <img id="imageZoom2" class="gallery-image" id="" data-imgbigurl="{{product.image_3.url}}"
+                              <img id="imageZoom2" class="gallery-image" data-imgbigurl="{{product.image_3.url}}"
                               src="{{product.image_3.url}}" alt="">
                               {% endif %}
 
                               {% if product.image_4.url != '' %}
-                              <img id="imageZoom3" class="gallery-image" id="" data-imgbigurl="{{product.image_4.url}}"
+                              <img id="imageZoom3" class="gallery-image" data-imgbigurl="{{product.image_4.url}}"
                               src="{{product.image_4.url}}" alt="">
                               {% endif %}
 
@@ -233,8 +233,5 @@
       </div>
   </section>
   <!-- Related Product Section End -->
-  <script>
-
-  </script>
 
 {% endblock content %}
