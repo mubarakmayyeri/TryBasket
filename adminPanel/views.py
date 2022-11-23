@@ -101,6 +101,8 @@ def dashboard(request):
     shipped = Order.objects.filter(status = "Shipped").count()
     out_of_delivery = Order.objects.filter(status ="Out for delivery").count()
     delivered = Order.objects.filter(status = "Delivered").count()
+    returned = Order.objects.filter(status = "Returned").count()
+    cancelled = Order.objects.filter(status = "Cancelled").count()
 
     context ={
         'order_count_in_month':order_count_in_month,
@@ -115,6 +117,8 @@ def dashboard(request):
         'shipped':shipped,
         'out_of_delivery':out_of_delivery,
         'delivered':delivered,
+        'returned':returned,
+        'cancelled':cancelled,
         'cash_on_delivery_count':cash_on_delivery_count,
         'blocked_user':blocked_user,
         'unblocked_user':unblocked_user,

@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
 from shop.models import Category, Product, Sub_Category
 from carts.models import Cart, CartItem
 
@@ -66,3 +67,18 @@ def product_details(request, category_slug, sub_category_slug, product_slug):
     "in_cart":in_cart,
   }
   return render(request, 'shop/product_detail.html', context)
+
+def price_change(request):
+  var_value = request.GET['var_value']
+  pro_id = request.GET['pid']
+  product = Product.objects.get(id=pro_id)
+  price = product.price
+  x = var_value.split()
+  var_value = int(x[0])
+  pro_price = price * var_value
+  return JsonResponse(
+          {'success': True,
+           'pro_price':pro_price,
+           },
+          safe=False
+        )

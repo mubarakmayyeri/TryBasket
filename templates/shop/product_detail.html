@@ -79,7 +79,7 @@
                             </div> {% endcomment %}
                             <div class="d-flex mb-2">
                                     <h4>Size :</h4>
-                                    <select class="ml-2" id="size" name="size" required>
+                                    <select class="ml-2" id="size" name="size" required  onchange="getval(this);">
                                         {% comment %} <option value="" disabled selected>Size</option> {% endcomment %}
 
                                         {% for i in product.variation_set.sizes %}
@@ -117,7 +117,6 @@
                                         <span>In Stock</span></li>
                                     {% endif %}
                                 <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
-                                <li><b>Weight</b> <span>0.5 kg</span></li>
                                 <li><b>Share on</b>
                                     <div class="share">
                                         <a href="#"><i class="fa fa-facebook"></i></a>
@@ -234,6 +233,33 @@
       </div>
   </section>
   <!-- Related Product Section End -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>
+    function getval(sel)
+    {
+        var url = '{% url 'price_change' %}'
+        var value = sel.value
+        var pid = {{product.id}}
+        data = {
+            'var_value':value,
+            'pid':pid,
+        }
+        $.ajax({
+            url: url,
+            data: data,
+            dataType: 'json',
+            success: function(data){
+              if(data.success){
+                $('#price').html('₹'+data.pro_price)
+              }else{
+                alert('fail')
+              }
+            }
+          })
+    }
+  </script>
 
 
 

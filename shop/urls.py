@@ -9,4 +9,6 @@ urlpatterns = [
   path('shop/<slug:category_slug>/<slug:sub_category_slug>/', views.shop, name='products_by_sub_category'),
   
   path('shop/<slug:category_slug>/<slug:sub_category_slug>/<slug:product_slug>/', views.product_details, name='product_details'),
+  
+  path('price_change/', views.price_change, name='price_change'),
 ]

@@ -47,7 +47,8 @@ class Order(models.Model):
         ('Shipped',"Shipped"),
         ('Out for delivery',"Out for delivery"),
         ('Delivered', 'Delivered'),
-        ('Cancelled','Cancelled')
+        ('Cancelled','Cancelled'),
+        ('Returned','Returned'),
     )
 
     user = models.ForeignKey(Account, on_delete=models.SET_NULL,null=True)
@@ -70,6 +71,8 @@ class Order(models.Model):
     status = models.CharField(max_length=50,choices=STATUS,default='Order Confirmed')
     ip = models.CharField(blank=True,max_length=20)
     is_ordered = models.BooleanField(default=False)
+    is_returned = models.BooleanField(default=False)
+    return_reason = models.CharField(max_length=50, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 

@@ -91,10 +91,10 @@
 <script>
     
     var data = {
-        labels: ["Order Confirmed", "Shipped", "Out for delivery", "Delivered", ],
+        labels: ["Order Confirmed", "Shipped", "Out for delivery", "Delivered", "Cancelled", "Returned" ],
         datasets: [{
           label: '# of Ordres',
-          data: ['{{ordered}}', '{{shipped}}', '{{out_of_delivery}}', '{{delivered}}', ],
+          data: ['{{ordered}}', '{{shipped}}', '{{out_of_delivery}}', '{{delivered}}', '{{cancelled}}', '{{returned}}'],
           backgroundColor: [
             'rgba(54, 162, 235, 0.2)',
             'rgba(255, 99, 132, 0.2)',

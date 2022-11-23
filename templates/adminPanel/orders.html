@@ -44,8 +44,10 @@
           <label class="badge badge-success">Delivered</label>
           {% elif order.status == 'Cancelled' %}
           <label class="badge badge-danger">Cancelled</label>
+          {% elif order.status == 'Returned' %}
+          <label class="badge badge-warning">Returned</label>
           {%else%}
-          <label class="badge badge-warning" type="button"  data-toggle="modal" data-target="#myModal{{order.id}}" id="Modal_button">Change</button>
+          <label class="badge badge-info" type="button"  data-toggle="modal" data-target="#myModal{{order.id}}" id="Modal_button">Change</button>
           {%endif%}
         </td>
         <td>
@@ -53,8 +55,9 @@
           
           <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancel{{order.id}}">
             Cancel
-          </button>         
-
+          </button>
+          {% elif order.is_returned %}        
+            <b>Reason : </b><p>{{order.return_reason}}</p>
           {% endif %}
         </td>
       </tr>

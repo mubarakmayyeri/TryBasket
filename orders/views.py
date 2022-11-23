@@ -207,6 +207,18 @@ def cancel_order(request,id):
       return redirect('orders')
     else:
       return redirect('orderDetails', id)
+def return_order(request, id):
+  if request.method == 'POST':
+    return_reason = request.POST['return_reason']
+  print(return_reason)
+  order = Order.objects.get(order_number = id,user = request.user)
+  order.status = "Returned"
+  order.is_returned = True
+  order.return_reason = return_reason
+  order.save()
+  payment = Payment.objects.get(order_id = order.order_number)
+  payment.delete()
+  return redirect('orderDetails', id)
 
 def razorpay(request):
   current_user = request.user

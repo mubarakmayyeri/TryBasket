@@ -175,8 +175,9 @@
   </script> {% endcomment %}
   <script>
     {% for cart_item in cart_items %}
-        var quantity = $('#qnty{{cart_item.product.slug}}').val()
-        if(quantity == 1) {
+    
+    var quantity = $('#qnty{{cart_item.product.slug}}').val()
+    if(quantity == 1) {
             $('#dec-button{{cart_item.product.slug}}').attr('disabled', true)
             $('#dec-button{{cart_item.product.slug}}').html(' ')
         }
