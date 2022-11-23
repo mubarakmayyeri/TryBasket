@@ -68,7 +68,7 @@
                                 <i class="fa fa-star-half-o"></i>
                                 <span>(18 reviews)</span>
                             </div>
-                            <div class="product__details__price">₹{{product.price}}</div>
+                            <div class="product__details__price" id='price'>₹{{product.price}}</div>
                             <p>{{product.description}}</p>
                             {% comment %} <div class="product__details__quantity">
                                 <div class="quantity">
@@ -78,8 +78,9 @@
                                 </div>
                             </div> {% endcomment %}
                             <div class="d-flex mb-2">
+                                    <h4>Size :</h4>
                                     <select class="ml-2" id="size" name="size" required>
-                                        <option value="" disabled selected>Size</option>
+                                        {% comment %} <option value="" disabled selected>Size</option> {% endcomment %}
 
                                         {% for i in product.variation_set.sizes %}
 
@@ -233,5 +234,7 @@
       </div>
   </section>
   <!-- Related Product Section End -->
+
+
 
 {% endblock content %}

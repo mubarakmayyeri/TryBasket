@@ -104,6 +104,7 @@ def add_cart(request, product_id):
   else:
     product_variation = []
     if request.method == 'POST':
+      print(request.POST)
       for item in request.POST:
         key = item
         value = request.POST[key]

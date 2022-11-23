@@ -249,6 +249,17 @@ def editProfile(request):
 
   return render(request,'user/editProfile.html', context)
 
+@login_required(login_url='userLogin') 
+def myAddress(request):
+  current_user = request.user
+  address = Address.objects.filter(user=current_user)
+  
+  context = {
+    'address':address,
+  }
+  return render(request, 'user/myAddress.html', context)
+
+@login_required(login_url='userLogin')
 def add_address(request):
     if request.method == 'POST':
         form = AddressForm(request.POST,request.FILES,)
@@ -268,13 +279,40 @@ def add_address(request):
             detail.pincode =  form.cleaned_data['pincode']
             detail.save()
             messages.success(request,'Address added Successfully')
-            return redirect('userDashboard')
+            return redirect('myAddress')
         else:
             messages.success(request,'Form is Not valid')
-            return redirect('userDashboard')
+            return redirect('myAddress')
     else:
         form = AddressForm()
         context={
             'form':form
         }    
     return render(request,'user/add-address.html',context)
+  
+@login_required(login_url='userLogin')
+def edit_address(request, id):
+  address = Address.objects.get(id=id)
+  if request.method == 'POST':
+    form = AddressForm(request.POST, instance=address)
+    if form.is_valid():
+      form.save()
+      messages.success(request , 'Address Updated Successfully')
+      return redirect('myAddress')
+    else:
+      messages.error(request , 'Invalid Inputs!!!')
+      return redirect('myAddress')
+  else:
+      form = AddressForm(instance=address)
+      
+  context = {
+            'form' : form,
+        }
+  return render(request , 'user/edit-address.html' , context)
+
+@login_required(login_url='userLogin')
+def delete_address(request,id):
+    address=Address.objects.get(id = id)
+    messages.success(request,"Address Deleted")
+    address.delete()
+    return redirect('myAddress')

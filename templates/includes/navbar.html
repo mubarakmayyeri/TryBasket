@@ -118,11 +118,11 @@
                         {% else %}
 
                             <div class="header__top__right__auth">
-                                <a href="{% url 'userLogin' %}" class="btn btn-light"><i class="fa fa-user"></i>Login</a>
+                                <a href="{% url 'userLogin' %}" class="btn btn-light {% if '/login/' in request.path %}d-none{% endif %}" ><i class="fa fa-user"></i>Login</a>
                             </div>
-                            <span class="ml-2 mr-2">|</span>
+                            <span class="ml-2 mr-2 {% if '/login/' in request.path %}d-none{% endif %}">|</span>
                             <div class="header__top__right__auth">
-                            <a href="{% url 'register' %}" class="btn btn-light"><i class="fa fa-user-plus"></i>Register</a>
+                            <a href="{% url 'register' %}" class="btn btn-light {% if '/register/' in request.path %}d-none{% endif %}"><i class="fa fa-user-plus"></i>Register</a>
                             </div>
 
                         {% endif %}
