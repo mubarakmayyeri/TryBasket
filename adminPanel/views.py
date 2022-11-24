@@ -118,7 +118,7 @@ def dashboard(request):
         'out_of_delivery':out_of_delivery,
         'delivered':delivered,
         'returned':returned,
-        'cancelled':cancelled,
+        'deactivate':cancelled,
         'cash_on_delivery_count':cash_on_delivery_count,
         'blocked_user':blocked_user,
         'unblocked_user':unblocked_user,
