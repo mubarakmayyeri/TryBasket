@@ -118,7 +118,7 @@ def dashboard(request):
         'out_of_delivery':out_of_delivery,
         'delivered':delivered,
         'returned':returned,
-        'deactivate':cancelled,
+        'cancelled':cancelled,
         'cash_on_delivery_count':cash_on_delivery_count,
         'blocked_user':blocked_user,
         'unblocked_user':unblocked_user,
@@ -255,6 +255,38 @@ def deleteCategory(request, slug):
   messages.success(request, 'Category deleted successfully.')
   return redirect('categories')
 
+@login_required(login_url = 'adminLogin')  
+def category_offers(request):
+  categories = Category.objects.all().order_by('-category_offer')
+  
+  paginator = Paginator(categories, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
+  context = {
+    'categories':page_obj,
+  }
+  return render(request, 'adminPanel/category_offers.html', context)
+
+@login_required(login_url= 'adminLogin')
+def add_category_offer(request):
+  if request.method == 'POST' :
+    category_name = request.POST.get('category_name')
+    category_offer = request.POST.get('category_offer')
+    category = Category.objects.get(category_name = category_name)
+    category.category_offer =  category_offer
+    category.save()
+    messages.success(request,'Category offer added successfully')
+    return redirect('category_offers')
+      
+@login_required(login_url= 'adminLogin')
+def delete_category_offer(request, id):
+  category = Category.objects.get(id = id)
+  category.category_offer =  0
+  category.save()
+  messages.success(request,'Category offer deleted successfully')
+  return redirect('category_offers')
+
 
 # sub category management
 
@@ -374,13 +406,44 @@ def deleteProduct(request, id):
   product.delete()
   return redirect('products')
 
+@login_required(login_url = 'adminLogin')  
+def product_offers(request):
+  products = Product.objects.all().order_by('-product_offer')
+  
+  paginator = Paginator(products, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
+  context = {
+    'products':page_obj,
+  }
+  return render(request, 'adminPanel/product_offers.html', context)
+
+@login_required(login_url= 'adminLogin')
+def add_product_offer(request):
+  if request.method == 'POST' :
+    product_name = request.POST.get('product_name')
+    product_offer = request.POST.get('product_offer')
+    product = Product.objects.get(product_name = product_name)
+    product.product_offer =  product_offer
+    product.save()
+    messages.success(request,'Product offer added successfully')
+    return redirect('product_offers')
+  
+@login_required(login_url= 'adminLogin')
+def delete_product_offer(request, id):
+  product = Product.objects.get(id=id)
+  product.product_offer = 0
+  product.save()
+  messages.success(request, 'Product offer deleted successfully')
+  return redirect('product_offers')
 
 
 # Order Management
 
 @login_required(login_url = 'adminLogin')
 def orders(request):
-  orders = Order.objects.all().order_by('-id')
+  orders = Order.objects.filter(is_ordered=True).order_by('-id')
   
   paginator = Paginator(orders, 10)
   page_number = request.GET.get('page')

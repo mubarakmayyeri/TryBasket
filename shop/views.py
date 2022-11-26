@@ -82,3 +82,6 @@ def price_change(request):
            },
           safe=False
         )
+  
+def contact(request):
+  return render(request, 'contact.html')

@@ -78,8 +78,10 @@
         <form action="{% url 'update_order' order.id %}" method="POST">
           {% csrf_token %}
 
+          {% if order.status == 'Order Confirmed' %}
+
           <div class="row mb-2">
-            <input class="ml-3" type="radio" name="status" value="Order Confirmed"  checked>
+            <input class="ml-3" type="radio" name="status" value="Order Confirmed" disabled checked>
             <label for="dreamweaver" class="ml-2 mt-2">Order Confirmed</label>
           </div>
           <div class="row mb-2">
@@ -87,13 +89,53 @@
             <label for="dreamweaver" class="ml-2 mt-2 text-info">Shipped</label>
           </div>
           <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Out for delivery" disabled>
+            <label for="dreamweaver" class="ml-2 mt-2 text-warning">Out for delivery</label>
+          </div>
+          <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Delivered" disabled>
+            <label for="dreamweaver" class="ml-2 mt-2 text-success">Delivered</label>
+          </div>
+
+          {% elif order.status == 'Shipped' %}
+
+          <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Order Confirmed" disabled>
+            <label for="dreamweaver" class="ml-2 mt-2">Order Confirmed</label>
+          </div>
+          <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Shipped" disabled checked>
+            <label for="dreamweaver" class="ml-2 mt-2 text-info">Shipped</label>
+          </div>
+          <div class="row mb-2">
             <input class="ml-3" type="radio" name="status" value="Out for delivery">
+            <label for="dreamweaver" class="ml-2 mt-2 text-warning">Out for delivery</label>
+          </div>
+          <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Delivered" disabled>
+            <label for="dreamweaver" class="ml-2 mt-2 text-success">Delivered</label>
+          </div>
+
+          {% else %}
+
+          <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Order Confirmed" disabled>
+            <label for="dreamweaver" class="ml-2 mt-2">Order Confirmed</label>
+          </div>
+          <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Shipped" disabled>
+            <label for="dreamweaver" class="ml-2 mt-2 text-info">Shipped</label>
+          </div>
+          <div class="row mb-2">
+            <input class="ml-3" type="radio" name="status" value="Out for delivery"  disabled checked>
             <label for="dreamweaver" class="ml-2 mt-2 text-warning">Out for delivery</label>
           </div>
           <div class="row mb-2">
             <input class="ml-3" type="radio" name="status" value="Delivered">
             <label for="dreamweaver" class="ml-2 mt-2 text-success">Delivered</label>
           </div>
+
+          {% endif %}
 
           </div>
           <div class="modal-footer">

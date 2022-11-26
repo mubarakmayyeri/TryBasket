@@ -179,7 +179,6 @@
     var quantity = $('#qnty{{cart_item.product.slug}}').val()
     if(quantity == 1) {
             $('#dec-button{{cart_item.product.slug}}').attr('disabled', true)
-            $('#dec-button{{cart_item.product.slug}}').html(' ')
         }
 
     $('#dec-button{{cart_item.product.slug}}').click(() => {
@@ -208,7 +207,6 @@
                   $('#count').html(data.cart_count)
                   if(data.qnty == 1) {
                     $('#dec-button{{cart_item.product.slug}}').attr('disabled', true)
-                    $('#dec-button{{cart_item.product.slug}}').html(' ')
                 }
             
                 }else{
@@ -223,7 +221,6 @@
         var cid = $('#dec-button{{cart_item.product.slug}}').attr('data-id');
 
         $('#dec-button{{cart_item.product.slug}}').attr('disabled', false)
-        $('#dec-button{{cart_item.product.slug}}').html('-')
 
         $.ajax({
            url: 'incqnty/',

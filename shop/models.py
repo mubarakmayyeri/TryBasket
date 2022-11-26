@@ -5,10 +5,18 @@ from category.models import Category, Sub_Category
 # Create your models here.
 
 class Product(models.Model):
+  
+  UNIT = (('Kg', 'Kg'),
+          ('litre', 'litre'),
+          ('pack', 'pack'),
+          ('bottle', 'bottle'),
+          )
   product_name = models.CharField(max_length=200, unique=True)
   slug = models.SlugField(max_length=255, unique=True)
   description = models.TextField(max_length=500, blank=True)
   price = models.IntegerField()
+  product_offer = models.IntegerField(default = 0)
+  unit = models.CharField(max_length=50,choices=UNIT,default='Kg')
   image_1 = models.ImageField(upload_to='photos/products', blank=False)
   image_2 = models.ImageField(upload_to='photos/products', blank=True)
   image_3 = models.ImageField(upload_to='photos/products', blank=True)

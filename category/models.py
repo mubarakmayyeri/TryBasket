@@ -6,8 +6,10 @@ from django.urls import reverse
 class Category(models.Model):
   category_name = models.CharField(max_length=50, unique=True)
   slug = models.SlugField(max_length=100, unique=True)
+  category_offer = models.IntegerField(default=0)
   description = models.TextField(max_length=255, blank=True)
   cat_image = models.ImageField(upload_to='photos/categories', blank=False)
+  modified_at = models.DateTimeField(auto_now=True)
   
   class Meta:
         verbose_name        = 'category'

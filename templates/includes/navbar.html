@@ -51,10 +51,8 @@
           <ul>
               <li class="active"><a href="{% url 'home' %}">Home</a></li>
               <li><a href="{% url 'shop' %}">Shop</a></li>
-              <li><a href="#">Offers</a>
-              </li>
               <li><a href="{% url 'cart' %}">Basket</a></li>
-              <li><a href="./contact.html">Contact</a></li>
+              <li><a href="{% url 'contact' %}">Contact</a></li>
           </ul>
       </nav>
       <div id="mobile-menu-wrap"></div>
@@ -145,7 +143,7 @@
                           <li class="{% if '/' == request.path %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
                           <li class="{% if '/shop/' in request.path %}active{% endif %}"><a href="{% url 'shop' %}">Shop</a></li>
                           <li class="{% if '/cart/' in request.path %}active{% endif %}"><a href="{% url 'cart' %}">Basket</a></li>
-                          <li class="{% if '/contact/' in request.path %}active{% endif %}"><a href="./contact.html">Contact</a></li>
+                          <li class="{% if '/contact/' in request.path %}active{% endif %}"><a href="{% url 'contact' %}">Contact</a></li>
                       </ul>
                   </nav>
               </div>
