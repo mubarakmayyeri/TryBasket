@@ -15,7 +15,7 @@ from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserFo
 from accounts.models import Account
 from shop.models import Product
 from category.models import Category, Sub_Category
-from orders.models import Order, Payment
+from orders.models import Order, Payment, Coupon
 
 # Create your views here.
 
@@ -473,3 +473,11 @@ def update_order(request, id):
     order.save()
     
   return redirect('orders')
+
+@login_required(login_url = 'adminLogin')
+def coupons(request):
+  coupons = Coupon.objects.all()
+  context = {
+    'coupons':coupons,
+  }
+  return render(request, 'adminPanel/coupons.html', context)

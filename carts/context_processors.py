@@ -33,7 +33,7 @@ def total(request):
       cart_items = CartItem.objects.all().filter(cart=cart[:1])
       
       for cart_item in cart_items:
-        cart_total += (cart_item.product.price * cart_item.quantity)
+        cart_total += int(cart_item.product.offer_price())*int(cart_item.quantity)
     
     except Cart.DoesNotExist:
       cart_total=0

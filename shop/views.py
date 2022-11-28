@@ -22,9 +22,9 @@ def shop(request, category_slug=None, sub_category_slug=None):
   categories_shop= None
   subCategories_shop = None
   products = None
+  off_products = Product.objects.filter(product_offer__gt=0)
   
   if sub_category_slug != None:
-    print('hello')
     subCategories_shop = get_object_or_404(Sub_Category, slug=sub_category_slug)
     products = Product.objects.all().filter(sub_category=subCategories_shop, is_available=True)
     product_count = products.count()
@@ -45,6 +45,7 @@ def shop(request, category_slug=None, sub_category_slug=None):
     'categories_shop':categories_shop,
     'subCategories_shop':subCategories_shop,
     'products':products,
+    'off_products':off_products,
     'product_count':product_count
   }
   return render(request, 'shop/shop.html', context)

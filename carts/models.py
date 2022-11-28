@@ -18,10 +18,11 @@ class CartItem(models.Model):
   variations = models.ManyToManyField(Variation, blank=True)
   cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
   quantity = models.IntegerField()
+  price = models.IntegerField(default=1)
   is_active = models.BooleanField(default=True)
   
   def sub_total(self):
-    return self.product.price * self.quantity
+    return int(self.price)*int(self.quantity)
   
   def __unicode__(self):
     return self.product

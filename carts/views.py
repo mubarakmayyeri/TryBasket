@@ -20,6 +20,7 @@ def _cart_id(request):
 def cart(request, total=0, quantity=0, cart_items=None):
   tax=0
   grand_total=0
+  product_price = 0
   
   try:
     if request.user.is_authenticated:
@@ -29,8 +30,12 @@ def cart(request, total=0, quantity=0, cart_items=None):
       cart_items = CartItem.objects.filter(cart=cart, is_active=True)
       
     for cart_item in cart_items:
-      total += (cart_item.product.price * cart_item.quantity)
+      price_mult = int(cart_item.variations.all().values_list('price_multiplier')[0][0])
+      product_price = int(cart_item.product.offer_price()) * price_mult
+      total += int(cart_item.product.offer_price())*int(cart_item.quantity)*price_mult
       quantity += cart_item.quantity
+      cart_item.price = product_price
+      cart_item.save()
     tax = (18 * total)/100
     grand_total = total + tax
     grand_total = format(grand_total, '.2f')
@@ -211,14 +216,16 @@ def decqnty(request):
     else:
       cart = Cart.objects.get(cart_id=_cart_id(request))
       cart_items = CartItem.objects.filter(cart=cart, is_active=True)
-      
+    
     for cart_item in cart_items:
       cart_count += cart_item.quantity
         
     total = 0
-    for item in cart_items:
-      total += (item.product.price * item.quantity)
-      
+    for cart_item in cart_items:
+      total += int(cart_item.price)*int(cart_item.quantity)
+      print(cart_item.price, cart_item.quantity)
+    
+    print(total)
     tax = (18 * total)/100
     grand_total = total + tax
     grand_total = format(grand_total, '.2f')
@@ -242,7 +249,7 @@ def incqnty(request):
   if request.method == 'POST':
     product_id = request.POST['pid']
     cart_item_id = request.POST['cid']
-    
+  
   product = get_object_or_404(Product, id=product_id)
   
   tax= 0
@@ -275,9 +282,11 @@ def incqnty(request):
       cart_count += cart_item.quantity
         
     total = 0
-    for item in cart_items:
-      total += (item.product.price * item.quantity)
-      
+    
+    for cart_item in cart_items:
+      total += int(cart_item.price)*int(cart_item.quantity)
+      print(cart_item.price, cart_item.quantity)
+       
     tax = (18 * total)/100
     grand_total = total + tax
     grand_total = format(grand_total, '.2f')
@@ -321,7 +330,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
       cart_items = CartItem.objects.filter(cart=cart, is_active=True)
 
     for cart_item in cart_items:
-      total += (cart_item.product.price * cart_item.quantity)
+      total += int(cart_item.product.offer_price())*int(cart_item.quantity)
       quantity += cart_item.quantity
     tax = (18 * total)/100
     grand_total = total + tax

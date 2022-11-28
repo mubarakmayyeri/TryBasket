@@ -63,15 +63,16 @@
                                                 {% if cart_item.variations.all %}
                                                     {% for item in cart_item.variations.all %}
                                                         {{item.variation_category | capfirst }} : {{item.variation_value}} <br>
-                                                    {% endfor %}
-                                                {% endif %}
+
                                             </p>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="shoping__cart__price">
-                                    ₹{{cart_item.product.price}}
+                                    ₹{{cart_item.price}}
                                 </td>
+                                {% endfor %}
+                                {% endif %}
                                 <td class="shoping__cart__quantity p-5">
                                     <div class="quantity">
                                         <div class="pro-qty d-flex">
@@ -79,9 +80,9 @@
                                             {% comment %} <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}">
                                             <button class="btn">-</button></a> {% endcomment %}
 
-                                            <button id="dec-button{{cart_item.product.slug}}" class="btn" data-item='{{cart_item.product.id}}' data-id='{{cart_item.id}}'>-</button>
+                                            <button id="dec-button{{forloop.counter}}" class="btn" data-item='{{cart_item.product.id}}' data-id='{{cart_item.id}}'>-</button>
 
-                                            <input type="number" id="qnty{{cart_item.product.slug}}" value="{{cart_item.quantity}}">
+                                            <input type="number" id="qnty{{forloop.counter}}" value="{{cart_item.quantity}}">
                                             
                                             <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
                                                 {% csrf_token %}
@@ -90,18 +91,18 @@
                                                 <input type="hidden" name="{{item.variation_category | lower}}" value="{{item.variation_value | capfirst}}">
                                                     
                                                 {% endfor %}
-                                                <button id="inc-button{{cart_item.product.slug}}" href="" type="button" class="btn">+</button>
+                                                <button id="inc-button{{forloop.counter}}" href="" type="button" class="btn">+</button>
                                             </form>
 
                                         </div>
                                     </div>
                                 </td>
-                                <td class="shoping__cart__total"  id="total{{cart_item.product.slug}}"> ₹{{cart_item.sub_total}} </td>
+                                <td class="shoping__cart__total"  id="total{{forloop.counter}}"> ₹{{cart_item.sub_total}} </td>
                                 <td class="shoping__cart__item__close">
-                                    <a data-toggle="modal" data-target="#Modal{{cart_item.product.id}}">
+                                    <a data-toggle="modal" data-target="#Modal{{forloop.counter}}">
                                                                             <span class="icon_close"></span></a>
                                     <!-- Modal -->
-                                    <div class="modal fade" id="Modal{{cart_item.product.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="Modal{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -176,15 +177,15 @@
   <script>
     {% for cart_item in cart_items %}
     
-    var quantity = $('#qnty{{cart_item.product.slug}}').val()
+    var quantity = $('#qnty{{forloop.counter}}').val()
     if(quantity == 1) {
-            $('#dec-button{{cart_item.product.slug}}').attr('disabled', true)
+            $('#dec-button{{forloop.counter}}').attr('disabled', true)
         }
 
-    $('#dec-button{{cart_item.product.slug}}').click(() => {
+    $('#dec-button{{forloop.counter}}').click(() => {
          
-         var pid = $('#dec-button{{cart_item.product.slug}}').attr('data-item');
-         var cid = $('#dec-button{{cart_item.product.slug}}').attr('data-id');
+         var pid = $('#dec-button{{forloop.counter}}').attr('data-item');
+         var cid = $('#dec-button{{forloop.counter}}').attr('data-id');
 
 
 
@@ -198,15 +199,15 @@
 
             success: function(data){
                 if(data.success){
-                  $('#qnty{{cart_item.product.slug}}').val(data.qnty)
-                  $('#total{{cart_item.product.slug}}').html('₹'+ data.sub_total)
+                  $('#qnty{{forloop.counter}}').val(data.qnty)
+                  $('#total{{forloop.counter}}').html('₹'+ data.sub_total)
 
                   $('#total').html('₹'+data.total)
                   $('#tax').html('₹'+data.tax)
                   $('#grand_total').html('₹'+data.grand_total)
                   $('#count').html(data.cart_count)
                   if(data.qnty == 1) {
-                    $('#dec-button{{cart_item.product.slug}}').attr('disabled', true)
+                    $('#dec-button{{forloop.counter}}').attr('disabled', true)
                 }
             
                 }else{
@@ -216,11 +217,11 @@
         });
     });
 
-    $('#inc-button{{cart_item.product.slug}}').click(() => {
-        var pid = $('#dec-button{{cart_item.product.slug}}').attr('data-item');
-        var cid = $('#dec-button{{cart_item.product.slug}}').attr('data-id');
+    $('#inc-button{{forloop.counter}}').click(() => {
+        var pid = $('#dec-button{{forloop.counter}}').attr('data-item');
+        var cid = $('#dec-button{{forloop.counter}}').attr('data-id');
 
-        $('#dec-button{{cart_item.product.slug}}').attr('disabled', false)
+        $('#dec-button{{forloop.counter}}').attr('disabled', false)
 
         $.ajax({
            url: 'incqnty/',
@@ -234,8 +235,8 @@
 
            success: function(data){
                if(data.success){
-                $('#qnty{{cart_item.product.slug}}').val(data.qnty)
-                $('#total{{cart_item.product.slug}}').html('₹'+ data.sub_total)
+                $('#qnty{{forloop.counter}}').val(data.qnty)
+                $('#total{{forloop.counter}}').html('₹'+ data.sub_total)
 
                 $('#total').html('₹'+data.total)
                 $('#tax').html('₹'+data.tax)

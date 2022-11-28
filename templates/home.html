@@ -14,7 +14,7 @@
                         <span>FRUIT FRESH</span>
                         <h2>Vegetable <br />100% Organic</h2>
                         <p>Free Pickup and Delivery Available</p>
-                        <a href="#" class="primary-btn">SHOP NOW</a>
+                        <a href="{% url 'products_by_category' 'fresh-preserved-vegetables' %}" class="primary-btn">SHOP NOW</a>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,11 @@
                             </div>
                             <div class="featured__item__text">
                                 <h6><a href="{{product.get_url}}">{{product.product_name}}</a></h6>
+                                {% if product.offer_price != product.price %}
+                                <h5><del class="text-secondary">₹{{product.price}}</del> ₹{{product.offer_price}}/<span class='text-secondary'> {{product.unit}}</span></h5>
+                                {% else %}
                                 <h5>₹{{product.price}}/<span class='text-secondary'> {{product.unit}}</span></h5>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -131,7 +135,11 @@
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{product.product_name}}</h6>
+                                        {% if product.offer_price != product.price %}
+                                        <span><del class="text-secondary">₹{{product.price}}</del> ₹{{product.offer_price}}/ {{product.unit}}</span>
+                                        {% else %}
                                         <span>₹{{product.price}}/ {{product.unit}}</span>
+                                        {% endif %}
                                     </div>
                                 </a>
 
@@ -148,7 +156,11 @@
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{product.product_name}}</h6>
+                                        {% if product.offer_price != product.price %}
+                                        <span><del class="text-secondary">₹{{product.price}}</del> ₹{{product.offer_price}}/ {{product.unit}}</span>
+                                        {% else %}
                                         <span>₹{{product.price}}/ {{product.unit}}</span>
+                                        {% endif %}
                                     </div>
                                 </a>
 
@@ -171,7 +183,11 @@
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{product.product_name}}</h6>
-                                        <span>₹{{product.price}}/<span class='text-secondary'> {{product.unit}}</span></span>
+                                        {% if product.offer_price != product.price %}
+                                        <span><del class="text-secondary">₹{{product.price}}</del> ₹{{product.offer_price}}/ {{product.unit}}</span>
+                                        {% else %}
+                                        <span>₹{{product.price}}/ {{product.unit}}</span>
+                                        {% endif %}
                                     </div>
                                 </a>
 
@@ -188,7 +204,11 @@
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{product.product_name}}</h6>
+                                        {% if product.offer_price != product.price %}
+                                        <span><del class="text-secondary">₹{{product.price}}</del> ₹{{product.offer_price}}/ {{product.unit}}</span>
+                                        {% else %}
                                         <span>₹{{product.price}}/ {{product.unit}}</span>
+                                        {% endif %}
                                     </div>
                                 </a>
 
@@ -203,7 +223,7 @@
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
                                 
-                                {% for product in latest_products_1 %}
+                                {% for product in offer_products1 %}
                                     
                                 <a href="{{product.get_url}}" class="latest-product__item">
                                     <div class="latest-product__item__pic">
@@ -211,7 +231,12 @@
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{product.product_name}}</h6>
+                                        {% if product.offer_price != product.price %}
+                                        <span class="text-danger">-{{product.product_offer}}%</span>
+                                        <span><del class="text-secondary">₹{{product.price}}</del> ₹{{product.offer_price}}/ {{product.unit}}</span>
+                                        {% else %}
                                         <span>₹{{product.price}}/ {{product.unit}}</span>
+                                        {% endif %}
                                     </div>
                                 </a>
 
@@ -220,7 +245,7 @@
                             </div>
                             <div class="latest-prdouct__slider__item">
 
-                                {% for product in latest_products_2 %}
+                                {% for product in offer_products2 %}
                                     
                                 <a href="{{product.get_url}}" class="latest-product__item">
                                     <div class="latest-product__item__pic">
@@ -228,7 +253,12 @@
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>{{product.product_name}}</h6>
+                                        {% if product.offer_price != product.price %}
+                                        <span class="text-danger">-{{product.product_offer}}%</span>
+                                        <span><del class="text-secondary">₹{{product.price}}</del> ₹{{product.offer_price}}/ {{product.unit}}</span>
+                                        {% else %}
                                         <span>₹{{product.price}}/ {{product.unit}}</span>
+                                        {% endif %}
                                     </div>
                                 </a>
 

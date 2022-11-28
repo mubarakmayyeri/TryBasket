@@ -73,6 +73,8 @@ TEMPLATES = [
                 'category.context_processors.sub_category_links',
                 'shop.context_processors.latest_products1',
                 'shop.context_processors.latest_products2',
+                'shop.context_processors.offer_products1',
+                'shop.context_processors.offer_products2',
                 'carts.context_processors.counter',
                 'carts.context_processors.total',
             ],
