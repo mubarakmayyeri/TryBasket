@@ -70,7 +70,7 @@
                             </div>
                             <div class="product__details__price" id='price'>
                                 {% if product.offer_price < product.price %}
-                                <del>₹{{product.price}}</del> ₹{{product.offer_price}}</span>
+                                ₹{{product.offer_price}}
                                 {% else %}
                                 ₹{{product.price}}
                                 {% endif %}

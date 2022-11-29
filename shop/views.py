@@ -73,7 +73,7 @@ def price_change(request):
   var_value = request.GET['var_value']
   pro_id = request.GET['pid']
   product = Product.objects.get(id=pro_id)
-  price = product.price
+  price = product.offer_price()
   x = var_value.split()
   var_value = int(x[0])
   pro_price = price * var_value

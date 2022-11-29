@@ -223,7 +223,6 @@ def decqnty(request):
     total = 0
     for cart_item in cart_items:
       total += int(cart_item.price)*int(cart_item.quantity)
-      print(cart_item.price, cart_item.quantity)
     
     print(total)
     tax = (18 * total)/100
@@ -285,7 +284,6 @@ def incqnty(request):
     
     for cart_item in cart_items:
       total += int(cart_item.price)*int(cart_item.quantity)
-      print(cart_item.price, cart_item.quantity)
        
     tax = (18 * total)/100
     grand_total = total + tax
@@ -330,7 +328,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
       cart_items = CartItem.objects.filter(cart=cart, is_active=True)
 
     for cart_item in cart_items:
-      total += int(cart_item.product.offer_price())*int(cart_item.quantity)
+      total += int(cart_item.price)*int(cart_item.quantity)
       quantity += cart_item.quantity
     tax = (18 * total)/100
     grand_total = total + tax

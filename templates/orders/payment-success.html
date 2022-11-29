@@ -69,9 +69,9 @@
                                           <tr >
                                               <td style="border:1px solid black" >{{item.product.product_name}}
                                               </td>
-                                              <td class="text-center" id="qnty{{item.product.slug}}" style="border:1px solid black">{{item.quantity}}</td>
-                                              <td class="text-center" id="price{{item.product.slug}}" style="border:1px solid black">{{item.product_price}} </td>
-                                              <td class="text-center" id="total{{item.product.slug}}" style="border:1px solid black"></td>
+                                              <td class="text-center" id="qnty{{forloop.counter}}" style="border:1px solid black">{{item.quantity}}</td>
+                                              <td class="text-center" id="price{{forloop.counter}}" style="border:1px solid black">{{item.product_price}} </td>
+                                              <td class="text-center" id="total{{forloop.counter}}" style="border:1px solid black"></td>
                                           </tr>
                                           {% endfor %}
                                       </tbody>
@@ -116,11 +116,11 @@
     <script>
       {% for item in ordered_products %}
 
-      var qnty = $('#qnty{{item.product.slug}}').html()
-      var price = $('#price{{item.product.slug}}').html()
+      var qnty = $('#qnty{{forloop.counter}}').html()
+      var price = $('#price{{forloop.counter}}').html()
       var total = qnty * price
-      $('#total{{item.product.slug}}').html('₹'+total)
-      var price = $('#price{{item.product.slug}}').html('₹'+price)
+      $('#total{{forloop.counter}}').html('₹'+total)
+      var price = $('#price{{forloop.counter}}').html('₹'+price)
 
       {% endfor %}
     </script>

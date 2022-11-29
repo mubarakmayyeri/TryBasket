@@ -11,7 +11,7 @@ from django.db.models import FloatField
 from django.db.models.functions import Cast
 from django.core.paginator import Paginator
 
-from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm
+from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm
 from accounts.models import Account
 from shop.models import Product
 from category.models import Category, Sub_Category
@@ -481,3 +481,46 @@ def coupons(request):
     'coupons':coupons,
   }
   return render(request, 'adminPanel/coupons.html', context)
+
+@login_required(login_url = 'adminLogin')
+def add_coupon(request):
+  if request.method == 'POST':
+    form = CouponForm(request.POST , request.FILES)
+    if form.is_valid():
+      form.save()
+      messages.success(request,'Coupon Added successfully')
+      return redirect('coupons')
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('add_coupon')
+  form = CouponForm()
+  context = {
+    'form':form,
+  }
+  return render(request, 'adminPanel/addCoupon.html', context)
+
+@login_required(login_url = 'adminLogin')
+def edit_coupon(request, id):
+  coupon = Coupon.objects.get(id = id)
+  if request.method == 'POST':
+    form = CouponForm(request.POST , request.FILES, instance=coupon)
+    if form.is_valid():
+      form.save()
+      messages.success(request,'Coupon updated successfully')
+      return redirect('coupons')
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('edit_coupon', coupon.id)
+  form = CouponForm(instance=coupon)
+  context = {
+    'coupon':coupon,
+    'form':form,
+  }
+  return render(request, 'adminPanel/editCoupon.html', context)
+
+@login_required(login_url= 'adminLogin')
+def delete_coupon(request, id):
+  coupon = Coupon.objects.get(id = id)
+  coupon.delete()
+  messages.success(request,'Coupon deleted successfully')
+  return redirect('coupons')
