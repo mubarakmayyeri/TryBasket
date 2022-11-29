@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 import datetime
 from carts.models import CartItem
-from .models import Order, Address, Payment, OrderProduct
+from .models import Order, Address, Payment, OrderProduct, Coupon, UserCoupon
 import json
 from shop.models import Product
 from .forms import OrderForm
@@ -252,6 +252,35 @@ def razorpay(request):
     'payment':payment,
      'payment_method' : "RazorPay"
       })
-   
+
+def coupon(request):
+  if request.method == 'POST':
+    coupon_code = request.POST['coupon']
+    grand_total = request.POST['grand_total']
+    coupon_discount = 0
+    try:
+      instance = UserCoupon.objects.get(user = request.user ,coupon__code = coupon_code)
+
+      if float(grand_total) >= float(instance.coupon.min_value):
+        grand_total = float(grand_total) - ((float(grand_total) * float(instance.coupon.discount))/100)
+        coupon_discount = ((float(grand_total) * float(instance.coupon.discount))/100)
+        grand_total = format(grand_total, '.2f')
+        coupon_discount = format(coupon_discount, '.2f')
+        msg = 'Coupon Applied successfully'
+        instance.used = True
+        instance.save()
+      else:
+          msg='This coupon is only applicable for orders more than ₹'+ str(instance.coupon.min_value)+ '\- only!'
+    except:
+            msg = 'Coupon is not valid'
+    response = {
+               'grand_total': grand_total,
+               'msg':msg,
+               'coupon_discount':coupon_discount,
+               'coupon_code':coupon_code,
+                }
+
+  return JsonResponse(response)
+
 def test(request):
   return render(request, 'orders/test.html')

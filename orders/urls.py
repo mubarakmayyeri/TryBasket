@@ -13,5 +13,7 @@ urlpatterns = [
   path("cancel_order/<int:id>/",views.cancel_order,name='cancel_order'),
   path("return_order/<int:id>/",views.return_order,name='return_order'),
   
+  path("coupon/",views.coupon,name='coupon'),
+  
   path("test/",views.test,name='test'),
 ]

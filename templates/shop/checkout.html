@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% load static %}
@@ -42,8 +43,7 @@
 
                             <div class="card-body form-check row">
                                     <div class="col-12">
-            <form action="{% url 'place_order' %}" method="POST">
-                            {% csrf_token %}
+            
                                         {% if forloop.counter == 1 %}
                                         <input class="form-check-input d-block ml-1 mt-2" value="{{item.id}}" type="radio" name="flexRadioDefault" checked>
                                         {%else%}
@@ -82,11 +82,53 @@
                                     
                                 </div>              
                             </div>
-                            {%endif%}
-                            
-                            
+                            {%endif%}                          
 
                         </div>
+
+                                <form action="#">
+                                </form>
+
+
+                        
+                        <div class="shoping__continue">
+                            <div class="shoping__discount">
+                                <h5>Discount Codes</h5>
+                                <form id="coupon_form">
+                                    <input type="text" id="coupon_data" placeholder="Enter your coupon code">
+                                    <button type="submit" class="site-btn">APPLY COUPON</button>
+                                </form>
+                            </div>
+                            <p class="text-danger mt-3" id="output"></p>
+                        </div>
+
+                        {% if coupons %}
+                        <div class="accordion mt-3 shoping__discount" id="accordionExample">
+                            <h5>Available Coupons:</h5>
+                            
+                            {% for item in coupons %}
+
+                            <div class="card w-75">
+                              <div class="card-header" id="headingThree">
+                                <h2 class="mb-0">
+                                  <button class="btn btn-link btn-block text-left collapsed text-danger text-decoration-none" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="false" aria-controls="collapseThree">
+                                    <span class="text-dark">{{forloop.counter}}.</span> <b>-{{item.coupon.discount}}% Off</b>
+                                  </button>
+                                </h2>
+                              </div>
+                              <div id="collapse{{forloop.counter}}" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <p><b>*</b>Applicable only  for order price more than <b>₹{{item.coupon.min_value}}\-</b></p>
+                                    <span class="ml-3">Coupon Code: <b class="text-danger">{{item.coupon.code}}</b></span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+                        {%endif%}
+
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="checkout__order">
@@ -111,7 +153,10 @@
                             </ul>
                             <div class="checkout__order__total">Subtotal <span>₹{{total}}</span></div>
                             <div class="checkout__order__total">Tax <span>₹{{tax}}</span></div>
-                            <div class="checkout__order__total">Total <span>₹{{grand_total}}</span></div>
+                            <div class="checkout__order__total" id="coupon_block" style="display: none;">Discount <span>-₹<b id="coupon_discount"></b></span>
+                            <h1 class="text-danger" style="font-size: 12px;">*Coupon Applied - <b id="coupon_code"></b></h1>
+                            </div>
+                            <div class="checkout__order__total">Total <span id='grand_total'>₹{{grand_total}}</span></div>
                             {% comment %} <div class="checkout__input__checkbox">
                                 <label for="payment">
                                     Check Payment
@@ -135,5 +180,47 @@
     </div>
 </section>
 <!-- Checkout Section End -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    $('#coupon_form').on('submit', function(e){
+             
+        e.preventDefault();
+        
+          $.ajax({
+               type : "POST", 
+               url: "{% url 'coupon' %}",
+               data: {
+                   coupon : $('#coupon_data').val(),
+                   grand_total : '{{grand_total}}',
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                dataType: "json",
+        
+               },
+               
+               success: function(data){
+                  $('#output').html(data.msg) /* response message */
+                  $('#grand_total').text('₹'+data.grand_total)
+                  if (data.coupon_discount > 0) {
+                      $('#coupon_block').show()
+                      $('#accordionExample').hide()
+                  }
+                  $('#coupon_discount').html(data.coupon_discount)
+                  $('#coupon_code').html(data.coupon_code)
+
+                  
+               },
+        
+               failure: function() {
+                   
+               }
+        
+        
+           });
+        
+        
+                });  
+</script>
 
 {% endblock content %}

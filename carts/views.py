@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from .models import Cart, CartItem
-from orders.models import Address
+from orders.models import Address, Coupon, UserCoupon
 from shop.models import Product, Variation
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
@@ -320,6 +320,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
   tax=0
   grand_total=0
   address = Address.objects.filter(user = request.user)
+  
   try:
     if request.user.is_authenticated:
       cart_items = CartItem.objects.filter(user = request.user, is_active=True)
@@ -336,6 +337,20 @@ def checkout(request, total=0, quantity=0, cart_items=None):
   except ObjectDoesNotExist:
     pass
   
+  coupons = Coupon.objects.filter(active = True)
+
+  for item in coupons:
+    try:
+        coupon = UserCoupon.objects.get(user = request.user,coupon = item)
+    except:
+        coupon = UserCoupon()
+        coupon.user = request.user
+        coupon.coupon = item
+        coupon.save() 
+
+
+  coupons = UserCoupon.objects.filter(user = request.user, used=False)
+  
   context = {
     'address':address,
     'total':total,
@@ -343,5 +358,6 @@ def checkout(request, total=0, quantity=0, cart_items=None):
     'cart_items':cart_items,
     'tax':tax,
     'grand_total':grand_total,
+    'coupons':coupons,
   }
   return render(request, 'shop/checkout.html', context)

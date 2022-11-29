@@ -111,3 +111,11 @@ class Coupon(models.Model):
     active = models.BooleanField(default=False)
     def __str__(self):
         return self.code
+    
+class UserCoupon(models.Model):
+    user =  models.ForeignKey(Account,on_delete=models.CASCADE, null= True)
+    coupon = models.ForeignKey(Coupon,on_delete = models.CASCADE, null = True)
+    order  = models.ForeignKey(Order,on_delete=models.SET_NULL,null = True,related_name='order_coupon')
+    used = models.BooleanField(default = False)
+    def __str__(self):  
+        return str(self.id)
