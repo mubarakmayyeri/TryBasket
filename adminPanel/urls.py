@@ -39,4 +39,7 @@ urlpatterns = [
   path('edit_coupon_offers/<int:id>',views.edit_coupon,name="edit_coupon"),
   path('delete_coupon/<int:id>',views.delete_coupon,name="delete_coupon"),
   
+  path('sales_report/',views.sales_report,name="sales_report"),
+  path("sales_report_month/<int:id>",views.sales_report_month,name='sales_report_month'),
+  path("sales_report_year/<int:id>",views.sales_report_year,name='sales_report_year')
 ]

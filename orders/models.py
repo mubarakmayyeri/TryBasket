@@ -68,6 +68,7 @@ class Order(models.Model):
     pincode =   models.IntegerField(default=0)
     order_note = models.CharField(max_length=100, blank=True)
     order_total = models.FloatField()
+    order_discount = models.FloatField(default=0)
     tax     = models.FloatField()
     status = models.CharField(max_length=50,choices=STATUS,default='Order Confirmed')
     ip = models.CharField(blank=True,max_length=20)
@@ -87,7 +88,7 @@ class Order(models.Model):
         return f'{self.address_line1} {self.address_line2}'
       
 class OrderProduct(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='user_order_page')
     payment = models.ForeignKey(Payment,on_delete=models.SET_NULL,blank=True,null=True)
     user = models.ForeignKey(Account,on_delete=models.CASCADE)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)

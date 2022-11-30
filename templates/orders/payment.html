@@ -1,8 +1,35 @@
-{% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="zxx">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TryBasket - Only the fresh</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.png' %}">
+
+    <!-- Google Font -->
+    <link href='https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap' rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/elegant-icons.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+
+</head>
+
+<body>
+
+    {% include 'includes/navbar.html' %}
 
     <!-- ...:::: Start Cart Section:::... -->
     <div class="cart-section my-5">
@@ -10,16 +37,7 @@
         <div class="coupon_area">
             <div class="container">
                 <div class="row">
-                    <!-- <div class="col-lg-6 col-md-6">
-                        <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
-                            <h3>Coupon</h3>
-                            <div class="coupon_inner">
-                                <p>Enter your coupon code if you have one.</p>
-                                <input class="mb-2" placeholder="Coupon code" type="text">
-                                <button type="submit" class="btn btn-md btn-golden">Apply coupon</button>
-                            </div>
-                        </div>
-                    </div> -->
+
                     <div class="col-lg-7 clo-md-6">
                         <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
                             <div class="card">
@@ -94,10 +112,14 @@
                                     <span class="cart_amount">₹{{tax}}</span>
                                 </div>
 
-                                {% comment %} <div class="cart_subtotal" id="coupon_block" style="display: none!important;">
-                                    <p>Coupon</p>
-                                    <p class="cart_amount"> - <b id="coupon_perc"></b>%</p>
-                                </div> {% endcomment %}
+                                {% if coupon_discount %}
+
+                                <div class="cart_subtotal d-flex justify-content-between">
+                                    <p>Discount :</p>
+                                    <span class="cart_amount">-₹{{coupon_discount}}</span>
+                                </div>
+
+                                {% endif %}
 
                                 <div class="cart_subtotal d-flex justify-content-between">
                                     <p>Grand Total :</p>
@@ -106,10 +128,10 @@
 
                                 <div class="container-fluid mt-4">
                                         <div class="row">
-                                            <button  class="btn ml-3 mb-4 col-11 btn-warning" style="height: 44px;" data-toggle="modal" data-target="#exampleModal">
-                                                CASH ON DELIVERY
+                                            <button  class="btn ml-3 mb-3 col-11 btn-warning" style="height: 40px;" data-toggle="modal" data-target="#exampleModal">
+                                                <b>CASH ON DELIVERY</b>
                                             </button>
-                                            <button id="rzp-button1" class="btn btn-primary ml-3 mb-4 col-11" >
+                                            <button id="rzp-button1" class="btn btn-light ml-3 mb-3 col-11" style="height: 40px;" >
                                             <img src="{% static 'img/razorpay-icon.png' %}" alt="Razer Pay"  width="150px">
                                             </button>
                                             <!-- paypal button -->
@@ -146,6 +168,13 @@
         </div> 
         <!-- End Coupon Start -->
     </div> <!-- ...:::: End Cart Section:::... -->
+
+    {% include 'includes/footer.html' %}
+
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.min.js' %}"></script>
 
 <script src="https://www.paypal.com/sdk/js?client-id=AfHU3mDsa8YG5NwWfhiuS6HSmvt98dw1sx4FXn7uibSSEUtgxzACrTNxianta07ZmhE2MftfaopHP3wn&currency=USD"></script>
 
@@ -311,5 +340,8 @@
               }	
     </script>
 
+</body>
 
-{% endblock %}
+</html>
+
+

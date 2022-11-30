@@ -157,20 +157,7 @@
                             <h1 class="text-danger" style="font-size: 12px;">*Coupon Applied - <b id="coupon_code"></b></h1>
                             </div>
                             <div class="checkout__order__total">Total <span id='grand_total'>₹{{grand_total}}</span></div>
-                            {% comment %} <div class="checkout__input__checkbox">
-                                <label for="payment">
-                                    Check Payment
-                                    <input type="checkbox" id="payment">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="checkout__input__checkbox">
-                                <label for="paypal">
-                                    Paypal
-                                    <input type="checkbox" id="paypal">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div> {% endcomment %}
+                            <input type="text" name="coupon" id="coupon_code1" style="display: none;">
                             <button type="submit" class="site-btn">PROCEED TO PAYMENT</button>
                         </div>
                     </div>
@@ -208,6 +195,7 @@
                   }
                   $('#coupon_discount').html(data.coupon_discount)
                   $('#coupon_code').html(data.coupon_code)
+                  $('#coupon_code1').val(data.coupon_code)
 
                   
                },

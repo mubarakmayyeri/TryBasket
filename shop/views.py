@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from django.db.models import Q
 from shop.models import Category, Product, Sub_Category
 from carts.models import Cart, CartItem
 
@@ -23,7 +24,7 @@ def shop(request, category_slug=None, sub_category_slug=None):
   subCategories_shop = None
   products = None
   off_products = Product.objects.filter(product_offer__gt=0)
-  
+    
   if sub_category_slug != None:
     subCategories_shop = get_object_or_404(Sub_Category, slug=sub_category_slug)
     products = Product.objects.all().filter(sub_category=subCategories_shop, is_available=True)
@@ -34,12 +35,21 @@ def shop(request, category_slug=None, sub_category_slug=None):
     products = Product.objects.all().filter(category=categories_shop, is_available=True)
     print(categories_shop)
     product_count = products.count()
-    
+        
   else:
     categories_shop = Category.objects.all()
     subCategories_shop = Sub_Category.objects.all()
     products = Product.objects.all().filter(is_available=True).order_by('product_name')
     product_count = products.count()
+    
+  if request.method == 'POST':
+    min = request.POST['minamount']
+    max = request.POST['maxamount']
+    min_price = min.split('₹')[1]
+    max_price = max.split('₹')[1]
+    products = Product.objects.all().filter(Q(price__gte=min_price),Q(price__lte=max_price),is_available=True).order_by('price')
+    product_count = products.count()
+  
     
   context = {
     'categories_shop':categories_shop,

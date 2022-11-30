@@ -28,10 +28,20 @@
   <header class="card-header d-flex justify-content-between">
     <strong class="d-inline-block mr-3">Order Details</strong>
     <!-- Button trigger modal -->
-{% if order.status == 'Delivered' %}
-<button type="button" class="btn btn-success disabled">
-  Order Delivered.
+
+{% if order.status == 'Returned' %}
+<button type="button" class="btn btn-warning disabled">
+  Order Returned!!!
 </button>
+{% elif order.status == 'Delivered' %}
+<div class="d-flex">
+  <button type="button" class="btn btn-success disabled mr-3">
+    Order Delivered.
+  </button>
+  <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#returnModal">
+    Return Order?
+  </button>
+</div>
 {% elif order.status == 'Order Confirmed' %}
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
   Cancel Order?
@@ -40,13 +50,9 @@
 <button type="button" class="btn btn-danger disabled">
   Order Cancelled!!!
 </button>
-{% elif order.status == 'Returned' %}
-<button type="button" class="btn btn-warning disabled">
-  Order Returned!!!
-</button>
 {% else %}
-<button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#returnModal">
-  Return Order?
+<button type="button" class="btn btn-info disabled">
+  {{order.status}}
 </button>
 {% endif %} 
 
@@ -88,7 +94,8 @@
 
         <select name="return_reason" id="return_reason">
           <option value="Purchased by Mistake">Purchased by Mistake.</option>
-          <option value="Item no longer needed">Item no longer needed.</option>
+          <option value="Item no longer needed">Product is damaged.</option>
+          <option value="Item no longer needed">Item expired.</option>
           <option value="Delivery is later than expected.">Delivery is later than expected.</option>
           <option value="Other Reasons">Other Reasons</option>
         </select>

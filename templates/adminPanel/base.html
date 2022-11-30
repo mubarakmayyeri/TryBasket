@@ -53,25 +53,11 @@
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            {% comment %} <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <i class="far fa-file-alt"></i>
-                <span> Reports <i class="fas fa-angle-down"></i> </span>
+            <li class="nav-item {% if '/sales_report/' in request.path %}active{% endif %}">
+              <a class="nav-link" href="{% url 'sales_report' %}">
+                <i class="fa fa-table"></i></i> Sales Report
               </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Daily Report</a>
-                <a class="dropdown-item" href="#">Weekly Report</a>
-                <a class="dropdown-item" href="#">Yearly Report</a>
-              </div>
-            </li> {% endcomment %}
+            </li>
 
             <li class="nav-item {% if '/categories/' in request.path %}active{% endif %}">
               <a class="nav-link" href="{% url 'categories' %}">

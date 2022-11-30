@@ -6,8 +6,7 @@ from django.views.decorators.cache import never_cache
 from accounts.otp import *
 from django.shortcuts import get_object_or_404
 from datetime import datetime,timedelta,date
-from django.db.models import Sum
-from django.db.models import FloatField
+from django.db.models import Sum, Q, FloatField
 from django.db.models.functions import Cast
 from django.core.paginator import Paginator
 
@@ -524,3 +523,53 @@ def delete_coupon(request, id):
   coupon.delete()
   messages.success(request,'Coupon deleted successfully')
   return redirect('coupons')
+
+@login_required(login_url= 'adminLogin')
+def sales_report(request):
+    year = datetime.now().year
+    today = datetime.today()
+    month = today.month
+    years = []
+    today_date=str(date.today())
+
+    if request.method == 'POST':
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        val = datetime.strptime(end_date, '%Y-%m-%d')
+        end_date = val+timedelta(days=1)
+        orders = Order.objects.filter(Q(created_at__lt=end_date),Q(created_at__gte=start_date),payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+    else:
+        orders = Order.objects.filter(created_at__year = year,created_at__month=month,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+ 
+    year = today.year
+    for i in range (10):
+        val = year-i
+        years.append(val)
+
+    context = {
+        'orders':orders,
+        'today_date':today_date,
+        'years':years
+    }
+    return render(request, 'adminPanel/sales_report.html', context)
+  
+@login_required(login_url='adminLogin')
+def sales_report_month(request,id):
+    orders = Order.objects.filter(created_at__month = id,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by()    
+    print(orders)
+    today_date=str(date.today())
+    context = {
+        'orders':orders,
+        'today_date':today_date
+    }
+    return render(request,'adminPanel/sales_report.html',context)
+  
+@login_required(login_url='adminLogin')
+def sales_report_year(request,id):
+    orders = Order.objects.filter(created_at__year = id,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by()    
+    today_date=str(date.today())
+    context = {
+        'orders':orders,
+        'today_date':today_date
+    }
+    return render(request,'adminPanel/sales_report.html',context) 

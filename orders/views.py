@@ -28,10 +28,12 @@ def place_order(request, total=0, quantity=0):
     quantity += cart_item.quantity
     
   tax = (18 * total)/100
+  coupon_discount=0
   grand_total = total + tax
   grand_total = format(grand_total, '.2f')
   
   if request.method == 'POST':
+      coupon_code = request.POST['coupon']
       id = request.POST['flexRadioDefault']
       address  = Address.objects.get(user = request.user,id = id)
       data = Order()
@@ -62,12 +64,29 @@ def place_order(request, total=0, quantity=0):
       data.order_number = order_number
       data.save()
       
+      try:
+        instance = UserCoupon.objects.get(user = request.user ,coupon__code = coupon_code)
+        
+        if float(grand_total) >= float(instance.coupon.min_value):
+          grand_total = float(grand_total) - ((float(grand_total) * float(instance.coupon.discount))/100)
+          coupon_discount = ((float(grand_total) * float(instance.coupon.discount))/100)
+          grand_total = format(grand_total, '.2f')
+          coupon_discount = format(coupon_discount, '.2f')
+          
+        data.order_total = grand_total
+        data.order_discount = coupon_discount
+        data.save()
+        
+      except:
+        pass
+      
       order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
       context = {
         'order':order,
         'cart_items':cart_items,
         'total':total,
         'tax':tax,
+        'coupon_discount':coupon_discount,
         'grand_total':grand_total,
         'order_number':order_number,
       }
