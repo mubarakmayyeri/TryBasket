@@ -85,6 +85,15 @@
                                               <th class="text-center">₹{{order.tax}} </th>
                                           </tr>
 
+                                          {% if order.order_discount %}
+
+                                          <tr>
+                                            <th colspan="3" class="text-right">Discount :</th>
+                                            <th class="text-center">- ₹{{order.order_discount}} </th>
+                                          </tr>
+
+                                          {% endif %}
+
                                           <tr>
                                               <th colspan="3" class="text-right">Grand Total:</th>
                                               <th class="text-center">₹{{order.order_total}} </th>

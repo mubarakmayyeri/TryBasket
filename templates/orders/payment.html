@@ -265,6 +265,7 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     var orderID = "{{order_number}}"
+    var discount = "{{coupon_discount}}"
     var csrftoken = getCookie('csrftoken');
     var redirect_url = "{% url 'payments_completed' %}"
     var url1 = "{% url 'razorpay' %}";
@@ -305,7 +306,16 @@
     //   });
     }
       document.getElementById('rzp-button1').onclick = function(e){
-          fetch(url1).then((response)=>response.json()).then(response=>{
+          fetch(url1,{
+            method : "POST",
+            headers : {
+                "Content-type":"application/json",
+                "X-CSRFToken": csrftoken,
+            },
+            body:JSON.stringify({
+                discount: discount,
+            }),
+        }).then((response)=>response.json()).then(response=>{
             console.log(response)
              sample(response)
              

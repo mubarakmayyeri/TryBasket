@@ -68,8 +68,8 @@ def place_order(request, total=0, quantity=0):
         instance = UserCoupon.objects.get(user = request.user ,coupon__code = coupon_code)
         
         if float(grand_total) >= float(instance.coupon.min_value):
-          grand_total = float(grand_total) - ((float(grand_total) * float(instance.coupon.discount))/100)
           coupon_discount = ((float(grand_total) * float(instance.coupon.discount))/100)
+          grand_total = float(grand_total) - coupon_discount
           grand_total = format(grand_total, '.2f')
           coupon_discount = format(coupon_discount, '.2f')
           
@@ -241,6 +241,10 @@ def return_order(request, id):
   return redirect('orderDetails', id)
 
 def razorpay(request):
+  
+  body = json.loads(request.body)
+  discount = body['discount']
+    
   current_user = request.user
   
   cart_items = CartItem.objects.filter(user=current_user)
@@ -252,7 +256,7 @@ def razorpay(request):
     total += (cart_item.price * cart_item.quantity)
     
   tax = (18 * total)/100
-  grand_total = total + tax
+  grand_total = total + tax - float(discount)
   grand_total = format(grand_total, '.2f')
     
   amount = float(grand_total) * 100
@@ -281,8 +285,8 @@ def coupon(request):
       instance = UserCoupon.objects.get(user = request.user ,coupon__code = coupon_code)
 
       if float(grand_total) >= float(instance.coupon.min_value):
-        grand_total = float(grand_total) - ((float(grand_total) * float(instance.coupon.discount))/100)
         coupon_discount = ((float(grand_total) * float(instance.coupon.discount))/100)
+        grand_total = float(grand_total) - coupon_discount
         grand_total = format(grand_total, '.2f')
         coupon_discount = format(coupon_discount, '.2f')
         msg = 'Coupon Applied successfully'
