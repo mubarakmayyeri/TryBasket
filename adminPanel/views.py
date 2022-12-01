@@ -16,6 +16,11 @@ from shop.models import Product
 from category.models import Category, Sub_Category
 from orders.models import Order, Payment, Coupon
 
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+import xlwt
+
 # Create your views here.
 
 
@@ -531,16 +536,18 @@ def sales_report(request):
     month = today.month
     years = []
     today_date=str(date.today())
+    start_date=today_date
+    end_date=today_date
 
     if request.method == 'POST':
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
         val = datetime.strptime(end_date, '%Y-%m-%d')
         end_date = val+timedelta(days=1)
-        orders = Order.objects.filter(Q(created_at__lt=end_date),Q(created_at__gte=start_date),payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+        orders = Order.objects.filter(Q(created_at__lte=end_date),Q(created_at__gte=start_date),payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
     else:
         orders = Order.objects.filter(created_at__year = year,created_at__month=month,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
- 
+    
     year = today.year
     for i in range (10):
         val = year-i
@@ -549,27 +556,79 @@ def sales_report(request):
     context = {
         'orders':orders,
         'today_date':today_date,
-        'years':years
+        'years':years,
+        'start_date':start_date,
+        'end_date':end_date,
     }
     return render(request, 'adminPanel/sales_report.html', context)
   
-@login_required(login_url='adminLogin')
-def sales_report_month(request,id):
-    orders = Order.objects.filter(created_at__month = id,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by()    
-    print(orders)
-    today_date=str(date.today())
-    context = {
-        'orders':orders,
-        'today_date':today_date
-    }
-    return render(request,'adminPanel/sales_report.html',context)
+def pdf_report(request, start_date, end_date):
+    year = datetime.now().year
+    today = datetime.today()
+    month = today.month
+    
+    if start_date == end_date:
+      orders = Order.objects.filter(created_at__year = year,created_at__month=month,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+    else:
+      orders = Order .objects.filter(Q(created_at__lte=end_date),Q(created_at__gte=start_date),payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+    
+    template_path = 'adminPanel/sales-report-pdf.html'
+    context = {'orders': orders,}
+    
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=sales_report' + str(datetime.now()) +'.pdf'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # if error then show some funny view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
   
-@login_required(login_url='adminLogin')
-def sales_report_year(request,id):
-    orders = Order.objects.filter(created_at__year = id,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by()    
-    today_date=str(date.today())
-    context = {
-        'orders':orders,
-        'today_date':today_date
-    }
-    return render(request,'adminPanel/sales_report.html',context) 
+  
+def excel_report(request, start_date, end_date):
+    year = datetime.now().year
+    today = datetime.today()
+    month = today.month
+    
+    if start_date == end_date:
+      orders = Order.objects.filter(created_at__year = year,created_at__month=month,payment__status = True).values_list('user_order_page__product__product_name', Sum('user_order_page__quantity'),'user_order_page__product__stock', Sum('order_total'))
+    else:
+      orders = Order.objects.filter(Q(created_at__lte=end_date),Q(created_at__gte=start_date),payment__status = True).values_list('user_order_page__product__product_name', Sum('user_order_page__quantity'),'user_order_page__product__stock', Sum('order_total'))
+      
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=sales_report' + str(datetime.now()) +'.xls'
+    
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Sales_report')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    
+    columns = ['Item Name', 'Item sold', 'In stock', 'Amount Received']
+    
+    for col_num in range(len(columns)):
+      ws.write(row_num, col_num, columns[col_num], font_style)
+      
+    font_style = xlwt.XFStyle()
+    
+    rows = orders
+    
+    print(orders)
+    
+    for row in rows:
+      row_num += 1
+
+      for col_num in range(len(row)):
+        ws.write(row_num, col_num, str(row[col_num]), font_style)
+        
+    wb.save(response)
+
+    return response
+    
+    

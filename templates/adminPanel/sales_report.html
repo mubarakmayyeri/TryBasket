@@ -7,10 +7,11 @@
 <div class="container mt-3" style="min-height: 33rem;">
   <div class="card mt-3">
     <h1 class="card-header  text-center">Sales Report</h1>
+    <h4 class="h4 text-center mt-3">From <b>{{start_date}}</b> To <b>{{end_date}}</b></h4>
     <div class="card-body">
       <div class="row">
-        <div class="col-6 text-center">
-          <h5 class="card-title">By Date</h5>
+        <div class="col-8 text-center">
+          {% comment %} <h5 class="card-title">By Date</h5> {% endcomment %}
           <form action="{% url 'sales_report' %}" method="POST">
             {% csrf_token %}
             <div class="form">
@@ -24,16 +25,15 @@
             <button class="btn btn-success btn-sm px-2 mt-3  px-4 ml-5" type="submit">Filter</button>
           </form>
         </div>
-        <div class="col-6">
-          <button class="btn btn-secondary">By Month</button>
-          <button class="btn btn-secondary">By Year</button>
+        <div class="col-4 d-flex flex-column">
+          <a href="{% url 'pdf_report' start_date end_date %}"><button class="btn btn-danger mb-3">Export to PDF</button></a>
+          <a href="{% url 'excel_report' start_date end_date  %}"><button class="btn btn-success">Export to EXCEL</button></a>
         </div>
       </div>
+      {% include 'adminPanel/sales_report_table.html' %}
     </div>
   </div>
   
-
-  {% include 'adminPanel/sales_report_table.html' %}
 </div>
 
 <script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>

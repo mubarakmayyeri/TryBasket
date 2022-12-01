@@ -147,22 +147,22 @@
 
 <nav aria-label="Page navigation example" class="mt-3">
   <ul class="pagination d-flex justify-content-center">
-    {% if category.has_previous %}
+    {% if categories.has_previous %}
     <li class="page-item">
-      <a class="page-link" href="?page={{ category.previous_page_number }}" aria-label="Previous">
+      <a class="page-link" href="?page={{ categories.previous_page_number }}" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
         <span class="sr-only">Previous</span>
       </a>
     </li>
     {% endif %}
-    <li class="page-item"><a class="page-link" href="?page={{ category.number }}">{{ category.number }}</a></li>
-    {% if category.has_next %}
-    <li class="page-item"><a class="page-link" href="?page={{ category.next_page_number }}">{{ category.next_page_number }}</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{ categories.number }}">{{ categories.number }}</a></li>
+    {% if categories.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ categories.next_page_number }}">{{ categories.next_page_number }}</a></li>
     {%endif%}
 
-    {% if category.has_next %}
+    {% if categories.has_next %}
     <li class="page-item">
-      <a class="page-link" href="?page={{ category.next_page_number }}" aria-label="Next">
+      <a class="page-link" href="?page={{ categories.next_page_number }}" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
         <span class="sr-only">Next</span>
       </a>
