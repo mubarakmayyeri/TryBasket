@@ -116,7 +116,6 @@ def payments(request):
     cart_items = CartItem.objects.filter(user = request.user)
 
     for cart_item in cart_items:
-        print(cart_item.variations.all())
         order_product =  OrderProduct()
         order_product.order_id = order.id
         order_product.payment = payment
@@ -127,7 +126,12 @@ def payments(request):
         order_product.ordered = True
         order_product.save()
         
-        
+        cart_item = CartItem.objects.get(id=cart_item.id)
+        product_variation = cart_item.variations.all()
+        order_product = OrderProduct.objects.get(id=order_product.id)
+        order_product.variations.set(product_variation)
+        order_product.save()
+
         product = Product.objects.get( id = cart_item.product_id)
         product.stock -= cart_item.quantity
         product.save()
@@ -195,6 +199,12 @@ def cash_on_delivery(request,id):
             order_product.quantity =  cart_item.quantity
             order_product.product_price = cart_item.sub_total()
             order_product.ordered = True
+            order_product.save()
+            
+            cart_item = CartItem.objects.get(id=cart_item.id)
+            product_variation = cart_item.variations.all()
+            order_product = OrderProduct.objects.get(id=order_product.id)
+            order_product.variations.set(product_variation)
             order_product.save()
             
         #Reduce Quantity of product

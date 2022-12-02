@@ -68,6 +68,14 @@
                                           {% for item in ordered_products %}
                                           <tr >
                                               <td style="border:1px solid black" >{{item.product.product_name}}
+                                                <p class="text-muted small">
+                                                    {% if item.variations.all %}
+                                                      {% for i in item.variations.all %}
+                                                        {{i.variation_category | capfirst}} : {{i.variation_value | capfirst}} <br>
+                                                      {% endfor %}
+
+                                                    {% endif %}
+                                                  </p>
                                               </td>
                                               <td class="text-center" id="qnty{{forloop.counter}}" style="border:1px solid black">{{item.quantity}}</td>
                                               <td class="text-center" id="price{{forloop.counter}}" style="border:1px solid black">{{item.product_price}} </td>

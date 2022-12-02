@@ -101,7 +101,7 @@ class OrderProduct(models.Model):
 
 
     def __str__(self):
-        return self.user.first_name
+        return self.product.product_name
     
 class Coupon(models.Model):
     code = models.CharField(max_length=50,unique=True)
