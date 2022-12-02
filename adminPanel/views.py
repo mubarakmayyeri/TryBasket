@@ -157,8 +157,13 @@ def adminLogout(request):
 @login_required(login_url = 'adminLogin')
 def accounts(request):
   users = Account.objects.all().filter(is_superadmin=False).order_by('-id')
+  
+  paginator = Paginator(users, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
   context = {
-    'users': users
+    'users': page_obj
   }
   return render(request, 'adminPanel/accounts.html', context)
 
@@ -207,8 +212,13 @@ def blockUser(request, id):
 @login_required(login_url = 'adminLogin')
 def categories(request):
   categories = Category.objects.all().order_by('id')
+  
+  paginator = Paginator(categories, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
   context = {
-    'categories':categories
+    'categories':page_obj
   }
   return render(request, 'adminPanel/categories.html', context)
 
@@ -360,8 +370,13 @@ def deleteSubCategory(request, slug):
 @login_required(login_url = 'adminLogin')
 def products(request):
   products = Product.objects.all().order_by('-id')
+  
+  paginator = Paginator(products, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
   context = {
-    'products': products
+    'products': page_obj
   }
   return render(request, 'adminPanel/products.html', context)
 
