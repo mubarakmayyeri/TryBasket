@@ -1,5 +1,6 @@
 from django import forms
 from .models import Account
+from orders.models import Address
 from django.contrib import messages
 
 
@@ -33,3 +34,24 @@ class RegistrationForm(forms.ModelForm):
     
     if password != confirm_password:
       raise forms.ValidationError("Password does not match!!")
+    
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields  = ['first_name','last_name', 'email', 'phone_number',]
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm,self).__init__(*args, **kwargs)  
+        for field  in self.fields:
+             self.fields[field].widget.attrs['class'] = 'form-control'
+             
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields=['first_name','last_name','phone','email','address_line1','address_line2','district','state','city', 'pincode']
+    
+    def __init__(self, *args, **kwargs):
+      super(AddressForm,self).__init__(*args, **kwargs)  
+      for field  in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+             

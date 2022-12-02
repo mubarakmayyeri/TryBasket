@@ -12,16 +12,22 @@
         <h2 class="card-title mb-4 text-center">Sign in</h2>
         
         {% include 'includes/alerts.html' %}
+        
+        <div class="text-danger text-center">
+          <span id="crederror"></span>
+        </div>
 
-        <form action="{% url 'login' %}" method="post">
+        <form action="" method="">
           {% csrf_token %}
           <div class="form-group">
             <label>Email</label>
-         <input type="email" class="form-control" placeholder="Enter Your Email Address" name="email" required>
+         <input type="email" id="email" class="form-control" placeholder="Enter Your Email Address" name="email" required>
+         <div class="text-danger mt-1"><span id="emailerror"></span></div>
             </div> <!-- form-group// -->
             <div class="form-group">
               <label>Password</label>
-        <input type="password" class="form-control" placeholder="Enter Your Password" name="password" required>
+        <input type="password" id="password" class="form-control" placeholder="Enter Your Password" name="password" required>
+        <div class="text-danger mt-1"><span id="passerror"></span></div>
             </div> <!-- form-group// -->
             
             <div class="form-group">
@@ -29,7 +35,7 @@
              
             </div> <!-- form-group form-check .// -->
             <div class="form-group">
-                <button type="submit" class="btn btn-success btn-block"> Login  </button>
+                <button type="button" id="login" class="btn btn-success btn-block"> Login  </button>
             </div> <!-- form-group// -->    
         </form>
         <p class="text-center">Or Login with OTP? <a href="{% url 'otpLogin' %}">Click Here</a></p>
@@ -43,5 +49,38 @@
   
   </section>
   <!-- ========================= SECTION CONTENT END// ========================= -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    $('#login').click(() => {
+      var email = $('#email').val()
+      var password = $('#password').val()
+      var url = '{% url 'userLogin' %}'
+      var data = {
+        'csrfmiddlewaretoken':'{{ csrf_token }}',
+        'email':email,
+        'password':password,
+      }
+      if(email == ''){
+        $('#emailerror').html('Please enter a valid email!!!')
+      }else if(password == ''){
+        $('#passerror').html('Please enter a valid password!!!')
+      }else {
+        $.ajax({
+          url: url,
+          method:'POST',
+          data: data,
+          {% comment %} dataType: 'json', {% endcomment %}
+          success: function(data){
+            if(data.success){
+              window.location.replace(data.url)
+            }else{
+              $('#crederror').html('Invalid credentials!!!')
+            }
+          }
+        })
+      }
+
+    })
+  </script>
 
 {% endblock content %}

@@ -26,11 +26,9 @@
                 </button>
             </div>
             <div class="text-center mt-3">
-                <span class="d-block mobile-text"
-                    >Don not received the code?</span
-                ><span class="font-weight-bold text-primary cursor"
-                    >Resend</span
-                >
+                <span class="d-block mobile-text">Did not receive the code?</span>
+                <span class="text-danger cursor" id="timer"></span>
+                <a href="" class="font-weight-bold text-primary cursor" style="display: none;" id="resend">Resend</a>
                 {% for message in messages %}
                 <hr />
                 <p class="text-danger">{{message}}</p>
@@ -39,5 +37,27 @@
         </div>
     </form>
 </div>
+
+<script>
+    var timeLeft = 30;
+    var elem = document.getElementById('timer');
+    var re = document.getElementById('resend');
+    var timerId = setInterval(countdown, 1000);
+
+    function countdown() {
+        if (timeLeft == -1) {
+            clearTimeout(timerId);
+            resend();
+        } else {
+            elem.innerHTML = timeLeft + ' seconds remaining';
+            timeLeft--;
+        }
+    }
+
+    function resend() {
+        elem.style.display = "none";
+        re.style.display = "block";
+    }
+</script>
 
 {% endblock content %}

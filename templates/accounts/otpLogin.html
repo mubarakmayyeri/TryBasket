@@ -14,14 +14,15 @@
   
           <form action="{% url 'otpLogin' %}" method="post">
             {% csrf_token %}
-            <div class="form-group">
+            <div class="form-group d-flex">
+              <span class="border mr-1 btn">+91</span>
            <input type="text" class="form-control" placeholder="Enter Your Mobile Number" name="phone_number" maxlength="10" required>
               </div> <!-- form-group// -->
               <div class="form-group">
                   <button type="submit" class="btn btn-success btn-block"> Login  </button>
               </div> <!-- form-group// -->    
           </form>
-          <p class="text-center">Or Login with password? <a href="{% url 'login' %}">Click Here</a></p>
+          <p class="text-center">Or Login with password? <a href="{% url 'userLogin' %}">Click Here</a></p>
           </div> <!-- card-body.// -->
         </div> <!-- card .// -->
     

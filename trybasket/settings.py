@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'accounts',
     'shop',
     'adminPanel',
+    'carts',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +69,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'category.context_processors.category_links',
+                'category.context_processors.sub_category_links',
+                'shop.context_processors.latest_products1',
+                'shop.context_processors.latest_products2',
+                'shop.context_processors.offer_products1',
+                'shop.context_processors.offer_products2',
+                'carts.context_processors.counter',
+                'carts.context_processors.total',
             ],
         },
     },
@@ -155,3 +165,8 @@ MESSAGE_TAGS = {
 AUTH_TOKEN=config('AUTH_TOKEN')
 ACCOUNT_SID=config('ACCOUNT_SID')
 SERVICES_ID=config('SERVICES_ID')
+
+#razorpay data
+
+RAZORPAY_ID = config('RAZORPAY_ID')
+RAZORPAY_KEY = config('RAZORPAY_KEY')

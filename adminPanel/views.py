@@ -4,11 +4,22 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from accounts.otp import *
+from django.shortcuts import get_object_or_404
+from datetime import datetime,timedelta,date
+from django.db.models import Sum, Q, FloatField
+from django.db.models.functions import Cast
+from django.core.paginator import Paginator
 
-from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm
+from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm
 from accounts.models import Account
 from shop.models import Product
 from category.models import Category, Sub_Category
+from orders.models import Order, Payment, Coupon
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+import xlwt
 
 # Create your views here.
 
@@ -32,11 +43,9 @@ def adminLogin(request):
       if user.is_superadmin:
         request.session['email'] = email
         
-        login(request, user)            #for log in without otp
+        login(request, user)
         return redirect('dashboard')
         
-        # send_otp(user.phone_number)
-        # return redirect('otpVerification')
       else:
         messages.error(request, 'Not Authorized!!!')
         return redirect(adminLogin)
@@ -49,7 +58,89 @@ def adminLogin(request):
 
 @login_required(login_url = 'adminLogin')
 def dashboard(request):
-    return render(request, 'adminPanel/dashboard.html')
+    today = datetime.today()
+    today_date = today.strftime("%Y-%m-%d")
+    month = today.month
+    year = today.strftime("%Y")
+    one_week = datetime.today() - timedelta(days=7)
+    order_count_in_month = Order.objects.filter(created_at__year = year,created_at__month=month, is_ordered=True).count() 
+    order_count_in_day =Order.objects.filter(created_at__date = today, is_ordered=True).count()
+    order_count_in_week = Order.objects.filter(created_at__gte = one_week, is_ordered=True).count()
+    number_of_users  = Account.objects.filter(is_admin = False).count()
+    paypal_orders = Payment.objects.filter(payment_method="PayPal",status = True).count()
+    razorpay_orders = Payment.objects.filter(payment_method="RazerPay",status = True).count()
+    cash_on_delivery_count = Payment.objects.filter(payment_method="Cash On Delivery",status = True).count()
+
+    total_payment_count = paypal_orders + razorpay_orders + cash_on_delivery_count
+    try:
+        total_payment_amount = Payment.objects.filter(status = True).annotate(total_amount=Cast('amount_paid', FloatField())).aggregate(Sum('total_amount'))
+        
+    except:
+        total_payment_amount=0
+    revenue = total_payment_amount['total_amount__sum']
+    revenue = format(revenue, '.2f')
+           
+    blocked_user = Account.objects.filter(is_active = False,is_superadmin = False).count()
+    unblocked_user = Account.objects.filter(is_active = True,is_superadmin = False).count()
+
+    today_sale = Order.objects.filter(created_at__date = today_date,payment__status = True, is_ordered=True).count()
+    today = today.strftime("%A")
+    new_date = datetime.today() - timedelta(days = 1)
+    yester_day_sale =   Order.objects.filter(created_at__date = new_date,payment__status = True, is_ordered=True).count()  
+    yesterday = new_date.strftime("%A")
+    new_date = new_date - timedelta(days = 1)
+    day_2 = Order.objects.filter(created_at__date = new_date,payment__status = True, is_ordered=True).count()
+    day_2_name = new_date.strftime("%A")
+    new_date = new_date - timedelta(days = 1)
+    day_3 = Order.objects.filter(created_at__date = new_date,payment__status = True, is_ordered=True).count()
+    day_3_name = new_date.strftime("%A")
+    new_date = new_date - timedelta(days = 1)
+    day_4 = Order.objects.filter(created_at__date = new_date,payment__status = True, is_ordered=True).count()
+    day_4_name = new_date.strftime("%A")
+    new_date = new_date - timedelta(days = 1)
+    day_5 = Order.objects.filter(created_at__date = new_date,payment__status = True, is_ordered=True).count()
+    day_5_name = new_date.strftime("%A")
+    #status
+    ordered = Order.objects.filter(status = 'Order Confirmed', is_ordered=True).count()
+    shipped = Order.objects.filter(status = "Shipped").count()
+    out_of_delivery = Order.objects.filter(status ="Out for delivery").count()
+    delivered = Order.objects.filter(status = "Delivered").count()
+    returned = Order.objects.filter(status = "Returned").count()
+    cancelled = Order.objects.filter(status = "Cancelled").count()
+
+    context ={
+        'order_count_in_month':order_count_in_month,
+        'order_count_in_day':order_count_in_day,
+        'order_count_in_week':order_count_in_week,
+        'number_of_users':number_of_users,
+        'paypal_orders':paypal_orders,
+        'razorpay_orders':razorpay_orders,
+        'total_payment_count':total_payment_count,
+        'revenue':revenue,
+        'ordered':ordered,
+        'shipped':shipped,
+        'out_of_delivery':out_of_delivery,
+        'delivered':delivered,
+        'returned':returned,
+        'cancelled':cancelled,
+        'cash_on_delivery_count':cash_on_delivery_count,
+        'blocked_user':blocked_user,
+        'unblocked_user':unblocked_user,
+        'today_sale':today_sale,
+        'yester_day_sale':yester_day_sale,
+        'day_2':day_2,
+        'day_3':day_3,
+        'day_4':day_4,
+        'day_5':day_5,
+        'today':today,
+        'yesterday':yesterday,
+        'day_2_name':day_2_name,
+        'day_3_name':day_3_name,
+        'day_4_name':day_4_name,
+        'day_5_name':day_5_name
+        
+    }
+    return render(request, 'adminPanel/dashboard.html', context)
   
 @login_required(login_url = 'adminLogin')
 def adminLogout(request):
@@ -167,6 +258,38 @@ def deleteCategory(request, slug):
   category.delete()
   messages.success(request, 'Category deleted successfully.')
   return redirect('categories')
+
+@login_required(login_url = 'adminLogin')  
+def category_offers(request):
+  categories = Category.objects.all().order_by('-category_offer')
+  
+  paginator = Paginator(categories, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
+  context = {
+    'categories':page_obj,
+  }
+  return render(request, 'adminPanel/category_offers.html', context)
+
+@login_required(login_url= 'adminLogin')
+def add_category_offer(request):
+  if request.method == 'POST' :
+    category_name = request.POST.get('category_name')
+    category_offer = request.POST.get('category_offer')
+    category = Category.objects.get(category_name = category_name)
+    category.category_offer =  category_offer
+    category.save()
+    messages.success(request,'Category offer added successfully')
+    return redirect('category_offers')
+      
+@login_required(login_url= 'adminLogin')
+def delete_category_offer(request, id):
+  category = Category.objects.get(id = id)
+  category.category_offer =  0
+  category.save()
+  messages.success(request,'Category offer deleted successfully')
+  return redirect('category_offers')
 
 
 # sub category management
@@ -287,10 +410,225 @@ def deleteProduct(request, id):
   product.delete()
   return redirect('products')
 
+@login_required(login_url = 'adminLogin')  
+def product_offers(request):
+  products = Product.objects.all().order_by('-product_offer')
+  
+  paginator = Paginator(products, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
+  context = {
+    'products':page_obj,
+  }
+  return render(request, 'adminPanel/product_offers.html', context)
+
+@login_required(login_url= 'adminLogin')
+def add_product_offer(request):
+  if request.method == 'POST' :
+    product_name = request.POST.get('product_name')
+    product_offer = request.POST.get('product_offer')
+    product = Product.objects.get(product_name = product_name)
+    product.product_offer =  product_offer
+    product.save()
+    messages.success(request,'Product offer added successfully')
+    return redirect('product_offers')
+  
+@login_required(login_url= 'adminLogin')
+def delete_product_offer(request, id):
+  product = Product.objects.get(id=id)
+  product.product_offer = 0
+  product.save()
+  messages.success(request, 'Product offer deleted successfully')
+  return redirect('product_offers')
 
 
 # Order Management
 
 @login_required(login_url = 'adminLogin')
 def orders(request):
-  return render(request, 'adminPanel/orders.html')
+  orders = Order.objects.filter(is_ordered=True).order_by('-id')
+  
+  paginator = Paginator(orders, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
+  context = {
+    'orders':page_obj,
+  }
+  return render(request, 'adminPanel/orders.html', context)
+
+@login_required(login_url = 'adminLogin')
+def update_order(request, id):
+  if request.method == 'POST':
+    order = get_object_or_404(Order, id=id)
+    status = request.POST.get('status')
+    order.status = status 
+    order.save()
+    if status  == "Delivered":
+      try:
+          payment = Payment.objects.get(payment_id = order.order_number, status = False)
+          print(payment)
+          if payment.payment_method == 'Cash On Delivery':
+              payment.status = True
+              payment.save()
+      except:
+          pass
+    order.save()
+    
+  return redirect('orders')
+
+@login_required(login_url = 'adminLogin')
+def coupons(request):
+  coupons = Coupon.objects.all()
+  context = {
+    'coupons':coupons,
+  }
+  return render(request, 'adminPanel/coupons.html', context)
+
+@login_required(login_url = 'adminLogin')
+def add_coupon(request):
+  if request.method == 'POST':
+    form = CouponForm(request.POST , request.FILES)
+    if form.is_valid():
+      form.save()
+      messages.success(request,'Coupon Added successfully')
+      return redirect('coupons')
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('add_coupon')
+  form = CouponForm()
+  context = {
+    'form':form,
+  }
+  return render(request, 'adminPanel/addCoupon.html', context)
+
+@login_required(login_url = 'adminLogin')
+def edit_coupon(request, id):
+  coupon = Coupon.objects.get(id = id)
+  if request.method == 'POST':
+    form = CouponForm(request.POST , request.FILES, instance=coupon)
+    if form.is_valid():
+      form.save()
+      messages.success(request,'Coupon updated successfully')
+      return redirect('coupons')
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('edit_coupon', coupon.id)
+  form = CouponForm(instance=coupon)
+  context = {
+    'coupon':coupon,
+    'form':form,
+  }
+  return render(request, 'adminPanel/editCoupon.html', context)
+
+@login_required(login_url= 'adminLogin')
+def delete_coupon(request, id):
+  coupon = Coupon.objects.get(id = id)
+  coupon.delete()
+  messages.success(request,'Coupon deleted successfully')
+  return redirect('coupons')
+
+@login_required(login_url= 'adminLogin')
+def sales_report(request):
+    year = datetime.now().year
+    today = datetime.today()
+    month = today.month
+    years = []
+    today_date=str(date.today())
+    start_date=today_date
+    end_date=today_date
+
+    if request.method == 'POST':
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        val = datetime.strptime(end_date, '%Y-%m-%d')
+        end_date = val+timedelta(days=1)
+        orders = Order.objects.filter(Q(created_at__lte=end_date),Q(created_at__gte=start_date),payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+    else:
+        orders = Order.objects.filter(created_at__year = year,created_at__month=month,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+    
+    year = today.year
+    for i in range (10):
+        val = year-i
+        years.append(val)
+
+    context = {
+        'orders':orders,
+        'today_date':today_date,
+        'years':years,
+        'start_date':start_date,
+        'end_date':end_date,
+    }
+    return render(request, 'adminPanel/sales_report.html', context)
+  
+def pdf_report(request, start_date, end_date):
+    year = datetime.now().year
+    today = datetime.today()
+    month = today.month
+    
+    if start_date == end_date:
+      orders = Order.objects.filter(created_at__year = year,created_at__month=month,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+    else:
+      orders = Order .objects.filter(Q(created_at__lte=end_date),Q(created_at__gte=start_date),payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+    
+    template_path = 'adminPanel/sales-report-pdf.html'
+    context = {'orders': orders,}
+    
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=sales_report' + str(datetime.now()) +'.pdf'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # if error then show some funny view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+  
+  
+def excel_report(request, start_date, end_date):
+    year = datetime.now().year
+    today = datetime.today()
+    month = today.month
+    
+    if start_date == end_date:
+      orders = Order.objects.filter(created_at__year = year,created_at__month=month,payment__status = True).values_list('user_order_page__product__product_name', Sum('user_order_page__quantity'),'user_order_page__product__stock', Sum('order_total'))
+    else:
+      orders = Order.objects.filter(Q(created_at__lte=end_date),Q(created_at__gte=start_date),payment__status = True).values_list('user_order_page__product__product_name', Sum('user_order_page__quantity'),'user_order_page__product__stock', Sum('order_total'))
+      
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=sales_report' + str(datetime.now()) +'.xls'
+    
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Sales_report')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    
+    columns = ['Item Name', 'Item sold', 'In stock', 'Amount Received']
+    
+    for col_num in range(len(columns)):
+      ws.write(row_num, col_num, columns[col_num], font_style)
+      
+    font_style = xlwt.XFStyle()
+    
+    rows = orders
+    
+    print(orders)
+    
+    for row in rows:
+      row_num += 1
+
+      for col_num in range(len(row)):
+        ws.write(row_num, col_num, str(row[col_num]), font_style)
+        
+    wb.save(response)
+
+    return response
+    
+    
