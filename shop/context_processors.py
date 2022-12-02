@@ -15,3 +15,11 @@ def offer_products1(request):
 def offer_products2(request):
   offer_products = Product.objects.filter(product_offer__gt=0).order_by('-product_offer')[3:6]
   return dict(offer_products2=offer_products)
+
+def selling_products1(request):
+  selling_products = Product.objects.all().order_by('stock')[:3]
+  return dict(selling_products1=selling_products)
+
+def selling_products2(request):
+  selling_products = Product.objects.all().order_by('stock')[3:6]
+  return dict(selling_products2=selling_products)

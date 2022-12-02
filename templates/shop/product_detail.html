@@ -83,7 +83,13 @@
                                     </div>
                                 </div>
                             </div> {% endcomment %}
-                            <div class="d-flex mb-2">
+
+                            {% if product.stock <= 0 %}
+
+                            <h3  class="danger-btn">OUT OF STOCK</h3>
+
+                            {% else %}
+                                <div class="d-flex mb-2">
                                     <h4>Size :</h4>
                                     <select class="ml-2" id="size" name="size" required  onchange="getval(this);">
                                         {% comment %} <option value="" disabled selected>Size</option> {% endcomment %}
@@ -95,12 +101,7 @@
                                         {% endfor %}
 
                                     </select>
-                            </div>
-                            {% if product.stock <= 0 %}
-
-                            <h3  class="danger-btn">OUT OF STOCK</h3>
-
-                            {% else %}
+                                </div>
 
                                 {% comment %} {% if in_cart %}
 
@@ -114,7 +115,7 @@
                                 {% comment %} {% endif %} {% endcomment %}
 
                             {% endif %}
-                            <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+                            {% comment %} <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a> {% endcomment %}
                             <ul>
                                 <li><b>Availability</b>
                                     {% if product.stock <= 0 %}

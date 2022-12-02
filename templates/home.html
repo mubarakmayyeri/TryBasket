@@ -122,12 +122,12 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="banner__pic">
-                        <img src="{% static 'img/banner/banner-1.jpg' %}" alt="">
+                        <a href="{% url 'products_by_category' 'fresh-dried-preserved-fruits' %}"><img src="{% static 'img/banner/banner-1.jpg' %}" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="banner__pic">
-                        <img src="{% static 'img/banner/banner-2.jpg' %}" alt="">
+                        <a href="{% url 'products_by_sub_category' 'juices-soups-soft-drinks' 'fruit-drinks' %}"><img src="{% static 'img/banner/banner-2.jpg' %}" alt=""></a>
                     </div>
                 </div>
             </div>
@@ -189,11 +189,11 @@
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="latest-product__text">
-                        <h4>Top Rated Products</h4>
+                        <h4>Top Selling Products</h4>
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
                                 
-                                {% for product in latest_products_1 %}
+                                {% for product in selling_products1 %}
                                     
                                 <a href="{{product.get_url}}" class="latest-product__item">
                                     <div class="latest-product__item__pic">
@@ -214,7 +214,7 @@
                             </div>
                             <div class="latest-prdouct__slider__item">
 
-                                {% for product in latest_products_2 %}
+                                {% for product in selling_products2 %}
                                     
                                 <a href="#" class="latest-product__item">
                                     <div class="latest-product__item__pic">

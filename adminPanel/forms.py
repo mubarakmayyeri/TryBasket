@@ -12,7 +12,7 @@ class LoginForm(forms.Form):
 class ProductForm(forms.ModelForm):
     class Meta:
          model = Product
-         fields = ['product_name', 'slug', 'description', 'price', 'image_1', 'image_2', 'image_3', 'image_4', 'stock',
+         fields = ['product_name', 'slug', 'description', 'price', 'unit', 'image_1', 'image_2', 'image_3', 'image_4', 'stock',
                       'is_available', 'is_featured', 'category', 'sub_category']
         
     def __init__(self, *args, **kwargs):
