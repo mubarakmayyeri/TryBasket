@@ -1,7 +1,7 @@
 from .models import Category, Sub_Category
 
 def category_links(request):
-  cat_links = Category.objects.all()
+  cat_links = Category.objects.all().order_by('-category_offer')
   return dict(cat_links=cat_links)
 
 def sub_category_links(request):

@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.db.models import Q
 from shop.models import Category, Product, Sub_Category
@@ -49,12 +50,17 @@ def shop(request, category_slug=None, sub_category_slug=None):
     max_price = max.split('₹')[1]
     products = Product.objects.all().filter(Q(price__gte=min_price),Q(price__lte=max_price),is_available=True).order_by('price')
     product_count = products.count()
+    
+  
+  paginator = Paginator(products, 9)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
   
     
   context = {
     'categories_shop':categories_shop,
     'subCategories_shop':subCategories_shop,
-    'products':products,
+    'products':page_obj,
     'off_products':off_products,
     'product_count':product_count
   }
