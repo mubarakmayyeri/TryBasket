@@ -6,6 +6,7 @@ from django.contrib import messages, auth
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from .otp import *
+from django.core.paginator import Paginator
 from requests.utils import urlparse
 
 from carts.views import _cart_id, add_cart
@@ -208,9 +209,13 @@ def userDashboard(request):
 @login_required(login_url='userLogin')
 def myOrders(request):
     orders = Order.objects.filter(user=request.user,is_ordered=True).order_by('-created_at')
+    
+    paginator = Paginator(orders, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'orders':orders
+        'orders':page_obj
     }
 
     return render(request,'user/myOrders.html',context)

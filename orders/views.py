@@ -215,10 +215,17 @@ def cash_on_delivery(request,id):
 
         #clear cart
         CartItem.objects.filter(user = request.user).delete()
-        #send order number and Transaction id to Web page using 
+        ordered_products = OrderProduct.objects.filter(order_id=order.id)
+        
+        subtotal = 0
+        for i in ordered_products:
+            subtotal += i.product_price * i.quantity
+        
         context ={
-          'orders':order,
-          'payment':payment
+          'order':order,
+          'ordered_products':ordered_products,
+          'payment':payment,
+          'subtotal':subtotal,
              }
         return render(request,'orders/cod_success.html',context)
     except:
