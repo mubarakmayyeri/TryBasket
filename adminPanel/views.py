@@ -628,7 +628,7 @@ def sales_report(request):
         orders = Order.objects.filter(created_at__year = year,created_at__month=month,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
     
     year = today.year
-    for i in range (10):
+    for i in range (3):
         val = year-i
         years.append(val)
 
@@ -640,6 +640,27 @@ def sales_report(request):
         'end_date':end_date,
     }
     return render(request, 'adminPanel/sales_report.html', context)
+
+@login_required(login_url= 'adminLogin') 
+def sales_report_month(request,id):
+    orders = Order.objects.filter(created_at__month = id,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by()
+    today_date=str(date.today())
+    context = {
+        'orders':orders,
+        'today_date':today_date
+    }
+    return render(request,'adminPanel/sales_report_table.html',context)
+  
+@login_required(login_url='adminLogin')
+def sales_report_year(request,id):
+    orders = Order.objects.filter(created_at__year = id,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by()    
+    today_date=str(date.today())
+    context = {
+        'orders':orders,
+        'today_date':today_date
+    }
+    return render(request,'adminPanel/sales_report_table.html',context) 
+
   
 def pdf_report(request, start_date, end_date):
     year = datetime.now().year
@@ -697,8 +718,6 @@ def excel_report(request, start_date, end_date):
     font_style = xlwt.XFStyle()
     
     rows = orders
-    
-    print(orders)
     
     for row in rows:
       row_num += 1

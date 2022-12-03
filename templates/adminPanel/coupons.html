@@ -18,7 +18,7 @@
       <tr>
         <th scope="col">Coupon Code</th>
         <th>Discount</th>
-        <th>Applicable for</th>
+        <th>Min Price</th>
         <th>Expiry Date</th>
         <th>Edit</th>
         <th>Delete</th>
@@ -30,8 +30,8 @@
 
       <tr style="height: 50px !important;" class="text-wrap">
         <th scope="row">{{coupon.code}}</th>
-        <td>{{coupon.discount}}</td>
-        <td>{{coupon.min_value}}</td>
+        <td>{{coupon.discount}}%</td>
+        <td>₹{{coupon.min_value}}</td>
         <td>{{coupon.valid_at}}</td>
         <td>
           <div class="pro-img-overlay"><a href="{% url 'edit_coupon' coupon.id  %}" ><i class="fas fa-edit text-warning"></i></a>
