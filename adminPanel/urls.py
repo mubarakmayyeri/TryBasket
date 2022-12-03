@@ -31,6 +31,11 @@ urlpatterns = [
   path('add_product_offer/', views.add_product_offer, name='add_product_offer'),
   path('delete_product_offer/<int:id>/', views.delete_product_offer, name='delete_product_offer'),
   
+  path('products/product_variations/', views.product_variations, name='product_variations'),
+  path('products/product_variations/add_product_variation/', views.add_product_variation, name='add_product_variation'),
+  path('products/product_variations/<int:id>/edit_variation', views.edit_product_variation, name='edit_product_variation'),
+  path('products/product_variations/<int:id>/delete_variation', views.delete_product_variation, name='delete_product_variation'),
+  
   path('orders/', views.orders, name='orders'),
   path('update_order/<int:id>',views.update_order,name="update_order"),
   

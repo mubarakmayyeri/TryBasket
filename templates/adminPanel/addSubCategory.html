@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="text-center mx-auto mt-2" style="min-width: 22rem;">{% include 'includes/alerts.html' %}</div>
+<div class="text-center mx-auto mt-2 w-50">{% include 'includes/alerts.html' %}</div>
 
 <div class="container mt-3" style="min-height: 33rem;">
   <h2 class="text-center text-white">Add Sub Category</h2>
@@ -24,7 +24,6 @@
     <div class="col form-group">
         <label > Category</label><br>
         {{form.category}}
-        {% comment %} <input class="form-control" type="text" placeholder="hi" readonly> {% endcomment %}
     </div>
     <div class="col form-group">
       <label > Is_featured</label><br>

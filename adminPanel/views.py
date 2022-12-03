@@ -10,9 +10,9 @@ from django.db.models import Sum, Q, FloatField
 from django.db.models.functions import Cast
 from django.core.paginator import Paginator
 
-from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm
+from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm, VariationForm
 from accounts.models import Account
-from shop.models import Product
+from shop.models import Product, Variation
 from category.models import Category, Sub_Category
 from orders.models import Order, Payment, Coupon
 
@@ -456,6 +456,70 @@ def delete_product_offer(request, id):
   product.save()
   messages.success(request, 'Product offer deleted successfully')
   return redirect('product_offers')
+
+
+# variations
+
+@login_required(login_url= 'adminLogin')
+def product_variations(request):
+  variations = Variation.objects.all().order_by('product')
+  
+  paginator = Paginator(variations, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
+  context = {
+    'variations':page_obj,
+  }
+  return render(request, 'adminPanel/product_variations.html', context)
+
+@login_required(login_url= 'adminLogin')
+def delete_product_variation(request, id):
+  variation = Variation.objects.get(id=id)
+  variation.delete()
+  messages.success(request, 'Variation deleted successfully!!!')
+  return redirect('product_variations')
+
+@login_required(login_url= 'adminLogin')
+def edit_product_variation(request, id):
+  variation = Variation.objects.get(id=id)
+  
+  if request.method == 'POST':
+    form = VariationForm(request.POST, instance=variation)
+    
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Variation edited successfully.')
+      return redirect('product_variations')
+    else:
+      messages.error(request, 'Invalid input')
+      return redirect('edit_product_variation')
+      
+  form =   VariationForm(instance=variation)
+  context = {
+    'form':form,
+    'variation':variation,
+  }
+  return render(request, 'adminPanel/editVariation.html', context)
+
+@login_required(login_url= 'adminLogin')
+def add_product_variation(request):
+  
+  if request.method == 'POST':
+    form = VariationForm(request.POST)
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Variation added successfully.')
+      return redirect('product_variations')
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('add_product_variation')
+    
+  form = VariationForm()
+  context = {
+    'form':form
+  }
+  return render(request, 'adminPanel/addVariation.html', context)
 
 
 # Order Management
