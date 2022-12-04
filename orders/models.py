@@ -14,8 +14,6 @@ class Payment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status         = models.BooleanField(default=False)
 
-
-
     def __str__(self):
         return self.payment_id
       

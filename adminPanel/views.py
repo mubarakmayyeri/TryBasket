@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.cache import never_cache
 from accounts.otp import *
 from django.shortcuts import get_object_or_404
@@ -56,7 +56,7 @@ def adminLogin(request):
   form = LoginForm
   return render(request, 'adminPanel/login.html', {'form':form})
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def dashboard(request):
     today = datetime.today()
     today_date = today.strftime("%Y-%m-%d")
@@ -142,7 +142,7 @@ def dashboard(request):
     }
     return render(request, 'adminPanel/dashboard.html', context)
   
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def adminLogout(request):
   if 'email' in request.session:
     request.session.flush()
@@ -154,7 +154,7 @@ def adminLogout(request):
 
 # User account management
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def accounts(request):
   users = Account.objects.all().filter(is_superadmin=False).order_by('-id')
   
@@ -167,7 +167,7 @@ def accounts(request):
   }
   return render(request, 'adminPanel/accounts.html', context)
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def editUser(request, id):
   user = Account.objects.get(id=id)
   id = user.id
@@ -192,7 +192,7 @@ def editUser(request, id):
     
   return render(request, 'adminPanel/editUser.html', context)
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def blockUser(request, id):
     users = Account.objects.get(id=id)
     if users.is_active:
@@ -209,7 +209,7 @@ def blockUser(request, id):
 
 # Category Management
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def categories(request):
   categories = Category.objects.all().order_by('id')
   
@@ -222,7 +222,7 @@ def categories(request):
   }
   return render(request, 'adminPanel/categories.html', context)
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def addCategory(request):
   if request.method == 'POST':
     form = CategoryForm(request.POST, request.FILES)
@@ -240,7 +240,7 @@ def addCategory(request):
     }
     return render(request, 'adminPanel/addCategory.html', context)
   
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def editCategory(request, slug):
   category = Category.objects.get(slug=slug)
   
@@ -262,14 +262,14 @@ def editCategory(request, slug):
   }
   return render(request, 'adminPanel/editCategory.html', context)
   
-@login_required(login_url = 'adminLogin')  
+@staff_member_required(login_url = 'adminLogin')  
 def deleteCategory(request, slug):
   category = Category.objects.get(slug=slug)
   category.delete()
   messages.success(request, 'Category deleted successfully.')
   return redirect('categories')
 
-@login_required(login_url = 'adminLogin')  
+@staff_member_required(login_url = 'adminLogin')  
 def category_offers(request):
   categories = Category.objects.all().order_by('-category_offer')
   
@@ -282,7 +282,7 @@ def category_offers(request):
   }
   return render(request, 'adminPanel/category_offers.html', context)
 
-@login_required(login_url= 'adminLogin')
+@staff_member_required(login_url= 'adminLogin')
 def add_category_offer(request):
   if request.method == 'POST' :
     category_name = request.POST.get('category_name')
@@ -293,7 +293,7 @@ def add_category_offer(request):
     messages.success(request,'Category offer added successfully')
     return redirect('category_offers')
       
-@login_required(login_url= 'adminLogin')
+@staff_member_required(login_url= 'adminLogin')
 def delete_category_offer(request, id):
   category = Category.objects.get(id = id)
   category.category_offer =  0
@@ -304,7 +304,7 @@ def delete_category_offer(request, id):
 
 # sub category management
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def subCategories(request, category_slug):
   subCategories = Sub_Category.objects.all().filter(category__slug=category_slug)
   context = {
@@ -313,7 +313,7 @@ def subCategories(request, category_slug):
   }
   return render(request, 'adminPanel/subCategories.html', context)
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def addSubCategory(request, category_slug):
   if request.method == 'POST':
     form = SubCategoryForm(request.POST, request.FILES)
@@ -332,7 +332,7 @@ def addSubCategory(request, category_slug):
     }
     return render(request, 'adminPanel/addSubCategory.html', context)
   
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def editSubCategory(request, slug):
   subCategory = Sub_Category.objects.get(slug=slug)
   cat_slug = subCategory.category.slug
@@ -355,7 +355,7 @@ def editSubCategory(request, slug):
   }
   return render(request, 'adminPanel/editSubCategory.html', context)
 
-@login_required(login_url = 'adminLogin')  
+@staff_member_required(login_url = 'adminLogin')  
 def deleteSubCategory(request, slug):
   sub_category = Sub_Category.objects.get(slug=slug)
   cat_slug = sub_category.category.slug
@@ -367,7 +367,7 @@ def deleteSubCategory(request, slug):
  
 # Product management
   
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def products(request):
   products = Product.objects.all().order_by('-id')
   
@@ -380,7 +380,7 @@ def products(request):
   }
   return render(request, 'adminPanel/products.html', context)
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def addProduct(request):
   if request.method == 'POST':
     form = ProductForm(request.POST, request.FILES)
@@ -398,7 +398,7 @@ def addProduct(request):
     }
     return render(request, 'adminPanel/addProduct.html', context)
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def editProduct(request, id):
   product = Product.objects.get(id=id)
   
@@ -419,13 +419,13 @@ def editProduct(request, id):
   }
   return render(request, 'adminPanel/editProduct.html', context)
 
-@login_required(login_url = 'adminLogin')  
+@staff_member_required(login_url = 'adminLogin')  
 def deleteProduct(request, id):
   product = Product.objects.get(id=id)
   product.delete()
   return redirect('products')
 
-@login_required(login_url = 'adminLogin')  
+@staff_member_required(login_url = 'adminLogin')  
 def product_offers(request):
   products = Product.objects.all().order_by('-product_offer')
   
@@ -438,7 +438,7 @@ def product_offers(request):
   }
   return render(request, 'adminPanel/product_offers.html', context)
 
-@login_required(login_url= 'adminLogin')
+@staff_member_required(login_url= 'adminLogin')
 def add_product_offer(request):
   if request.method == 'POST' :
     product_name = request.POST.get('product_name')
@@ -449,7 +449,7 @@ def add_product_offer(request):
     messages.success(request,'Product offer added successfully')
     return redirect('product_offers')
   
-@login_required(login_url= 'adminLogin')
+@staff_member_required(login_url= 'adminLogin')
 def delete_product_offer(request, id):
   product = Product.objects.get(id=id)
   product.product_offer = 0
@@ -460,7 +460,7 @@ def delete_product_offer(request, id):
 
 # variations
 
-@login_required(login_url= 'adminLogin')
+@staff_member_required(login_url= 'adminLogin')
 def product_variations(request):
   variations = Variation.objects.all().order_by('product')
   
@@ -473,14 +473,14 @@ def product_variations(request):
   }
   return render(request, 'adminPanel/product_variations.html', context)
 
-@login_required(login_url= 'adminLogin')
+@staff_member_required(login_url= 'adminLogin')
 def delete_product_variation(request, id):
   variation = Variation.objects.get(id=id)
   variation.delete()
   messages.success(request, 'Variation deleted successfully!!!')
   return redirect('product_variations')
 
-@login_required(login_url= 'adminLogin')
+@staff_member_required(login_url= 'adminLogin')
 def edit_product_variation(request, id):
   variation = Variation.objects.get(id=id)
   
@@ -502,7 +502,7 @@ def edit_product_variation(request, id):
   }
   return render(request, 'adminPanel/editVariation.html', context)
 
-@login_required(login_url= 'adminLogin')
+@staff_member_required(login_url= 'adminLogin')
 def add_product_variation(request):
   
   if request.method == 'POST':
@@ -524,7 +524,7 @@ def add_product_variation(request):
 
 # Order Management
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def orders(request):
   orders = Order.objects.filter(is_ordered=True).order_by('-id')
   
@@ -537,7 +537,7 @@ def orders(request):
   }
   return render(request, 'adminPanel/orders.html', context)
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def update_order(request, id):
   if request.method == 'POST':
     order = get_object_or_404(Order, id=id)
@@ -557,7 +557,7 @@ def update_order(request, id):
     
   return redirect('orders')
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def coupons(request):
   coupons = Coupon.objects.all()
   context = {
@@ -565,7 +565,7 @@ def coupons(request):
   }
   return render(request, 'adminPanel/coupons.html', context)
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def add_coupon(request):
   if request.method == 'POST':
     form = CouponForm(request.POST , request.FILES)
@@ -582,7 +582,7 @@ def add_coupon(request):
   }
   return render(request, 'adminPanel/addCoupon.html', context)
 
-@login_required(login_url = 'adminLogin')
+@staff_member_required(login_url = 'adminLogin')
 def edit_coupon(request, id):
   coupon = Coupon.objects.get(id = id)
   if request.method == 'POST':
@@ -601,14 +601,14 @@ def edit_coupon(request, id):
   }
   return render(request, 'adminPanel/editCoupon.html', context)
 
-@login_required(login_url= 'adminLogin')
+@staff_member_required(login_url= 'adminLogin')
 def delete_coupon(request, id):
   coupon = Coupon.objects.get(id = id)
   coupon.delete()
   messages.success(request,'Coupon deleted successfully')
   return redirect('coupons')
 
-@login_required(login_url= 'adminLogin')
+@staff_member_required(login_url= 'adminLogin')
 def sales_report(request):
     year = datetime.now().year
     today = datetime.today()
@@ -641,7 +641,7 @@ def sales_report(request):
     }
     return render(request, 'adminPanel/sales_report.html', context)
 
-@login_required(login_url= 'adminLogin') 
+@staff_member_required(login_url= 'adminLogin') 
 def sales_report_month(request,id):
     orders = Order.objects.filter(created_at__month = id,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by()
     today_date=str(date.today())
@@ -651,7 +651,7 @@ def sales_report_month(request,id):
     }
     return render(request,'adminPanel/sales_report_table.html',context)
   
-@login_required(login_url='adminLogin')
+@staff_member_required(login_url='adminLogin')
 def sales_report_year(request,id):
     orders = Order.objects.filter(created_at__year = id,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by()    
     today_date=str(date.today())

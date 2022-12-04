@@ -265,7 +265,7 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     var orderID = "{{order_number}}"
-    var discount = "{{coupon_discount}}"
+    var amount = "{{grand_total}}"
     var csrftoken = getCookie('csrftoken');
     var redirect_url = "{% url 'payments_completed' %}"
     var url1 = "{% url 'razorpay' %}";
@@ -313,7 +313,7 @@
                 "X-CSRFToken": csrftoken,
             },
             body:JSON.stringify({
-                discount: discount,
+                amount: amount,
             }),
         }).then((response)=>response.json()).then(response=>{
             console.log(response)

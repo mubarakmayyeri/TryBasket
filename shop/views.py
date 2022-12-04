@@ -100,5 +100,22 @@ def price_change(request):
           safe=False
         )
   
+def search(request):
+  if request.method == 'GET':
+    keyword = request.GET['keyword']
+    if keyword:
+      products = Product.objects.order_by('-created_date').filter(Q(description__icontains=keyword) | Q(product_name__icontains=keyword))
+      product_count = products.count()
+      
+  paginator = Paginator(products, 9)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+      
+  context = {
+    'products':page_obj,
+    'product_count':product_count,
+  }
+  return render(request, 'shop/shop.html', context)
+  
 def contact(request):
   return render(request, 'contact.html')

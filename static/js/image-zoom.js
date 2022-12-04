@@ -48,6 +48,18 @@ perfect for store products and galleries
     DocumentType.prototype.replaceWith = ReplaceWithPolyfill;
   }
 
+  $('.product__details__pic__slider img').on('click', function () {
+
+    var imgurl = $(this).data('imgbigurl');
+    var bigImg = $('#imageZoom').attr('src');
+    if (imgurl != bigImg) {
+        $('.containerZoom').attr({
+            style: "background-image:url("+imgurl+"); background-size: 150%;"
+        });
+    }
+});
+
+
   const imageObj = {};
 
   $.fn.imageZoom = function (options) {

@@ -4,7 +4,6 @@ from carts.models import CartItem
 from .models import Order, Address, Payment, OrderProduct, Coupon, UserCoupon
 import json
 from shop.models import Product
-from .forms import OrderForm
 from django.http import JsonResponse
 from django.conf import settings
 import razorpay
@@ -138,8 +137,9 @@ def payments(request):
     
     #clear cart
     CartItem.objects.filter(user = request.user).delete()
+    
+    
     #send order number and Transaction id to Web page using 
-
       
     data = {
         'order_number': order.order_number,
@@ -260,23 +260,9 @@ def return_order(request, id):
 def razorpay(request):
   
   body = json.loads(request.body)
-  discount = body['discount']
-    
-  current_user = request.user
-  
-  cart_items = CartItem.objects.filter(user=current_user)
-
-  grand_total = 0
-  tax = 0
-  total = 0
-  for cart_item in cart_items:
-    total += (cart_item.price * cart_item.quantity)
-    
-  tax = (18 * total)/100
-  grand_total = total + tax - float(discount)
-  grand_total = format(grand_total, '.2f')
-    
-  amount = float(grand_total) * 100
+  amount = body['amount']
+      
+  amount = float(amount) * 100
   
   DATA = {
     "amount": amount,

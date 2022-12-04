@@ -13,5 +13,7 @@ urlpatterns = [
   
   path('price_change/', views.price_change, name='price_change'),
   
+  path('search/', views.search, name='search'),
+  
   path('contact/', views.contact, name='contact'),
 ]
