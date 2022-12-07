@@ -197,9 +197,12 @@
         }
 
 
-    var amount=Number("{{grand_total}}");
+    let amount=Number("{{grand_total}}");
+    
     amount =  amount/81.52;
     amount = amount.toFixed(2)
+    console.log(amount)
+
     var url = "{% url 'payments' %}"
     var csrftoken = getCookie('csrftoken');
     var orderID = "{{order.order_number}}"
@@ -216,7 +219,6 @@
                 label:  'pay',
                 height: 40
             },
-
 
             // Set up the transaction
             createOrder: function(data, actions) {
