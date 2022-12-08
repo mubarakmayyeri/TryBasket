@@ -121,7 +121,7 @@
     $(".product__discount__slider").owlCarousel({
         loop: true,
         margin: 0,
-        items: 3,
+        items: 4,
         dots: true,
         smartSpeed: 1200,
         autoHeight: false,
@@ -141,7 +141,7 @@
             },
 
             992: {
-                items: 3,
+                items: 4,
             }
         }
     });
@@ -173,12 +173,12 @@
         max: maxPrice,
         values: [minPrice, maxPrice],
         slide: function (event, ui) {
-            minamount.val('$' + ui.values[0]);
-            maxamount.val('$' + ui.values[1]);
+            minamount.val('₹' + ui.values[0]);
+            maxamount.val('₹' + ui.values[1]);
         }
     });
-    minamount.val('$' + rangeSlider.slider("values", 0));
-    maxamount.val('$' + rangeSlider.slider("values", 1));
+    minamount.val('₹' + rangeSlider.slider("values", 0));
+    maxamount.val('₹' + rangeSlider.slider("values", 1));
 
     /*--------------------------
         Select

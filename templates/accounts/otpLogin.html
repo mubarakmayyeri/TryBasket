@@ -1,6 +1,187 @@
-{% extends 'base.html' %}
+{% load static %}
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TryBasket - Only the fresh</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.png' %}">
+
+    <!-- Google Font -->
+    <link href='https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap' rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/elegant-icons.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+
+</head>
+
+<body>
+
+  <!-- Humberger Begin -->
+  <div class="humberger__menu__overlay"></div>
+  <div class="humberger__menu__wrapper">
+      <div class="humberger__menu__logo">
+          <a href="#"><img src="{% static 'img/logo.png' %}" alt=""></a>
+      </div>
+      <div class="humberger__menu__cart">
+        <ul>
+            {% comment %} <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li> {% endcomment %}
+            <li><a href="{% url 'cart' %}"><i class="fa fa-shopping-bag"></i> <span id="count">{{cart_count}}</span></a></li>
+        </ul>
+        <div class="header__cart__price">Total: <span id='ct'>₹{{cart_total}}</span></div>
+      </div>
+      <div class="humberger__menu__widget">
+          <div class="header__top__right__language col-sm mb-2">
+              <img src="{% static 'img/language.png' %}" alt="">
+              <div>English</div>
+              <span class="arrow_carrot-down"></span>
+              <ul>
+                  <li><a href="#">Hindi</a></li>
+                  <li><a href="#">English</a></li>
+              </ul>
+          </div>
+                        {% if user.is_authenticated %}
+
+                            <div class="header__top__right__auth col">
+                                <a href="" class="btn btn-light"><i class="fa fa-user-circle" aria-hidden="true"></i><strong>{{user.first_name}}</strong></a>
+                            </div>
+                            <span class="ml-2 mr-2">|</span>
+                            <div class="header__top__right__auth">
+                            <a href="{% url 'userLogout' %}" class="btn btn-light"><i class="fa fa-sign-out"></i></i>Logout</a>
+                            </div>
+                                
+
+
+                        {% else %}
+
+                            <div class="header__top__right__auth">
+                                <a href="{% url 'userLogin' %}" class="btn btn-light"><i class="fa fa-user"></i>Login</a>
+                            </div>
+                            <span class="ml-2 mr-2">|</span>
+                            <div class="header__top__right__auth">
+                            <a href="{% url 'register' %}" class="btn btn-light"><i class="fa fa-user-plus"></i>Register</a>
+                            </div>
+
+                        {% endif %}
+      </div>
+      <nav class="humberger__menu__nav mobile-menu">
+          <ul>
+              <li class="active"><a href="{% url 'home' %}">Home</a></li>
+              <li><a href="{% url 'shop' %}">Shop</a></li>
+              <li><a href="{% url 'cart' %}">Basket</a></li>
+              <li><a href="{% url 'contact' %}">Contact</a></li>
+          </ul>
+      </nav>
+      <div id="mobile-menu-wrap"></div>
+      <div class="header__top__right__social">
+          <a href="#"><i class="fa fa-facebook"></i></a>
+          <a href="#"><i class="fa fa-twitter"></i></a>
+          <a href="#"><i class="fa fa-linkedin"></i></a>
+          <a href="#"><i class="fa fa-pinterest-p"></i></a>
+      </div>
+      <div class="humberger__menu__contact">
+          <ul>
+              <li><i class="fa fa-envelope"></i> hello@trybasket.com</li>
+              <li>Free Shipping for all Order above ₹299</li>
+          </ul>
+      </div>
+  </div>
+  <!-- Humberger End -->
+
+  <!-- Header Section Begin -->
+  <header class="header">
+      <div class="header__top">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-6 col-md-6">
+                      <div class="header__top__left">
+                        <ul>
+                            <li><i class="fa fa-envelope"></i> hello@trybasket.com</li>
+                            <li>Free Shipping for all Order above ₹299</li>
+                        </ul>
+                      </div>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                      <div class="header__top__right">
+                          <div class="header__top__right__social">
+                              <a href="#"><i class="fa fa-facebook"></i></a>
+                              <a href="#"><i class="fa fa-twitter"></i></a>
+                              <a href="#"><i class="fa fa-linkedin"></i></a>
+                              <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                          </div>
+                          
+                        {% if user.is_authenticated %}
+
+                            <div class="header__top__right__auth">
+                                <a href="{% url 'userDashboard' %}" class="btn btn-light><i class="fa fa-user-circle" aria-hidden="true"></i><strong>{{user.first_name}}</strong></a>
+                            </div>
+                            <span class="ml-2 mr-2">|</span>
+                            <div class="header__top__right__auth">
+                            <a href="{% url 'userLogout' %}" class="btn btn-light><i class="fa fa-sign-out"></i></i>Logout</a>
+                            </div>
+
+                        {% else %}
+
+                            <div class="header__top__right__auth">
+                                <a href="{% url 'userLogin' %}" class="btn btn-light {% if '/login/' in request.path %}d-none{% endif %}" ><i class="fa fa-user"></i>Login</a>
+                            </div>
+                            <span class="ml-2 mr-2 {% if '/login/' in request.path %}d-none{% endif %}">|</span>
+                            <div class="header__top__right__auth">
+                            <a href="{% url 'register' %}" class="btn btn-light {% if '/register/' in request.path %}d-none{% endif %}"><i class="fa fa-user-plus"></i>Register</a>
+                            </div>
+
+                        {% endif %}
+
+                        </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-3">
+                  <div class="header__logo" style="max-width: 25rem;">
+                      <a href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+                  </div>
+              </div>
+              <div class="col-lg-6">
+                  <nav class="header__menu">
+                      <ul>
+                          <li class="{% if '/' == request.path %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
+                          <li class="{% if '/shop' in request.path %}active{% endif %}"><a href="{% url 'shop' %}">Shop</a></li>
+                          <li class="{% if '/cart/' in request.path %}active{% endif %}"><a href="{% url 'cart' %}">Basket</a></li>
+                          <li class="{% if '/contact/' in request.path %}active{% endif %}"><a href="{% url 'contact' %}">Contact</a></li>
+                      </ul>
+                  </nav>
+              </div>
+              <div class="col-lg-3">
+                  <div class="header__cart">
+                      <ul>
+                          {% comment %} <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li> {% endcomment %}
+                          <li><a href="{% url 'cart' %}"><i class="fa fa-shopping-bag"></i> <span id="count">{{cart_count}}</span></a></li>
+                      </ul>
+                      <div class="header__cart__price">Total: <span id='ct'>₹{{cart_total}}</span></div>
+                  </div>
+              </div>
+          </div>
+          <div class="humberger__open">
+              <i class="fa fa-bars"></i>
+          </div>
+      </div>
+  </header>
+  <!-- Header Section End -->
 
   <!-- ========================= SECTION CONTENT ========================= -->
   <section class="section-conten padding-y" style="min-height:84vh">
@@ -33,6 +214,19 @@
     
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
+
+    {% include 'includes/footer.html' %}
   
 
-{% endblock content %}
+  <!-- Js Plugins -->
+  <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+  <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+  <script src="{% static 'js/jquery.slicknav.js' %}"></script>
+  <script src="{% static 'js/mixitup.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>
