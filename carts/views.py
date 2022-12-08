@@ -24,10 +24,10 @@ def cart(request, total=0, quantity=0, cart_items=None):
   
   try:
     if request.user.is_authenticated:
-      cart_items = CartItem.objects.filter(user = request.user, is_active=True)
+      cart_items = CartItem.objects.filter(user = request.user, is_active=True).order_by('id')
     else:
       cart = Cart.objects.get(cart_id=_cart_id(request))
-      cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+      cart_items = CartItem.objects.filter(cart=cart, is_active=True).order_by('id')
       
     for cart_item in cart_items:
       price_mult = int(cart_item.variations.all().values_list('price_multiplier')[0][0])
@@ -36,7 +36,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
       quantity += cart_item.quantity
       cart_item.price = product_price
       cart_item.save()
-    tax = (18 * total)/100
+    tax = (5 * total)/100
     grand_total = total + tax
     grand_total = format(grand_total, '.2f')
   except ObjectDoesNotExist:
@@ -225,7 +225,7 @@ def decqnty(request):
       total += int(cart_item.price)*int(cart_item.quantity)
     
     print(total)
-    tax = (18 * total)/100
+    tax = (5 * total)/100
     grand_total = total + tax
     grand_total = format(grand_total, '.2f')
 
@@ -285,7 +285,7 @@ def incqnty(request):
     for cart_item in cart_items:
       total += int(cart_item.price)*int(cart_item.quantity)
        
-    tax = (18 * total)/100
+    tax = (5 * total)/100
     grand_total = total + tax
     grand_total = format(grand_total, '.2f')
 
@@ -331,7 +331,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
     for cart_item in cart_items:
       total += int(cart_item.price)*int(cart_item.quantity)
       quantity += cart_item.quantity
-    tax = (18 * total)/100
+    tax = (5 * total)/100
     grand_total = total + tax
     grand_total = format(grand_total, '.2f')
   except ObjectDoesNotExist:

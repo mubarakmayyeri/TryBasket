@@ -33,8 +33,9 @@ def total(request):
       cart_items = CartItem.objects.all().filter(cart=cart[:1])
       
       for cart_item in cart_items:
-        cart_total += int(cart_item.product.offer_price())*int(cart_item.quantity)
-    
+        price_mult = int(cart_item.variations.all().values_list('price_multiplier')[0][0])
+        cart_total += int(cart_item.product.offer_price())*int(cart_item.quantity)*price_mult
+            
     except Cart.DoesNotExist:
       cart_total=0
       

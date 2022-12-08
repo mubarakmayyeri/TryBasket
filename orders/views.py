@@ -26,7 +26,7 @@ def place_order(request, total=0, quantity=0):
     total += (cart_item.price * cart_item.quantity)
     quantity += cart_item.quantity
     
-  tax = (18 * total)/100
+  tax = (5 * total)/100
   coupon_discount=0
   grand_total = total + tax
   grand_total = format(grand_total, '.2f')

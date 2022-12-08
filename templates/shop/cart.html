@@ -205,7 +205,10 @@
                   $('#total').html('₹'+data.total)
                   $('#tax').html('₹'+data.tax)
                   $('#grand_total').html('₹'+data.grand_total)
-                  $('#count').html(data.cart_count)
+                  $('#count_1').html(data.cart_count)
+                  $('#ct_1').html('₹'+data.total)
+                  $('#count_2').html(data.cart_count)
+                  $('#ct_2').html('₹'+data.total)
                   if(data.qnty == 1) {
                     $('#dec-button{{forloop.counter}}').attr('disabled', true)
                 }
@@ -241,8 +244,10 @@
                 $('#total').html('₹'+data.total)
                 $('#tax').html('₹'+data.tax)
                 $('#grand_total').html('₹'+data.grand_total)
-                $('#count').html(data.cart_count)
-                $('#ct').html('₹'+data.total)
+                $('#count_1').html(data.cart_count)
+                $('#ct_1').html('₹'+data.total)
+                $('#count_2').html(data.cart_count)
+                $('#ct_2').html('₹'+data.total)
                }else{
                  alert('fail')
                }
