@@ -17,6 +17,10 @@ class ProductForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super(ProductForm,self).__init__(*args, **kwargs)
+        self.fields['price'].widget.attrs['min'] = 0
+        self.fields['stock'].widget.attrs['min'] = 0
+        self.fields['category'].widget.attrs['onchange'] = "getval(this);"
+
         for field  in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
             

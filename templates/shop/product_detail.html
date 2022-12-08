@@ -88,6 +88,10 @@
 
                             <h3  class="danger-btn">OUT OF STOCK</h3>
 
+                            {% elif not product.variation_set.size %}
+
+                            <h3  class="danger-btn">Item not avialable</h3>
+
                             {% else %}
                                 <div class="d-flex mb-2">
                                     <h4>Size :</h4>
@@ -120,6 +124,8 @@
                                 <li><b>Availability</b>
                                     {% if product.stock <= 0 %}
                                         <span>Out of Stock</span></li>
+                                    {% elif not product.variation_set.size %}
+                                        <span>Item not avialable</span></li>
                                     {% else %}
                                         <span>In Stock</span></li>
                                     {% endif %}

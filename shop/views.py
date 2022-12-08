@@ -119,3 +119,14 @@ def search(request):
   
 def contact(request):
   return render(request, 'contact.html')
+
+def sub_category(request):
+  cat_id = request.GET['category_id']
+  sub_categories = Sub_Category.objects.filter(category=cat_id).values()
+  
+  return JsonResponse(
+          {'success': True,
+           'sub_categories':list(sub_categories),
+           },
+          safe=False
+        )

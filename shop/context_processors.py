@@ -1,4 +1,5 @@
 from .models import Product
+from category.models import Sub_Category
 
 def latest_products1(request):
   latest_products_1 = Product.objects.all().order_by('-created_date')[:3]
