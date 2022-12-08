@@ -315,6 +315,7 @@ def subCategories(request, category_slug):
 
 @staff_member_required(login_url = 'adminLogin')
 def addSubCategory(request, category_slug):
+  category = Category.objects.get(slug=category_slug)
   if request.method == 'POST':
     form = SubCategoryForm(request.POST, request.FILES)
     if form.is_valid():
@@ -328,7 +329,7 @@ def addSubCategory(request, category_slug):
     form = SubCategoryForm()
     context = {
       'form':form,
-      'category_slug':category_slug
+      'category':category
     }
     return render(request, 'adminPanel/addSubCategory.html', context)
   
