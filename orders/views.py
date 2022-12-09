@@ -307,6 +307,3 @@ def coupon(request):
                 }
 
   return JsonResponse(response)
-
-def test(request):
-  return render(request, 'orders/test.html')

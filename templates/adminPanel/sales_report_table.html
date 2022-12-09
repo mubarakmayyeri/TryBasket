@@ -4,7 +4,8 @@
 <div class="table-responsive mt-3 pt-3" style="background-color: #415a70;" id="sales-report-table">
   <div class="float-right mb-3 mr-3">
     <input type="button" class="btn btn-danger btn-md mr-3" id="btnExport" value="Export To PDF" />
-    <button class="btn btn-success btn-md" onclick="ExportToExcel('xlsx')">Export To Excel</button>
+    <button class="btn btn-success btn-md mr-3" onclick="ExportToExcel('xlsx')">Export To Excel</button>
+    <button class="btn btn-md btn-warning" id="btn-export" onclick="exportHTML();">Export To Doc</button>
   </div>
   <table class="table" id="sales_report_table">
       <thead>
