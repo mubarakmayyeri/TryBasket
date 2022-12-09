@@ -77,8 +77,13 @@ def dashboard(request):
         
     except:
         total_payment_amount=0
-    revenue = total_payment_amount['total_amount__sum']
-    revenue = format(revenue, '.2f')
+        
+    if total_payment_amount['total_amount__sum'] :
+      revenue = total_payment_amount['total_amount__sum']
+      revenue = format(revenue, '.2f')
+    
+    else:
+      revenue = 0
            
     blocked_user = Account.objects.filter(is_active = False,is_superadmin = False).count()
     unblocked_user = Account.objects.filter(is_active = True,is_superadmin = False).count()

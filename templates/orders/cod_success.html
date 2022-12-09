@@ -15,7 +15,7 @@
                       <h1>Order confirmed</h1>
                       <h4>Your item will be delivered soon</h4>
                       <h3 class="text-danger">Thank you for your purchase!!</h3>
-                      <h4 id="invoice">Your tracking number is : 
+                      <h4>Your tracking number is : 
                           
                               {{order.order_number}}
 
@@ -23,6 +23,7 @@
                       <div class="row py-3 d-flex justify-content-center">
                           <div class="col-4">
                               <a href="{% url 'home' %}" class="btn text-white" style="background-color: #7fad39;">Home</a>
+                              <input type="button" class="btn btn-danger ml-5" id="btnExport" value="Download Invoice" />
                           </div>
                       </div>
                       {% comment %} <div class="col-md-12">
@@ -38,7 +39,7 @@
                                       
                           </div>
                       </div> {% endcomment %}
-                <div class="container" style="background: #f1f1f1;">
+                <div class="container" style="background: #f1f1f1;" id="invoice">
                     <div class="row invoice row-printable">
                         <div class="col-md-12">
                             <!-- col-lg-12 start here -->
@@ -171,5 +172,27 @@
 
     {% endfor %}
 </script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <!-- script for for pdf creation -->
+    <!-- Main JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script type="text/javascript">
+        $("body").on("click", "#btnExport", function () {
+            html2canvas($('#invoice')[0], {
+                onrendered: function (canvas) {
+                    var data = canvas.toDataURL();
+                    var docDefinition = {
+                        content: [{
+                            image: data,
+                            width: 500
+                        }]
+                    };
+                    pdfMake.createPdf(docDefinition).download("invoice.pdf");
+                }
+            });
+        });
+    </script>
 
 {% endblock content %}

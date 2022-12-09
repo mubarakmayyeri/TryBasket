@@ -23,7 +23,9 @@
     </div>
     <div class="col-6 form-group">
         <label > Sub Category</label><br>
-        {{form.sub_category}}  
+        <select class="form-control" name="sub_category" id="id_sub_category">
+          <option value="" selected="">---------</option>
+        </select>  
     </div>
     <div class="col form-group">
         <label > Description</label><br>
@@ -77,5 +79,40 @@
         document.getElementById("id_slug").value=document.getElementById("id_product_name").value.toLowerCase().replaceAll(" ","-");
       }
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+  function getval(sel)
+  {
+    var url = '{% url 'sub_category' %}'
+    category_id = sel.value
+      data = {
+        'category_id':category_id,
+    }
+    $.ajax({
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function(data){
+          if(data.success){
+            let option_data = '<option value="" selected="">---------</option>'
+            $.each(data.sub_categories, function(index, ele){
+              option_data += 
+                  `<option value='${ele.id}'>${ele.sub_category_name}</option>`
+            })
+            $('#id_sub_category').html(option_data)
+            
+
+            
+          }else{
+            alert('fail')
+          }
+        }
+      })
+      
+  }
+</script>
+
   
 {% endblock content %}

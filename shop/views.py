@@ -35,7 +35,6 @@ def shop(request, category_slug=None, sub_category_slug=None):
   elif category_slug != None:
     categories_shop = get_object_or_404(Category, slug=category_slug)
     products = Product.objects.all().filter(category=categories_shop, is_available=True)
-    print(categories_shop)
     product_count = products.count()
         
   else:

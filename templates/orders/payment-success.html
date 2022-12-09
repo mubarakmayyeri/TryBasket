@@ -8,13 +8,14 @@
   <h2 class="text-center">Payment Successful</h2>
 <br>
 <div class="text-center">
-  <a href="{% url 'shop' %}" class="btn btn-success">Shop more</a>
+    <a href="{% url 'shop' %}" class="btn btn-success">Shop more</a>
+    <input type="button" class="btn btn-danger ml-5" id="btnExport" value="Download Invoice" />
 </div>
 </div>
 
 
 
-<div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;" id="invoice">
+<div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;" id="invoice">   
   <div class="row invoice row-printable">
       <div class="col-md-12">
           <!-- col-lg-12 start here -->
@@ -140,6 +141,28 @@
       var price = $('#price{{forloop.counter}}').html('₹'+price)
 
       {% endfor %}
+    </script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <!-- script for for pdf creation -->
+    <!-- Main JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script type="text/javascript">
+        $("body").on("click", "#btnExport", function () {
+            html2canvas($('#invoice')[0], {
+                onrendered: function (canvas) {
+                    var data = canvas.toDataURL();
+                    var docDefinition = {
+                        content: [{
+                            image: data,
+                            width: 500
+                        }]
+                    };
+                    pdfMake.createPdf(docDefinition).download("invoice.pdf");
+                }
+            });
+        });
     </script>
 
 {% endblock %}

@@ -27,6 +27,8 @@
   
   <header class="card-header d-flex justify-content-between">
     <strong class="d-inline-block mr-3">Order Details</strong>
+
+    <input type="button" class="btn btn-secondary btn-sm" id="btnExport" value="Download Invoice" />
     <!-- Button trigger modal -->
 
 {% if order.status == 'Returned' %}
@@ -112,7 +114,7 @@
   </header> 
       
 
-        <div class="container" style="background: #f1f1f1;">
+        <div class="container" style="background: #f1f1f1;" id='invoice'>
           <div class="row invoice row-printable">
               <div class="col-md-12">
                   <!-- col-lg-12 start here -->
@@ -124,11 +126,21 @@
                               <div class="col-lg-6">
                                   <!-- col-lg-6 start here -->
                                   <div class="invoice-logo mt-3"><img src="{% static 'img/logo.png' %}" alt="Invoice logo" style="max-height: 40px;"></div>
+                                  <div class="invoice-details mt-5">
+                                    <div class="well">
+                                        <ul class="list-unstyled mb0">
+                                            <li><strong>Order: </strong> #{{order.order_number}} </li>
+                                            <li><strong>Transaction: </strong>{{order.payment.payment_method}}</li>
+                                            <li><strong>Order Date:</strong> {{order.created_at}}</li>
+                                            <li><strong>Status:</strong> {{order.status}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
                               </div>
                               <!-- col-lg-6 end here -->
                               <div class="col-lg-6">
                                   <!-- col-lg-6 start here -->
-                                  <div class="invoice-from">
+                                  <div class="invoice-from mt-3">
                                       <ul class="list-unstyled text-right">
                                           <li><strong>Invoiced To</strong></li>
                                           <li>{{order.full_name}}</li>
@@ -140,18 +152,8 @@
                                   </div>
                               </div>
                               <!-- col-lg-6 end here -->
-                              <div class="col-lg-12">
+                              <div class="col-lg-12 mt-5">
                                   <!-- col-lg-12 start here -->
-                                  <div class="invoice-details mt25">
-                                      <div class="well">
-                                          <ul class="list-unstyled mb0">
-                                              <li><strong>Order: </strong> #{{order.order_number}} </li>
-                                              <li><strong>Transaction: </strong>{{order.payment.payment_method}}</li>
-                                              <li><strong>Order Date:</strong> {{order.created_at}}</li>
-                                              <li><strong>Status:</strong> {{order.status}}</li>
-                                          </ul>
-                                      </div>
-                                  </div>
                                  
                                   <div class="invoice-items">
                                       <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
@@ -248,6 +250,28 @@
 
     {% endfor %}
   </script>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <!-- script for for pdf creation -->
+    <!-- Main JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script type="text/javascript">
+        $("body").on("click", "#btnExport", function () {
+            html2canvas($('#invoice')[0], {
+                onrendered: function (canvas) {
+                    var data = canvas.toDataURL();
+                    var docDefinition = {
+                        content: [{
+                            image: data,
+                            width: 500
+                        }]
+                    };
+                    pdfMake.createPdf(docDefinition).download("invoice.pdf");
+                }
+            });
+        });
+    </script>
   
 
 {% endblock content %}
